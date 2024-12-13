@@ -2,6 +2,7 @@
   "name": "jobis",
   "version": "0.1.0",
   "private": true,
+  "homepage": "/",
   "dependencies": {
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
@@ -13,10 +14,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "react-scripts build --output-path ../../java_workspace/jobis/src/main/resources/static",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:8080",
   "eslintConfig": {
     "extends": [
       "react-app",

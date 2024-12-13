@@ -1,18 +1,84 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import style from './Signup.module.css'
+import axios from 'axios';
 
 function Signup() {
+    const [userId, setUserId] = useState('');
+    const [isIdAvailable, setIsIdAvailable] = useState(false); // 아이디 사용 가능 여부
+
+    const handleUserIdChange = (e) => {
+        setUserId(e.target.value);
+        setIsIdAvailable(false); // 입력 변경 시 상태 초기화
+    };
+
+    const checkDuplicateId = async () => {
+        console.log("checkDuplicateId 호출됨");
+        if (!userId) {
+            alert("아이디를 입력하세요.");
+            return;
+        }
+
+        if (!/^[a-z0-9]{6,20}$/.test(userId)) {
+            alert("아이디는 6~20자, 영문 소문자와 숫자만 사용할 수 있습니다.");
+            return;
+        }
+
+        try {
+            console.log("유저아이디: ", userId);
+            const response = await axios.post('http://localhost:8080/users/checkuserId',
+                { users: userId },
+                { headers: { 'Content-Type': 'application/json' } }
+            );
+
+            if (response.data === "dup") {
+                alert("이미 사용 중인 아이디입니다.");
+                setIsIdAvailable(false);
+            } else {
+                alert("사용 가능한 아이디입니다.");
+                setIsIdAvailable(true);
+            }
+        } catch (error) {
+            console.error("중복 확인 중 오류 발생:", error);
+            alert("중복 확인 중 오류가 발생했습니다.");
+        }
+    };
+
+
+
     return (
         <div className={style.signupContainer}>
             <div className={style.signupTitle}>환영합니다! <br /> 당신의 취업을 도와주는 JOBIS 입니다! </div>
             <hr className={style.topLine} />
             <table className={style.signupTable}>
                 <tbody>
-                    <tr>
+                <tr>
                         <td className={style.title}>아이디</td>
-                        <td className={style.sub}><input type="text" placeholder="아이디" /><br /> 6~20자, 영문 소문자, 숫자만 사용</td>
-                        <td><button className={style.checkButton}>중복확인</button></td>
+                        <td className={style.sub}>
+                            <input
+                                type="text"
+                                placeholder="아이디"
+                                value={userId}
+                                onChange={handleUserIdChange}
+                                disabled={isIdAvailable} // 사용 가능할 경우 입력 비활성화
+                            />
+                            <br /> 6~20자, 영문 소문자, 숫자만 사용
+                            {isIdAvailable && (
+                                <span style={{ color: 'green', marginLeft: '10px' }}>
+                                    *사용 가능한 아이디입니다.
+                                </span>
+                            )}
+                        </td>
+                        <td>
+                            <button
+                                className={style.idCheckButton}
+                                type="button"
+                                onClick={checkDuplicateId}
+                                disabled={isIdAvailable} // 사용 가능할 경우 버튼 비활성화
+                            >
+                                중복확인
+                            </button>
+                        </td>
                     </tr>
                     <tr>
                         <td className={style.title}>비밀번호</td>

@@ -32,6 +32,7 @@
 .signupTable td, 
 .signupTable th {
     padding: 10px; /* 내부 여백 */
+    
     text-align: left; /* 텍스트 왼쪽 정렬 */
 }
 
@@ -84,6 +85,19 @@
     height: 40px;
     font-size: 15px;
     font-weight: bold;
+}
+
+.idCheckButton{
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(109, 160, 255, 0.8); /* 50% 투명한 배경색 */
+    cursor: pointer;
+    color: white;
+    width: 90px;
+    height: 40px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 15px;
 }
 
 /* 라디오 버튼 컨테이너 */
