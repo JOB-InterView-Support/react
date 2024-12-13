@@ -18,7 +18,7 @@ import ticketRouter from './ticketRouter';
 const AppRouter = () => {
   return (
     <Routes>
-      {adminRouter}
+      {/* {adminRouter}
       {aiInterviewRouter}
       {jobPostingRouter}
       {loginRouter}
@@ -27,7 +27,7 @@ const AppRouter = () => {
       {payRouter}
       {qnaRouter}
       {reviewRouter}
-      {ticketRouter}
+      {ticketRouter} */}
       <Route path="/" element={<MainPage />} />
     </Routes>
   );

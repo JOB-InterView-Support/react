@@ -1,19 +1,13 @@
 import React from 'react';
-
+import styles from './MainPage.module.css';
+import main1 from '../../assets/images/main1.png';
 
 function MainPage() {
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>홈 페이지</h1>
-      <p className={styles.description}>여기는 홈 페이지입니다.</p>
+    <div>
+        <img src={main1} alt='Site Logo' className={styles.logo} />
     </div>
   );
 }
-// 한글 테스트
-// 인경 테스트
-// 건열 테스트
-// 현재 테스트
-// 치현 테스트
-// 영주 테스트ㅁㄴ!!
-// 만경 테스트
+
 export default MainPage;

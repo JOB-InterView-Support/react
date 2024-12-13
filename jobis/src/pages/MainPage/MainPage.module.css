@@ -1,0 +1,18 @@
+.container {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .title {
+    font-size: 2rem;
+    color: #2db400;
+  }
+  
+  .description {
+    font-size: 1.2rem;
+    color: #555;
+  }
+
+  .logo{
+    width: 100%;
+  }
