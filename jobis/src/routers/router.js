@@ -20,14 +20,14 @@ const AppRouter = () => {
     <Routes>
       {/* {adminRouter}
       {aiInterviewRouter}
-      {jobPostingRouter}
+      {jobPostingRouter} */}
       {loginRouter}
-      {mypageRouter}
+      {/* {mypageRouter}
       {noticeRouter}
       {payRouter}
       {qnaRouter}
       {reviewRouter}
-      {ticketRouter} */}
+      {ticketRouter}  */}
       <Route path="/" element={<MainPage />} />
     </Routes>
   );

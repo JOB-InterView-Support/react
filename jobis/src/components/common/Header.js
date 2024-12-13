@@ -10,7 +10,9 @@ function Header() {
     return (
         <header className={styles.header}>
             <div>
-                <img src={logo} alt='Site Logo' className={styles.logo} />
+                <Link to="/">
+                    <img src={logo} alt='Site Logo' className={styles.logo} />
+                </Link>
             </div>
             <nav>
                 <ul className={styles.navList}>
@@ -26,7 +28,7 @@ function Header() {
                 <div className={styles.top}>관리자님 환영합니다.</div>
                 <div className={styles.bottom}>
                     <button>마이페이지</button>
-                    <button>로그인</button>
+                    <button><Link to="/login">로그인</Link></button>
                 </div>
             </div>
         </header>
