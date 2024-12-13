@@ -7,6 +7,7 @@ import adminRouter from './adminRouter';
 import aiInterviewRouter from './aiInterviewRouter';
 import jobPostingRouter from './jobPostingRouter';
 import loginRouter from './loginRouter';
+import signupRouter from './signupRouter';
 import mypageRouter from './mypageRouter';
 import noticeRouter from './noticeRouter';
 import payRouter from './payRouter';
@@ -22,6 +23,7 @@ const AppRouter = () => {
       {aiInterviewRouter}
       {jobPostingRouter} */}
       {loginRouter}
+      {signupRouter}
       {/* {mypageRouter}
       {noticeRouter}
       {payRouter}
