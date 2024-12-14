@@ -1,84 +1,75 @@
-.signupContainer{
-    display: flex; /* Flexbox 사용 */
-    flex-direction: column; /* 자식 요소를 세로로 배치 */
-    justify-content: center; /* 세로 가운데 정렬 */
-    align-items: center; /* 가로 가운데 정렬 */
+.signupContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     margin-top: 30px;
 }
 
-.signupTitle{
+.signupTitle {
     font-size: 30px;
     font-weight: bold;
 }
 
-.topLine {
-    border: none; /* 기본 테두리 제거 */
-    border-top: 1px solid black; /* 가로선 스타일 */
-    margin: 10px 0; /* 위아래 간격 */
-    width: 45%; /* 전체 너비로 확장 */
-}
-
+.topLine,
 .bottomLine {
-    border: none; /* 기본 테두리 제거 */
-    border-top: 1px solid black; /* 가로선 스타일 */
-    margin: 10px 0; /* 위아래 간격 */
-    width: 45%; /* 전체 너비로 확장 */
+    border: none;
+    border-top: 1px solid black;
+    margin: 10px 0;
+    width: 45%;
 }
 
-.signupTable {   
-    border-collapse: collapse; /* 테두리 중복 제거 */
+.signupTable {
+    border-collapse: collapse;
 }
 
-.signupTable td, 
+.signupTable td,
 .signupTable th {
-    padding: 10px; /* 내부 여백 */
+    padding: 10px;
     
-    text-align: left; /* 텍스트 왼쪽 정렬 */
+    text-align: left;
 }
 
-.signupTable input{
-    width: 350px; /* 가로 크기 */
-    height: 40px; /* 세로 크기 */
-    padding: 5px; /* 입력 필드 내부 여백 */
-    font-size: 16px; /* 텍스트 크기 */
-    border: 2px solid black; /* 테두리 설정 */
-    border-radius: 5px; /* 둥근 테두리 */
-    box-sizing: border-box; /* 패딩과 테두리를 포함한 크기 계산 */
+.signupTable input {
+    width: 350px;
+    height: 40px;
+    padding: 5px;
+    font-size: 16px;
+    border: 2px solid black;
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
-.title{
+.title {
     font-weight: bold;
 }
 
-.sub{
+.sub {
     font-size: 13px;
 }
 
 .male,
 .female {
-    
     display: flex; /* Flexbox 사용 */
     align-items: center; /* 수직 가운데 정렬 */
-    justify-content: space-between; /* 라디오 버튼과 텍스트를 양끝으로 배치 */
-    gap: 5px; /* 라디오 버튼과 텍스트 간 간격 */
+    gap: 10px; /* 라디오 버튼과 텍스트 사이 간격 */
     margin: 0; /* 외부 여백 제거 */
-    padding: 0; /* 내부 여백 제거 */
-    width: 100px; /* 고정 너비 */
+    padding: 5px; 
+    width: auto; /* 고정 너비 대신 내용에 맞춤 */
 }
-
 .male input[type="radio"],
 .female input[type="radio"] {
-    transform: scale(0.5); /* 라디오 버튼 크기 줄이기 */
-    margin: 0; /* 기본 마진 제거 */
-    padding: 0; /* 기본 패딩 제거 */
-    margin-left: -150%;
-    margin-right: -150%;
+    transform: scale(0.5);
+    margin-right: 
+    100%;
+    
 }
 
-.checkButton{
+.checkButton,
+.checkButton2 {
     border-radius: 10px;
     border: none;
-    background-color: rgba(109, 160, 255, 0.8); /* 50% 투명한 배경색 */
+    background-color: rgba(109, 160, 255, 0.8);
     cursor: pointer;
     color: white;
     width: 90px;
@@ -87,30 +78,20 @@
     font-weight: bold;
 }
 
-.checkButton2{
-    border-radius: 10px;
-    border: none;
-    background-color: rgba(109, 160, 255, 0.8); /* 50% 투명한 배경색 */
-    cursor: pointer;
-    color: white;
-    width: 90px;
-    height: 40px;
-    font-size: 15px;
-    font-weight: bold;
+.checkButton2 {
     margin-bottom: 15px;
 }
 
 /* 라디오 버튼 컨테이너 */
 .radioContainer {
-    display: flex;
     align-items: center;
-    gap: 10px; /* 라디오 버튼과 텍스트 사이 간격 */
+    gap: 10px;
     margin-top: 10px;
 }
 
 /* 기본 라디오 버튼 숨기기 */
 .radioContainer input[type="radio"] {
-    display: none; /* 기본 라디오 버튼 숨기기 */
+    display: none;
 }
 
 /* 커스텀 라디오 버튼 */
@@ -120,37 +101,39 @@
     justify-content: center;
     width: 20px;
     height: 20px;
-    border: 2px solid rgba(109, 160, 255, 0.8); /* 외곽선 색상 */
-    border-radius: 50%; /* 원형 버튼 */
+    border: 2px solid rgba(109, 160, 255, 0.8);
+    border-radius: 50%;
     cursor: pointer;
     position: relative;
 }
 
 /* 선택되었을 때 배경 색상 */
 .radioContainer input[type="radio"]:checked + label {
-    background-color: rgba(109, 160, 255, 0.8); /* 선택된 배경색 */
+    background-color: rgba(109, 160, 255, 0.8);
 }
 
 .checkLine {
-    border: none; /* 기본 테두리 제거 */
-    border-top: 1px solid black; /* 가로선 스타일 */
-    margin: 10px 0; /* 위아래 간격 */
-    width: 100%; /* 전체 너비로 확장 */
+    border: none;
+    border-top: 1px solid black;
+    margin: 10px 0;
+    width: 100%;
 }
-.agreeCheck{
+
+.agreeCheck {
     margin-bottom: 10px;
     width: 23%;
-    display: flex; /* Flexbox 사용 */
-    flex-direction: column; /* 자식 요소를 세로로 배치 */
-    justify-content: center; /* 세로 가운데 정렬 */
-    align-items: center; /* 가로 가운데 정렬 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
-.allCheck{
+
+.allCheck {
     font-size: 20px;
     font-weight: bold;
 }
 
-.signupBtn{
+.signupBtn {
     background-color: rgba(109, 160, 255, 0.8);
     border-radius: 10px;
     border: none;
