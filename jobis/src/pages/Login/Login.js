@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
 import kakao from "../../assets/images/kakaotalk.png";
 import naver from "../../assets/images/naver.png";
 import google from "../../assets/images/google.png";
-import { useNavigate } from 'react-router-dom';
 
 function Login() {
-    const navigate = useNavigate(); // 여기에서 navigate를 선언
+    const navigate = useNavigate(); // 페이지 이동
     const [userId, setUserId] = useState("");
     const [password, setPassword] = useState("");
 
+    // Base64 디코딩 함수
     const base64DecodeUnicode = (base64String) => {
         try {
             const base64 = base64String.replace(/-/g, "+").replace(/_/g, "/");
@@ -28,42 +28,55 @@ function Login() {
         }
     };
 
+    // 로그인 처리 함수
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://localhost:8080/users/login", {
-                userId,
+            console.log("아이디:", userId);
+            console.log("비밀번호:", password);
+    
+            // 서버에 로그인 요청
+            const response = await axios.post("http://localhost:8080/login", {
+                userId: userId,
                 userPw: password,
             });
-
+    
             const { accessToken, refreshToken } = response.data;
-
-            // AccessToken에서 사용자 정보 추출
+    
+            // JWT 디코딩 및 사용자 정보 추출
             const tokenPayload = base64DecodeUnicode(accessToken.split(".")[1]);
             if (!tokenPayload) throw new Error("토큰 페이로드 디코딩 실패");
-
-            const { userId: decodedUserId, userName, adminYn } = tokenPayload;
-
+    
+            console.log("디코딩된 JWT Payload:", tokenPayload);
+    
+            // 클레임에서 사용자 정보 추출
+            const {
+                userId: decodedUserId = "unknown",
+                userName = "unknown",
+                role = "unknown",
+            } = tokenPayload;
+    
             // 콘솔 출력
             console.log("AccessToken:", accessToken);
             console.log("RefreshToken:", refreshToken);
             console.log("UserId:", decodedUserId);
             console.log("UserName:", userName);
-            console.log("AdminYn:", adminYn);
-
+            console.log("Role:", role);
+    
             // 로컬 스토리지에 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userId", decodedUserId);
             localStorage.setItem("userName", userName);
-            localStorage.setItem("adminYn", adminYn);
-
+            localStorage.setItem("role", role);
+    
             alert("로그인 성공!");
-            navigate('/'); // 메인페이지로 이동
+            navigate("/"); // 메인 페이지로 이동
         } catch (error) {
             console.error("로그인 실패:", error.response?.data || error.message);
             alert("로그인 실패: 다시 시도하십시오.");
         }
     };
+    
 
     return (
         <div className={styles.container}>
