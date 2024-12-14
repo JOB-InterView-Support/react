@@ -19,21 +19,31 @@ function Header() {
         try {
             // 서버에 로그아웃 요청
             await axios.post("http://localhost:8080/users/logout", { userId });
-
+    
             // 로컬스토리지에서 모든 데이터 제거
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
             localStorage.removeItem('userId');
             localStorage.removeItem('userName');
             localStorage.removeItem('adminYn');
-
+    
             alert("로그아웃 되었습니다.");
             navigate('/'); // 로그아웃 후 메인 페이지로 이동
         } catch (error) {
             console.error("로그아웃 실패:", error.response?.data || error.message);
-            alert("로그아웃에 실패했습니다. 다시 시도하십시오.");
+            alert("로그아웃 요청이 실패했지만 데이터를 정리하고 메인 페이지로 이동합니다.");
+    
+            // 요청 실패 시에도 로컬스토리지 제거 및 메인 페이지 이동
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('adminYn');
+    
+            navigate('/'); // 메인 페이지로 이동
         }
     };
+    
 
     const handleMyPage = () => {
         if (!isLoggedIn) {
