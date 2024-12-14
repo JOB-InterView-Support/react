@@ -1,17 +1,54 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/images/logo.png'; // 로고 이미지
 import styles from './Header.module.css'; // CSS Modules
-
-
+import axios from 'axios';
 
 function Header() {
+    const navigate = useNavigate();
+
+    // 로컬스토리지에서 로그인 정보 가져오기
+    const accessToken = localStorage.getItem('accessToken');
+    const userName = localStorage.getItem('userName');
+    const userId = localStorage.getItem('userId');
+
+    // 로그인 여부 확인
+    const isLoggedIn = !!accessToken;
+
+    const handleLogout = async () => {
+        try {
+            // 서버에 로그아웃 요청
+            await axios.post("http://localhost:8080/users/logout", { userId });
+
+            // 로컬스토리지에서 모든 데이터 제거
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userName');
+            localStorage.removeItem('adminYn');
+
+            alert("로그아웃 되었습니다.");
+            navigate('/'); // 로그아웃 후 메인 페이지로 이동
+        } catch (error) {
+            console.error("로그아웃 실패:", error.response?.data || error.message);
+            alert("로그아웃에 실패했습니다. 다시 시도하십시오.");
+        }
+    };
+
+    const handleMyPage = () => {
+        if (!isLoggedIn) {
+            alert("로그인 해주세요.");
+            navigate('/login'); // 로그인 페이지로 이동
+        } else {
+            navigate('/mypage'); // 마이페이지로 이동
+        }
+    };
 
     return (
         <header className={styles.header}>
             <div>
                 <Link to="/">
-                    <img src={logo} alt='Site Logo' className={styles.logo} />
+                    <img src={logo} alt="Site Logo" className={styles.logo} />
                 </Link>
             </div>
             <nav>
@@ -25,14 +62,25 @@ function Header() {
                 </ul>
             </nav>
             <div className={styles.rightBtn}>
-                <div className={styles.top}>관리자님 환영합니다.</div>
-                <div className={styles.bottom}>
-                    <button>마이페이지</button>
-                    <button><Link to="/login">로그인</Link></button>
-                </div>
+                {isLoggedIn ? (
+                    <>
+                        <div className={styles.top}>{userName}님 환영합니다.</div>
+                        <div className={styles.bottom}>
+                            <button onClick={handleMyPage}>마이페이지</button>
+                            <button onClick={handleLogout}>로그아웃</button>
+                        </div>
+                    </>
+                ) : (
+                    <div className={styles.bottom}>
+                        <button onClick={handleMyPage}>마이페이지</button>
+                        <button>
+                            <Link to="/login">로그인</Link>
+                        </button>
+                    </div>
+                )}
             </div>
         </header>
-    )
+    );
 }
 
 export default Header;

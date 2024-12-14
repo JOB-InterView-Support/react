@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import style from './Signup.module.css';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 function Signup() {
+    const navigate = useNavigate(); // 여기에서 navigate를 선언
     const [userId, setUserId] = useState('');
     const [isIdAvailable, setIsIdAvailable] = useState(false);
     const [password, setPassword] = useState('');
@@ -302,7 +305,8 @@ function Signup() {
 
             if (response.data === "success") {
                 alert("회원가입이 완료되었습니다.");
-                // 필요한 경우 리다이렉트 처리
+                // 회원가입 성공 시 로그인 페이지로 리다이렉트
+                navigate('/login'); // '/login'으로 이동
             } else {
                 alert("회원가입에 실패했습니다. 다시 시도해주세요.");
             }
