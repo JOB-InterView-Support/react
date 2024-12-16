@@ -30,7 +30,7 @@ function Footer() {
       <div className={styles.right}>
         <div>Address : 서울 서초구 강남구 서초대로 77길 41 4층</div>
         <div>Tel : 0507-1395-6865</div>
-        <div>Email : jobis@gmail.com</div>
+        <div>Email : jobisdev@gmail.com</div>
       </div>
     </footer>
   )

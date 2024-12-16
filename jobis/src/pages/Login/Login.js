@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; 
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import styles from "./Login.module.css";
@@ -10,6 +10,17 @@ function Login() {
     const navigate = useNavigate(); // 페이지 이동
     const [userId, setUserId] = useState("");
     const [password, setPassword] = useState("");
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem("accessToken");
+    
+        if (accessToken) {
+            navigate("/"); // 로그인된 사용자는 메인 페이지로 이동
+        } else if (window.location.pathname !== "/login") {
+            navigate("/login"); // 비로그인 사용자는 로그인 페이지로 이동
+        }
+    }, [navigate]);
+    
 
     // Base64 디코딩 함수
     const base64DecodeUnicode = (base64String) => {
