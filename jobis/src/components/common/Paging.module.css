@@ -1,0 +1,24 @@
+.pagingContainer {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+    gap: 10px;
+  }
+  
+  .pagingContainer button {
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+    background-color: white;
+    cursor: pointer;
+  }
+  
+  .pagingContainer button.active {
+    background-color: #6da0ff;
+    color: white;
+    font-weight: bold;
+  }
+  
+  .pagingContainer button:hover {
+    background-color: #f0f0f0;
+  }
+  

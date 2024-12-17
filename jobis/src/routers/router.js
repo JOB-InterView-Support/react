@@ -19,8 +19,8 @@ import ticketRouter from './ticketRouter';
 const AppRouter = () => {
   return (
     <Routes>
-      {/* {adminRouter}
-      {aiInterviewRouter}
+      {adminRouter}
+      {/* {aiInterviewRouter}
       {jobPostingRouter} */}
       {loginRouter}
       {signupRouter}
