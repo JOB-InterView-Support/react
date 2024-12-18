@@ -111,49 +111,53 @@ export const AuthProvider = ({ children }) => {
 
   // AccessToken 또는 RefreshToken 재발급 처리
   const handleReissueTokens = async (extendLogin = false) => {
-    // 토큰 가져오기 및 공백 제거
     let accessToken = localStorage.getItem("accessToken")?.trim();
     let refreshToken = localStorage.getItem("refreshToken")?.trim();
 
     if (!accessToken || !refreshToken) {
-        console.error("Reissue 요청 실패: 토큰이 존재하지 않습니다.");
-        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-        logoutAndRedirect();
-        return;
+      console.error("Reissue 요청 실패: 토큰이 존재하지 않습니다.");
+      alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+      logoutAndRedirect();
+      return;
     }
 
     try {
-        console.log("Reissue 요청 - AccessToken:", accessToken);
-        console.log("Reissue 요청 - RefreshToken:", refreshToken);
+      console.log("Reissue 요청 - AccessToken:", accessToken);
+      console.log("Reissue 요청 - RefreshToken:", refreshToken);
 
-        const response = await apiClient.post("/reissue", null, {
-            headers: {
-                Authorization: `Bearer ${refreshToken}`,
-                AccessToken: `Bearer ${accessToken}`,
-                ExtendLogin: extendLogin ? "true" : "false",
-            },
-        });
+      const response = await apiClient.post("/reissue", null, {
+        headers: {
+          Authorization: `Bearer ${refreshToken}`,
+          AccessToken: `Bearer ${accessToken}`,
+          ExtendLogin: extendLogin ? "true" : "false",
+        },
+      });
 
-        console.log("Reissue 성공 - 응답 헤더:", response.headers);
-        updateTokens(
-            response.headers["authorization"]?.split(" ")[1]?.trim(),
-            response.headers["refresh-token"]?.split(" ")[1]?.trim()
-        );
+      console.log("Reissue 성공 - 응답 헤더:", response.headers);
+      updateTokens(
+        response.headers["authorization"]?.split(" ")[1]?.trim(),
+        response.headers["refresh-token"]?.split(" ")[1]?.trim()
+      );
     } catch (error) {
-        console.error("Reissue 실패 - 상태 코드:", error.response?.status);
-        console.error("Reissue 실패 - 응답 데이터:", error.response?.data);
-        console.error("Reissue 실패 - 응답 헤더:", error.response?.headers);
+      console.error("Reissue 실패 - 상태 코드:", error.response?.status);
+      console.error("Reissue 실패 - 응답 데이터:", error.response?.data);
 
-        const expiredTokenType = error.response?.headers["token-expired"];
-        if (expiredTokenType === "RefreshToken") {
-            alert("세션이 만료되었습니다. 다시 로그인해주세요.");
-            logoutAndRedirect();
-        } else {
-            throw error;
-        }
+      const expiredTokenType = error.response?.headers["token-expired"];
+      if (
+        expiredTokenType === "RefreshToken" ||
+        error.response?.data === "Session Expired"
+      ) {
+        alert("세션이 만료되었습니다. 다시 로그인해주세요.");
+        logoutAndRedirect();
+      } else if (expiredTokenType === "AccessToken") {
+        console.warn("AccessToken 만료됨. RefreshToken으로 재발급 시도 중...");
+        return await handleReissueTokens();
+      } else {
+        console.error("Reissue 중 예상치 못한 오류 발생:", error.message);
+        logoutAndRedirect();
+      }
     }
-};
-
+  };
 
   // 로그아웃 함수
   const logoutAndRedirect = () => {
