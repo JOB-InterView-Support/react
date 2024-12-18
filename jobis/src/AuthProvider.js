@@ -49,12 +49,15 @@ export const AuthProvider = ({ children }) => {
       console.error("Failed to refresh token:", error);
   
       if (error.response && error.response.status === 401) {
-        // RefreshToken 만료 시
+        // Java가 RefreshToken이 만료되었음을 응답하면
         alert("Refresh Token이 만료되었습니다. 다시 로그인해주세요.");
-        logoutAndRedirect();
+        logoutAndRedirect(); // 세션 초기화 및 로그인 페이지로 이동
+      } else {
+        console.error("예상치 못한 오류:", error.message);
       }
     }
   };
+  
   
   // 로그아웃 함수
   const logoutAndRedirect = () => {

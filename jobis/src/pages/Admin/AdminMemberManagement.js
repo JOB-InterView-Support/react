@@ -7,50 +7,66 @@ import AdminSubMenubar from "../../components/common/subMenubar/AdminSubMenubar"
 import Paging from "../../components/common/Paging";
 
 function AdminMemberManagement() {
-  const { role, isLoggedIn, refreshAccessToken } = useContext(AuthContext); // refreshAccessToken 추가
+  const { role, isLoggedIn, refreshAccessToken } = useContext(AuthContext);
   console.log("AdminMemberManagement의 role 값:", role);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   const [members, setMembers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 10;
 
   useEffect(() => {
-    console.log("현재 role 값:", role); // role 값 콘솔 출력
+    console.log("현재 role 값:", role);
     if (!isLoggedIn || role !== "ADMIN") {
       alert("관리자만 접근할 수 있습니다.");
-      navigate("/");
+      navigate("/login");
     }
   }, [role, isLoggedIn, navigate]);
 
-  const fetchData = (page) => {
-    const token = localStorage.getItem("accessToken");
-
-    apiClient
-      .get(`/admin/adminMemberManagementList?page=${page - 1}&size=${itemsPerPage}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((response) => {
-        setMembers(response.data.content);
-        setTotalItems(response.data.totalElements);
-        setCurrentPage(page);
-      })
-      .catch(async (error) => {
-        if (error.response && error.response.status === 401) {
-          console.warn("AccessToken 만료됨. RefreshToken으로 재발급 요청 중...");
-          try {
-            await refreshAccessToken(); // AuthContext에서 가져온 함수 호출
-            fetchData(page); // 새 AccessToken으로 다시 요청
-          } catch (refreshError) {
-            console.error("Token 재발급 실패:", refreshError);
-            alert("세션이 만료되었습니다. 다시 로그인해 주세요.");
-            navigate("/login");
-          }
-        } else {
-          console.error("데이터 가져오는 중 오류 발생:", error.response?.data || error.message);
-        }
+  const secureApiRequest = async (url, options, retry = true) => {
+    try {
+      const token = localStorage.getItem("accessToken");
+      if (!token) throw new Error("AccessToken이 없습니다.");
+  
+      const response = await apiClient.get(url, {
+        ...options,
+        headers: { Authorization: `Bearer ${token}`, ...options?.headers },
       });
+  
+      return response;
+    } catch (error) {
+      if (error.response && error.response.status === 401 && retry) {
+        console.warn("AccessToken 만료됨. RefreshToken으로 재발급 요청 중...");
+        try {
+          await refreshAccessToken(); // AuthProvider.js의 함수 호출
+          return secureApiRequest(url, options, false); // 재시도
+        } catch (refreshError) {
+          console.error("Token 재발급 실패:", refreshError);
+          throw new Error("세션이 만료되었습니다. 다시 로그인해 주세요.");
+        }
+      } else {
+        throw error;
+      }
+    }
+  };
+  
+
+  const fetchData = async (page) => {
+    try {
+      const response = await secureApiRequest(
+        `/admin/adminMemberManagementList?page=${page - 1}&size=${itemsPerPage}`
+      );
+      setMembers(response.data.content);
+      setTotalItems(response.data.totalElements);
+      setCurrentPage(page);
+    } catch (error) {
+      console.error("데이터 가져오는 중 오류 발생:", error.message);
+      if (error.message.includes("세션이 만료")) {
+        alert(error.message);
+        navigate("/login");
+      }
+    }
   };
 
   useEffect(() => {

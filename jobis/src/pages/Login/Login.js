@@ -88,9 +88,7 @@ function Login() {
     };
 
     const handleKeyDown = (e) => {
-        console.log("Key pressed:", e.key); // 눌린 키의 이름
-        console.log("Key code:", e.code); // 키의 물리적 위치
-        console.log("Key code (numeric):", e.keyCode); // 키의 숫자 코드 (비표준)
+        console.log("Key pressed:", e.key); // 눌린 키의 이름      
         if (e.key === "Enter" ) {
             handleLogin(); // Enter 키가 눌리면 handleLogin 호출
         }
