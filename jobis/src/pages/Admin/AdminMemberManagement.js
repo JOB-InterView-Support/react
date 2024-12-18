@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
+import apiClient from "../../utils/axios"; // apiClient 가져오기
 import styles from "./AdminMemberManagement.module.css";
 import AdminSubMenubar from "../../components/common/subMenubar/AdminSubMenubar";
 import Paging from "../../components/common/Paging";
@@ -27,7 +27,7 @@ function AdminMemberManagement() {
   const fetchData = (page) => {
     const token = localStorage.getItem("accessToken");
 
-    axios
+    apiClient
       .get(`/admin/adminMemberManagementList?page=${page - 1}&size=${itemsPerPage}`, {
         headers: { Authorization: `Bearer ${token}` },
       })

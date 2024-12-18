@@ -1,5 +1,5 @@
 import React, { createContext, useState, useEffect } from "react";
-import axios from "axios";
+import apiClient from "../src/utils/axios"; // apiClient 가져오기
 
 export const AuthContext = createContext();
 
@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
       const refreshToken = localStorage.getItem("refreshToken");
       if (!refreshToken) throw new Error("No refresh token available");
   
-      const response = await axios.post("http://localhost:8080/reissue", null, {
+      const response = await apiClient.post("/reissue", null, {
         headers: { Authorization: `Bearer ${refreshToken}` },
       });
   

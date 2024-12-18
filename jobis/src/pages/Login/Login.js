@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
+import apiClient from "../../utils/axios"; // apiClient 가져오기
 import styles from "./Login.module.css";
 
 function Login() {
@@ -35,7 +35,7 @@ function Login() {
     // 로그인 처리 함수
     const handleLogin = async () => {
         try {
-            const response = await axios.post("http://localhost:8080/login", {
+            const response = await apiClient.post("/login", {
                 userId: userId,
                 userPw: password,
             });
@@ -77,8 +77,8 @@ function Login() {
             navigate("/"); // 메인 페이지로 이동
         } catch (error) {
             // 백엔드에서 반환된 에러 메시지를 정확히 추출
-            const errorMessage = error.response?.data?.error; // JSON에서 error 메시지 추출
-    
+            const errorMessage = error.response?.data?.error; // 백엔드의 error 키 값만 추출
+            console.log(errorMessage)
             if (errorMessage) {
                 alert(errorMessage); // 백엔드 에러 메시지를 alert로 표시
             } else {
@@ -87,9 +87,11 @@ function Login() {
         }
     };
 
-     // Enter 키 이벤트 핸들러
-     const handleKeyDown = (e) => {
-        if (e.key === "Enter") {
+    const handleKeyDown = (e) => {
+        console.log("Key pressed:", e.key); // 눌린 키의 이름
+        console.log("Key code:", e.code); // 키의 물리적 위치
+        console.log("Key code (numeric):", e.keyCode); // 키의 숫자 코드 (비표준)
+        if (e.key === "Enter" ) {
             handleLogin(); // Enter 키가 눌리면 handleLogin 호출
         }
     };
