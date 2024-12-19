@@ -3,12 +3,18 @@ import { useLocation, useNavigate } from "react-router-dom"; // useLocation 추�
 import { AuthContext } from "../../AuthProvider";
 import styles from "./AdminMemberManagementDetail.module.css";
 import BackButton from "../../components/common/button/BackButton";
+import RestricationModal from "./RestricationModal";
 
 function AdminMemberManagementDetail() {
   const location = useLocation(); // state를 가져오기 위해 useLocation 사용
   const navigate = useNavigate();
   const { secureApiRequest } = useContext(AuthContext);
   const [member, setMember] = useState(null);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true); // 모달 열기
+  const closeModal = () => setIsModalOpen(false); // 모달 닫기
 
   // state에서 uuid 추출
   const uuid = location.state?.uuid;
@@ -102,7 +108,7 @@ function AdminMemberManagementDetail() {
           <tr>
             <td className={styles.title}>제재 여부</td>
             <td>{member.userRestrictionStatus === "Y" ? "정지" : "이용중"}</td>
-            <td className={styles.title}>제제 사유</td>
+            <td className={styles.title}>제재 사유</td>
             <td>{member.userCreateAt}</td>
           </tr>
           <tr>
@@ -120,9 +126,13 @@ function AdminMemberManagementDetail() {
         </tbody>
       </table>
       <div className={styles.btnContainer}>
-        <BackButton/>
-        <button className={styles.restricationBtn}>이용 제제</button>
+        <BackButton />
+        <button className={styles.restricationBtn} onClick={openModal}>
+          이용 제재
+        </button>
       </div>
+       
+       {isModalOpen && <RestricationModal onClose={closeModal} />}
     </div>
   );
 }
