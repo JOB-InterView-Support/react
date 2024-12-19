@@ -24,9 +24,9 @@ const AppRouter = () => {
       {loginRouter}
       {signupRouter}
       {mypageRouter}
+      {qnaRouter}
       {/* {noticeRouter}
       {payRouter}
-      {qnaRouter}
       {reviewRouter}
       {ticketRouter} */}
       <Route path="/" element={<MainPage />} />
