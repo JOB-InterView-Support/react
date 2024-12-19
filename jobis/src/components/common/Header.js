@@ -62,7 +62,7 @@ function Header() {
       alert("로그인 후 이용 가능합니다."); // 로그인 필요 알림
       navigate("/login"); // 로그인 페이지로 이동
     } else {
-      navigate("/mypage"); // 마이페이지로 이동
+      navigate("/updateUser"); // 마이페이지로 이동
     }
   };
 

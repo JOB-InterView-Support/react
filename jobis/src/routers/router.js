@@ -8,13 +8,12 @@ import aiInterviewRouter from './aiInterviewRouter';
 import jobPostingRouter from './jobPostingRouter';
 import loginRouter from './loginRouter';
 import signupRouter from './signupRouter';
-import mypageRouter from './mypageRouter';
+import mypageRouter from './mypageRouter'; // 이 경로 확인
 import noticeRouter from './noticeRouter';
 import payRouter from './payRouter';
 import qnaRouter from './qnaRouter';
 import reviewRouter from './reviewRouter';
 import ticketRouter from './ticketRouter';
-
 
 const AppRouter = () => {
   return (
@@ -24,17 +23,15 @@ const AppRouter = () => {
       {jobPostingRouter} */}
       {loginRouter}
       {signupRouter}
-      {/* {mypageRouter}
-      {noticeRouter}
-      {payRouter}
+      {mypageRouter}
       {qnaRouter}
+      {/* {noticeRouter}
+      {payRouter}
       {reviewRouter}
-      {ticketRouter}  */}
+      {ticketRouter} */}
       <Route path="/" element={<MainPage />} />
     </Routes>
   );
 };
 
 export default AppRouter;
-
-
