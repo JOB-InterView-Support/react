@@ -70,7 +70,14 @@ function AdminMemberManagement() {
               </thead>
               <tbody>
                 {members.map((member) => (
-                  <tr key={member.uuid}>
+                  <tr
+                    key={member.uuid}
+                    onClick={() =>
+                      navigate("/adminMemberDetail", {
+                        state: { uuid: member.uuid },
+                      })
+                    } // state 전달
+                  >
                     <td>{member.userName}</td>
                     <td>{member.userId}</td>
                     <td>{member.userDefaultEmail}</td>
