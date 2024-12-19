@@ -94,7 +94,6 @@ function Header() {
           </>
         ) : (
           <div className={styles.bottom}>
-            <button onClick={handleMyPage}>마이페이지</button>
             <button>
               <Link to="/login">로그인</Link>
             </button>
