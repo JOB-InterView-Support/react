@@ -1,20 +1,23 @@
 import React, { useEffect, useState, useContext } from "react";
-import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
-import styles from "./UpdateUser.module.css"; // CSS 모듈 추가
+import { AuthContext } from "../../AuthProvider";
+import styles from "./UpdateUser.module.css";
 
 const UpdateUser = () => {
-  const { secureApiRequest } = useContext(AuthContext); // secureApiRequest 사용
+  const { secureApiRequest, isAuthInitialized } = useContext(AuthContext);
   const [user, setUser] = useState({
     userId: "",
     userName: "",
     userPw: "",
-    userPhone: "",
     userDefaultEmail: "",
+    userPhone1: "",
+    userPhone2: "",
+    userPhone3: "",
   });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // localStorage에서 userId 가져오기
+    if (!isAuthInitialized) return;
+
     const storedUserId = localStorage.getItem("userId");
     if (!storedUserId) {
       console.error("로그인 유저 정보 없음");
@@ -22,46 +25,55 @@ const UpdateUser = () => {
       return;
     }
 
-    // API로 사용자 정보 가져오기
     const fetchUserInfo = async () => {
       setLoading(true);
       try {
         const response = await secureApiRequest(`/mypage/${storedUserId}`);
-        setUser(response.data);
+        const phone = response.data.userPhone || "";
+        setUser({
+          ...response.data,
+          userPhone1: phone.slice(0, 3),
+          userPhone2: phone.slice(3, 7),
+          userPhone3: phone.slice(7),
+        });
       } catch (error) {
-        console.error("로그인 유저 정보 없음:", error);
+        console.error("로그인 유저 정보 없음:", error.response?.data || error.message);
       } finally {
         setLoading(false);
       }
     };
 
     fetchUserInfo();
-  }, [secureApiRequest]);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevUser) => ({ ...prevUser, [name]: value }));
-  };
+  }, [secureApiRequest, isAuthInitialized]);
 
   const handleUpdate = async () => {
-    const storedUserId = localStorage.getItem("userId");
-    if (!storedUserId) {
-      alert("User ID is missing in localStorage.");
-      return;
-    }
+    const updatedUser = {
+      ...user,
+      userPhone: `${user.userPhone1 || ""}${user.userPhone2 || ""}${user.userPhone3 || ""}`,
+    };
+
+    delete updatedUser.userPhone1;
+    delete updatedUser.userPhone2;
+    delete updatedUser.userPhone3;
 
     try {
-      const response = await secureApiRequest(`/mypage/${storedUserId}`, "PUT", user);
+      const response = await secureApiRequest(`/mypage/${user.userId}`, {
+        method: "PUT",
+        data: updatedUser,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
       setUser(response.data);
-      alert("User information updated successfully!");
+      alert("회원 정보가 성공적으로 수정되었습니다.");
     } catch (error) {
-      console.error("Error updating user:", error);
+      console.error("Error updating user:", error.response?.data || error.message);
       alert("Failed to update user information.");
     }
   };
 
   if (loading) return <div>Loading...</div>;
-  if (!user.userId) return <div>No user data available</div>;
 
   return (
     <div className={styles.container}>
@@ -75,7 +87,7 @@ const UpdateUser = () => {
             className={styles.input}
             name="userName"
             value={user.userName}
-            onChange={handleChange}
+            onChange={handleUpdate}
           />
         </div>
         <div className={styles.formGroup}>
@@ -94,7 +106,7 @@ const UpdateUser = () => {
             type="password"
             className={styles.input}
             name="userPw"
-            onChange={handleChange}
+            onChange={handleUpdate}
           />
         </div>
         <div className={styles.formGroup}>
@@ -103,7 +115,7 @@ const UpdateUser = () => {
             type="email"
             className={styles.input}
             name="userDefaultEmail"
-            onChange={handleChange}
+            onChange={handleUpdate}
           />
         </div>
         <div className={styles.formGroup}>
@@ -114,21 +126,21 @@ const UpdateUser = () => {
               className={`${styles.input} ${styles.phoneInput}`}
               name="userPhone1"
               maxLength={3}
-              onChange={handleChange}
+              onChange={handleUpdate}
             />
             <input
               type="text"
               className={`${styles.input} ${styles.phoneInput}`}
               name="userPhone2"
               maxLength={4}
-              onChange={handleChange}
+              onChange={handleUpdate}
             />
             <input
               type="text"
               className={`${styles.input} ${styles.phoneInput}`}
               name="userPhone3"
               maxLength={4}
-              onChange={handleChange}
+              onChange={handleUpdate}
             />
           </div>
         </div>
