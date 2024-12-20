@@ -129,13 +129,7 @@ function AdminMemberManagementDetail() {
             <td className={styles.title}>이용권 유효기간</td>
             <td></td>
           </tr>
-          <tr>
-            <td className={styles.title}>제재 여부</td>
-            <td>{member.userRestrictionStatus === "Y" ? "정지" : "이용중"}</td>
-            <td className={styles.title}>제재 사유</td>
-            <td>{member.userRestrictionReason || "없음"}</td>{" "}
-            {/* 제재 사유 수정 */}
-          </tr>
+
           <tr>
             <td className={styles.title}>카카오 이메일</td>
             <td>{member.userKakaoEmail ? member.userKakaoEmail : "없음"}</td>
@@ -147,6 +141,18 @@ function AdminMemberManagementDetail() {
             <td>{member.userGoogleEmail ? member.userGoogleEmail : "없음"}</td>
             <td className={styles.title}>페이스 아이디 여부</td>
             <td>{member.userFaceIdStatus === "Y" ? "있음" : "없음"}</td>
+          </tr>
+          <tr>
+            <td className={styles.title}>제재 여부</td>
+            <td>{member.userRestrictionStatus === "Y" ? "정지" : "이용중"}</td>
+            <td className={styles.title}>제재 사유</td>
+            <td>{member.userRestrictionReason || "없음"}</td>
+          </tr>
+          <tr>
+            <td className={styles.title}>탈퇴 여부</td>
+            <td>{member.userDeletionStatus === "Y" ? "탈퇴" : "미탈퇴"}</td>
+            <td className={styles.title}>탈퇴 사유</td>
+            <td>{member.userDeletionReason || "없음"}</td>
           </tr>
         </tbody>
       </table>
