@@ -89,6 +89,7 @@ function AdminMemberManagement() {
                   <th>가입일</th>
                   <th>이용 여부</th>
                   <th>관리자 여부</th>
+                  <th>탈퇴 여부</th>
                 </tr>
               </thead>
               <tbody>
@@ -107,6 +108,7 @@ function AdminMemberManagement() {
                     <td>{member.userCreateAt.split("T")[0]}</td>
                     <td>{member.userRestrictionStatus === "Y" ? "정지" : "이용중"}</td>
                     <td>{member.adminYn === "Y" ? "관리자" : "일반"}</td>
+                    <td>{member.userDeletionStatus === "Y" ? "탈퇴" : "비탈퇴"}</td>
                   </tr>
                 ))}
               </tbody>

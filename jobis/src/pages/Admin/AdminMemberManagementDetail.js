@@ -170,6 +170,9 @@ function AdminMemberManagementDetail() {
             이용 제재
           </button>
         )}
+        {member.userDeletionStatus === "Y" && (
+          <button className={styles.unsubscribeBtn}>탈퇴 해제</button>
+        )}
       </div>
 
       {isModalOpen && (

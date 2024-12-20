@@ -54,3 +54,15 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+.unsubscribeBtn{
+  background-color: rgba(0, 150, 150, 0.7);
+  border: none;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  width: 110px;
+  height: 40px;
+  border-radius: 5px;
+  cursor: pointer;
+}
