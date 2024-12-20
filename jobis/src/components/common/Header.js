@@ -79,7 +79,7 @@ function Header() {
           <li>AI 모의면접</li>
           <li>채용공고</li>
           <li>체험 후기</li>
-          <li>Q&A</li>
+          <li><Link to="/qna">Q&A</Link></li>
           <li>이용권</li>
         </ul>
       </nav>
