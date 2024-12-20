@@ -84,7 +84,7 @@ function AdminMemberManagementDetail() {
             <td className={styles.title}>휴대폰 번호</td>
             <td>{formatPhoneNumber(member.userPhone)}</td>
             <td className={styles.title}>자기소개서 유무</td>
-            <td>{member.userPhone}</td>
+            <td></td>
           </tr>
           <tr>
             <td className={styles.title}>가입일</td>
@@ -109,7 +109,8 @@ function AdminMemberManagementDetail() {
             <td className={styles.title}>제재 여부</td>
             <td>{member.userRestrictionStatus === "Y" ? "정지" : "이용중"}</td>
             <td className={styles.title}>제재 사유</td>
-            <td>{member.userCreateAt}</td>
+            <td>{member.userRestrictionReason || "없음"}</td>{" "}
+            {/* 제재 사유 수정 */}
           </tr>
           <tr>
             <td className={styles.title}>카카오 이메일</td>
@@ -131,8 +132,10 @@ function AdminMemberManagementDetail() {
           이용 제재
         </button>
       </div>
-       
-       {isModalOpen && <RestricationModal onClose={closeModal} />}
+
+      {isModalOpen && (
+        <RestricationModal onClose={closeModal} memberUuid={uuid} />
+      )}
     </div>
   );
 }

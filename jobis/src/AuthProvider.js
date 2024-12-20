@@ -4,6 +4,7 @@ import apiClient from "../src/utils/axios"; // apiClient 가져오기
 export const AuthContext = createContext();
 
 const parseAccessToken = (token) => {
+  console.log("AuthProvider.js 실행");
   if (!token) return null;
   const base64Url = token.split(".")[1];
   const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -52,15 +53,25 @@ export const AuthProvider = ({ children }) => {
     }
 
     try {
-      const response = await apiClient.get(url, {
-        ...options,
+      console.log("secureApiRequest 요청 URL:", url);
+      console.log("secureApiRequest 요청 옵션:", options);
+
+      // 요청 메서드와 데이터(body) 처리
+      const method = options.method || "GET"; // 기본 메서드는 GET
+      const data = options.body || null; // POST, PUT의 경우 데이터 포함
+
+      const response = await apiClient({
+        url,
+        method, // 동적으로 설정된 메서드
         headers: {
           Authorization: `Bearer ${refreshToken}`,
           AccessToken: `Bearer ${accessToken}`,
           ...options.headers,
         },
+        data, // POST, PUT 등의 경우 요청 본문 포함
       });
-      return response; // 성공 시 반환
+
+      return response; // 성공 시 응답 반환
     } catch (error) {
       console.error("API 요청 실패 - 상태 코드:", error.response?.status);
       console.error("API 응답 헤더:", error.response?.headers);
