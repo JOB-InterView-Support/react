@@ -46,6 +46,10 @@ const UpdateUser = () => {
     fetchUserInfo();
   }, [secureApiRequest, isAuthInitialized]);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({ ...prevUser, [name]: value }));
+  };
   const handleUpdate = async () => {
     const updatedUser = {
       ...user,
@@ -87,7 +91,7 @@ const UpdateUser = () => {
             className={styles.input}
             name="userName"
             value={user.userName}
-            onChange={handleUpdate}
+            onChange={handleChange}
           />
         </div>
         <div className={styles.formGroup}>
@@ -106,7 +110,7 @@ const UpdateUser = () => {
             type="password"
             className={styles.input}
             name="userPw"
-            onChange={handleUpdate}
+            onChange={handleChange}
           />
         </div>
         <div className={styles.formGroup}>
@@ -114,8 +118,9 @@ const UpdateUser = () => {
           <input
             type="email"
             className={styles.input}
+            value={user.userDefaultEmail}
             name="userDefaultEmail"
-            onChange={handleUpdate}
+            onChange={handleChange}
           />
         </div>
         <div className={styles.formGroup}>
@@ -125,22 +130,25 @@ const UpdateUser = () => {
               type="text"
               className={`${styles.input} ${styles.phoneInput}`}
               name="userPhone1"
+              value={user.userPhone1}
               maxLength={3}
-              onChange={handleUpdate}
+              onChange={handleChange}
             />
             <input
               type="text"
               className={`${styles.input} ${styles.phoneInput}`}
               name="userPhone2"
+              value={user.userPhone2}
               maxLength={4}
-              onChange={handleUpdate}
+              onChange={handleChange}
             />
             <input
               type="text"
               className={`${styles.input} ${styles.phoneInput}`}
               name="userPhone3"
+              value={user.userPhone3}
               maxLength={4}
-              onChange={handleUpdate}
+              onChange={handleChange}
             />
           </div>
         </div>
