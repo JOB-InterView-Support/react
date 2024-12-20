@@ -59,6 +59,30 @@ function AdminMemberManagementDetail() {
     fetchMemberDetail();
   }, [uuid, secureApiRequest, navigate]);
 
+  const handleLiftSanction = async () => {
+    if (!window.confirm(`${member.userName} 회원의 제재를 해제하시겠습니까?`)) {
+      return; // 사용자가 '아니오'를 클릭하면 함수 종료
+    }
+
+    try {
+      await secureApiRequest("/admin/memberLiftSanction", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uuid: member.uuid, // 회원의 UUID
+        }),
+      });
+
+      alert("회원 제재가 성공적으로 해제되었습니다.");
+      window.location.reload(); // 페이지 새로고침으로 변경 내용 반영
+    } catch (error) {
+      console.error("제재 해제 요청 중 오류 발생:", error);
+      alert("제재 해제 요청에 실패했습니다.");
+    }
+  };
+
   if (!member) {
     return <p>데이터를 불러오는 중입니다...</p>;
   }
@@ -129,7 +153,12 @@ function AdminMemberManagementDetail() {
       <div className={styles.btnContainer}>
         <BackButton />
         {member.userRestrictionStatus === "Y" ? (
-          <button className={styles.sanctionsLiftedBtn}>제재 해제</button>
+          <button
+            className={styles.sanctionsLiftedBtn}
+            onClick={handleLiftSanction}
+          >
+            제재 해제
+          </button>
         ) : (
           <button className={styles.restricationBtn} onClick={openModal}>
             이용 제재

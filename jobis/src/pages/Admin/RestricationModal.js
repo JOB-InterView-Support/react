@@ -41,7 +41,7 @@ function RestricationModal({ onClose, memberUuid }) {
         },
         body: JSON.stringify({
           uuid: memberUuid, // uuid 추가
-          userDeletionReason: finalReason, // 정지 사유
+          userRestricationReason: finalReason, // 정지 사유
         }),
       });
 
