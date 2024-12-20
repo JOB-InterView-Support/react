@@ -76,7 +76,7 @@ function AdminMemberManagementDetail() {
       });
 
       alert("회원 제재가 성공적으로 해제되었습니다.");
-      window.location.reload(); // 페이지 새로고침으로 변경 내용 반영
+      navigate("/adminMemberDetail");
     } catch (error) {
       console.error("제재 해제 요청 중 오류 발생:", error);
       alert("제재 해제 요청에 실패했습니다.");

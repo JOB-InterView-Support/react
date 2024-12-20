@@ -1,12 +1,15 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../../AuthProvider"; // AuthProvider 가져오기
 import styles from "./RestricationModal.module.css";
+import { useNavigate } from "react-router-dom";
 
 function RestricationModal({ onClose, memberUuid }) {
   const { secureApiRequest } = useContext(AuthContext); // secureApiRequest 가져오기
   const [reason, setReason] = useState(""); // 선택된 제재 사유
   const [customReason, setCustomReason] = useState(""); // 입력된 사유
   const [isInputDisabled, setIsInputDisabled] = useState(false); // input 비활성화 상태 관리
+
+  const navigate = useNavigate(); // useNavigate 훅 초기화
 
   const handleSelectChange = (e) => {
     const selectedReason = e.target.value;
@@ -41,14 +44,13 @@ function RestricationModal({ onClose, memberUuid }) {
         },
         body: JSON.stringify({
           uuid: memberUuid, // uuid 추가
-          userRestricationReason: finalReason, // 정지 사유
+          userRestrictionReason: finalReason, // 정지 사유
         }),
       });
 
       alert("회원이 성공적으로 제재되었습니다.");
       onClose(); // 모달 닫기
-      // 페이지 새로고침
-      window.location.reload();
+      navigate("/adminMemberDetail");
     } catch (error) {
       console.error("제재 요청 중 오류 발생:", error);
       alert("제재 요청에 실패했습니다.");
