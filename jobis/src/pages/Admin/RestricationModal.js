@@ -23,37 +23,37 @@ function RestricationModal({ onClose, memberUuid }) {
 
   const handleSubmit = async () => {
     const finalReason = isInputDisabled ? reason : customReason; // 입력된 최종 사유
-    console.log("제재 버튼 누름")
-    console.log(memberUuid)
-    console.log(finalReason)
-    
+    console.log("제재 버튼 누름");
+    console.log(memberUuid);
+    console.log(finalReason);
+
     if (!finalReason) {
       alert("사유를 입력하거나 선택하세요.");
       return;
     }
-  
+
     try {
       // secureApiRequest를 사용하여 서버로 데이터 전송
       await secureApiRequest("/admin/memberRestrict", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json",
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            uuid: memberUuid, // uuid 추가
-            userDeletionReason: finalReason, // 정지 사유
+          uuid: memberUuid, // uuid 추가
+          userDeletionReason: finalReason, // 정지 사유
         }),
-    });
-    
-  
+      });
+
       alert("회원이 성공적으로 제재되었습니다.");
       onClose(); // 모달 닫기
+      // 페이지 새로고침
+      window.location.reload();
     } catch (error) {
       console.error("제재 요청 중 오류 발생:", error);
       alert("제재 요청에 실패했습니다.");
     }
   };
-  
 
   return (
     <div className={styles.modalOverlay}>

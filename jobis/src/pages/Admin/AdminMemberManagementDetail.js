@@ -128,9 +128,13 @@ function AdminMemberManagementDetail() {
       </table>
       <div className={styles.btnContainer}>
         <BackButton />
-        <button className={styles.restricationBtn} onClick={openModal}>
-          이용 제재
-        </button>
+        {member.userRestrictionStatus === "Y" ? (
+          <button className={styles.sanctionsLiftedBtn}>제재 해제</button>
+        ) : (
+          <button className={styles.restricationBtn} onClick={openModal}>
+            이용 제재
+          </button>
+        )}
       </div>
 
       {isModalOpen && (

@@ -40,57 +40,50 @@ function Login() {
     const handleLogin = async () => {
         if (isLoggingIn) return; // 중복 요청 방지
         setIsLoggingIn(true);
-
+    
         try {
             const response = await apiClient.post("/login", {
                 userId: userId,
                 userPw: password,
             });
-
+    
             const { accessToken, refreshToken } = response.data;
-
+    
             // JWT 디코딩 및 사용자 정보 추출
             const tokenPayload = base64DecodeUnicode(accessToken.split(".")[1]);
             if (!tokenPayload) throw new Error("JWT 페이로드 디코딩 실패");
-
+    
             const {
                 userId: decodedUserId = "unknown",
                 userName = "unknown",
                 role = "unknown",
             } = tokenPayload;
-
-            // 콘솔 출력
-            console.log("AccessToken:", accessToken);
-            console.log("RefreshToken:", refreshToken);
-            console.log("UserId:", decodedUserId);
-            console.log("UserName:", userName);
-            console.log("Role:", role);
-
+    
             // 로컬 스토리지에 저장
             localStorage.setItem("accessToken", accessToken);
             localStorage.setItem("refreshToken", refreshToken);
             localStorage.setItem("userId", decodedUserId);
             localStorage.setItem("userName", userName);
             localStorage.setItem("role", role);
-
+    
             // AuthContext 상태 업데이트
             setAuthInfo({
                 isLoggedIn: true,
                 role: role,
                 username: userName,
             });
-
+    
             alert("로그인 성공!");
             navigate("/"); // 메인 페이지로 이동
         } catch (error) {
-            // 에러 메시지 처리
             const errorMessage =
                 error.response?.data?.error || "서버 오류로 인해 로그인에 실패했습니다. 다시 시도해주세요.";
-            alert(errorMessage);
+            alert(errorMessage); // 에러 메시지 표시
         } finally {
             setIsLoggingIn(false); // 요청 완료 후 로그인 상태 해제
         }
     };
+    
 
     const handleKeyDown = (e) => {
         if (e.key === "Enter") {
