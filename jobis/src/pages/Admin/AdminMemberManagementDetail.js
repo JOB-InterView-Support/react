@@ -83,6 +83,56 @@ function AdminMemberManagementDetail() {
     }
   };
 
+  const handleUnsubscribeLift = async () => {
+    if (!window.confirm(`${member.userName} 회원의 탈퇴 상태를 해제하시겠습니까?`)) {
+      return; // 사용자가 '아니오'를 클릭하면 함수 종료
+    }
+
+    try {
+      await secureApiRequest("/admin/memberUnsubscribeLift", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uuid: member.uuid, // 회원의 UUID
+        }),
+      });
+
+      alert("회원의 탈퇴 상태가 성공적으로 해제되었습니다.");
+      navigate("/adminMemberDetail");
+    } catch (error) {
+      console.error("탈퇴 해제 요청 중 오류 발생:", error);
+      alert("탈퇴 해제 요청에 실패했습니다.");
+    }
+  };
+
+  const handleDeleteMember = async () => {
+    if (!window.confirm("정말 회원 정보를 삭제하시겠습니까?")) {
+      return; // 사용자가 '취소'를 클릭하면 함수 종료
+    }
+
+    try {
+      await secureApiRequest(`/admin/deleteMember`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uuid: member.uuid, // 삭제할 회원의 UUID 전달
+        }),
+      });
+
+      alert("회원 정보가 성공적으로 삭제되었습니다.");
+      navigate("/adminMemberManagement"); // 삭제 후 리스트 페이지로 이동
+    } catch (error) {
+      console.error("회원 삭제 요청 중 오류 발생:", error.message);
+      alert("회원 삭제 요청에 실패했습니다.");
+    }
+  };
+
+
+
   if (!member) {
     return <p>데이터를 불러오는 중입니다...</p>;
   }
@@ -171,8 +221,23 @@ function AdminMemberManagementDetail() {
           </button>
         )}
         {member.userDeletionStatus === "Y" && (
-          <button className={styles.unsubscribeBtn}>탈퇴 해제</button>
+          <>
+            <button
+              className={styles.unsubscribeBtn}
+              onClick={handleUnsubscribeLift}
+            >
+              탈퇴 해제
+            </button>
+            <button
+              className={styles.deleteBtn}
+              onClick={handleDeleteMember}
+            >
+              회원 삭제
+            </button>
+          </>
         )}
+
+
       </div>
 
       {isModalOpen && (
