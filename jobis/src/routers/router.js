@@ -26,8 +26,9 @@ const AppRouter = () => {
       {mypageRouter}
       {qnaRouter}
       {ticketRouter}
-      {/* {noticeRouter}
       {payRouter}
+      {/* {noticeRouter}
+      
       {reviewRouter}
        */}
       <Route path="/" element={<MainPage />} />
