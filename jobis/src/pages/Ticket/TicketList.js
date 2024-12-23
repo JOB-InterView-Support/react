@@ -29,7 +29,7 @@ function TicketList() {
                 <button>구매하기</button>
             </div>
         </div>
-            )
+    )
 }
 
 export default TicketList;
