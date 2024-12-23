@@ -77,7 +77,7 @@ function Header() {
         <ul className={styles.navList}>
           <li>공지사항</li>
           <li>AI 모의면접</li>
-          <li>채용공고</li>
+          <li><Link to="/jobPosting">채용공고</Link></li>
           <li>체험 후기</li>
           <li><Link to="/qna">Q&A</Link></li>
           <li><Link to="/ticketList">이용권</Link></li>
