@@ -50,30 +50,33 @@ const UpdateUser = () => {
     const { name, value } = e.target;
     setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
-  const handleUpdate = async () => {
-    const updatedUser = {
-      ...user,
-      userPhone: `${user.userPhone1 || ""}${user.userPhone2 || ""}${user.userPhone3 || ""}`,
-    };
 
-    delete updatedUser.userPhone1;
-    delete updatedUser.userPhone2;
-    delete updatedUser.userPhone3;
-
+  const handleUpdate = async (e) => {
+    e.preventDefault();
+  
     try {
-      const response = await secureApiRequest(`/mypage/${user.userId}`, {
+      const updatedUser = {
+        userId: user.userId,
+        userPw: user.userPw || "", // 비밀번호 (공백 허용)
+        userName: user.userName,
+        userDefaultEmail: user.userDefaultEmail,
+        userPhone: `${user.userPhone1}${user.userPhone2}${user.userPhone3}`,
+      };
+  
+      console.log("Sending JSON Data:", updatedUser);
+  
+      await secureApiRequest(`/mypage/${user.userId}`, {
         method: "PUT",
-        data: updatedUser,
+        body: JSON.stringify(updatedUser), // JSON 데이터로 변환
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "application/json", // 반드시 JSON 형식으로 지정
         },
       });
-
-      setUser(response.data);
+  
       alert("회원 정보가 성공적으로 수정되었습니다.");
     } catch (error) {
       console.error("Error updating user:", error.response?.data || error.message);
-      alert("Failed to update user information.");
+      alert("회원 정보 수정 요청에 실패했습니다.");
     }
   };
 
@@ -153,7 +156,7 @@ const UpdateUser = () => {
           </div>
         </div>
         <div className={styles.buttonContainer}>
-          <button type="button" className={styles.button} onClick={handleUpdate}>
+          <button onClick={handleUpdate} className={styles.button}>
             수정 완료
           </button>
         </div>
