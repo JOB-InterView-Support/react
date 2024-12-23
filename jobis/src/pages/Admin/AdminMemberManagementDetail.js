@@ -16,6 +16,8 @@ function AdminMemberManagementDetail() {
   const openModal = () => setIsModalOpen(true); // 모달 열기
   const closeModal = () => setIsModalOpen(false); // 모달 닫기
 
+  const [loading, setLoading] = useState(false);
+
   // state에서 uuid 추출
   const uuid = location.state?.uuid;
 
@@ -84,7 +86,9 @@ function AdminMemberManagementDetail() {
   };
 
   const handleUnsubscribeLift = async () => {
-    if (!window.confirm(`${member.userName} 회원의 탈퇴 상태를 해제하시겠습니까?`)) {
+    if (
+      !window.confirm(`${member.userName} 회원의 탈퇴 상태를 해제하시겠습니까?`)
+    ) {
       return; // 사용자가 '아니오'를 클릭하면 함수 종료
     }
 
@@ -131,7 +135,61 @@ function AdminMemberManagementDetail() {
     }
   };
 
+  const promoteToAdmin = async () => {
+    if (!window.confirm(`정말로 ${member.userName} 회원을 관리자로 승격시키겠습니까?`)) {
+      return;
+    }
+    setLoading(true);
+    try {
+      await secureApiRequest(`/admin/promoteToAdmin`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uuid: member.uuid,
+        }),
+      });
+  
+      setMember({ ...member, adminYn: "Y" });
+      alert("관리자로 승격되었습니다.");
+      navigate("/adminMemberDetail");
+    } catch (error) {
+      console.error("승격 요청 중 오류 발생:", error);
+      alert(`관리자로 승격 요청에 실패했습니다: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
+  const demoteToUser = async () => {
+    if (!window.confirm(`정말로 ${member.userName} 회원을 일반 회원으로 변경하시겠습니까?`)) {
+      return;
+    }
+    setLoading(true);
+    try {
+      await secureApiRequest(`/admin/demoteToUser`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uuid: member.uuid,
+        }),
+      });
+  
+      setMember({ ...member, adminYn: "N" });
+      alert("일반 회원으로 변경되었습니다.");
+      navigate("/adminMemberDetail");
+    } catch (error) {
+      console.error("강등 요청 중 오류 발생:", error);
+      alert(`일반 회원으로 변경 요청에 실패했습니다: ${error.message}`);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
 
   if (!member) {
     return <p>데이터를 불러오는 중입니다...</p>;
@@ -228,16 +286,20 @@ function AdminMemberManagementDetail() {
             >
               탈퇴 해제
             </button>
-            <button
-              className={styles.deleteBtn}
-              onClick={handleDeleteMember}
-            >
+            <button className={styles.deleteBtn} onClick={handleDeleteMember}>
               회원 삭제
             </button>
           </>
         )}
-
-
+        {member.adminYn === "Y" ? (
+          <button className={styles.changeUserBtn} onClick={demoteToUser}>
+            회원으로 변경
+          </button>
+        ) : (
+          <button className={styles.changeAdminBtn} onClick={promoteToAdmin}>
+            관리자로 변경
+          </button>
+        )}
       </div>
 
       {isModalOpen && (
