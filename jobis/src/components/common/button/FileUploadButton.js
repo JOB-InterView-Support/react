@@ -18,12 +18,11 @@ const FileUploadButton = ({ onFileChange }) => {
   };
 
   return (
-    <div className={styles.fileInputContainer}>
-      <label className={styles.fileLabel}>
+    <div>
+      <label>
         <input
           type="file"
           onChange={handleFileInputChange}
-          className={styles.fileInput}
         />
       </label>
     </div>
