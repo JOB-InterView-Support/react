@@ -6,7 +6,7 @@ import { AuthContext } from "../../AuthProvider";
 import JobPostingList from "./JobPostingList"; // JobPostingList 컴포넌트
 
 const JobPostingSearch = () => {
-  const { isLoggedIn, isAuthInitialized, secureApiRequest } = useContext(AuthContext);
+  const { isLoggedIn, isAuthInitialized, secureApiRequest, role } = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(false);
   const [jobPostingSearch, setJobPostingSearch] = useState([]); // 데이터를 저장할 상태
   const [selectedJobType, setSelectedJobType] = useState('');
@@ -24,24 +24,35 @@ const JobPostingSearch = () => {
     setSelectedEducation('');
   };
 
-  // 채용공고 목록 가져오기
-  const fetchJobPostingSearch = async () => {
+  // 로그인 상태 및 인증 상태 확인 후 리다이렉트 처리
+  useEffect(() => {
     if (!isAuthInitialized) {
-      console.warn("인증 상태 초기화 중입니다. 데이터 요청을 건너뜁니다.");
-      return;
+      // 인증 상태 초기화 중일 때
+      return <p>인증 상태 초기화 중입니다...</p>;
     }
-
     if (!isLoggedIn) {
-      console.warn("로그인되지 않았습니다. 로그인 페이지로 이동합니다.");
+      // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
       navigate("/login");
-      return;
+    }
+  }, [isLoggedIn, isAuthInitialized, navigate]);
+
+  const fetchJobPostingSearch = async (page = 1) => {
+    if (!isAuthInitialized || !isLoggedIn) {
+      return; // 로그인 상태가 아닐 때 실행하지 않음
     }
 
+    console.log("채용공고 검색 요청 시작");
+    console.log("선택한 필터 값:", {
+      selectedJobType,
+      selectedLocation,
+      selectedExperience,
+      selectedEducation,
+    });
     setIsLoading(true);
     setError(null);
 
     try {
-      const response = await apiClient.get("/api/jobPostings/search", {
+      const response = await apiClient.get("/search", {
         params: {
           keyword: "developer",  // 키워드 예시
           jobType: selectedJobType,  // 직종
@@ -50,19 +61,29 @@ const JobPostingSearch = () => {
           education: selectedEducation,  // 학력
         },
       });
+      console.log("채용공고 검색 성공:", response.data);
       setJobPostingSearch(response.data);
     } catch (err) {
-      setError("채용공고 검색 중 오류가 발생했습니다.");
       console.error("채용공고 검색 오류:", err);
+      setError("채용공고 검색 중 오류가 발생했습니다.");
     } finally {
+      console.log("채용공고 검색 완료");
       setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    fetchJobPostingSearch();
+    if (isAuthInitialized && isLoggedIn) {
+      fetchJobPostingSearch();
+    }
+    return () => {
+      // Cleanup 함수 추가
+      console.log("컴포넌트 언마운트 중...");
+      // 여기에 추가적인 cleanup 작업을 넣을 수 있습니다
+    };
   }, [isLoggedIn, isAuthInitialized]);
 
+  // 인증 상태가 초기화되지 않았을 때 메시지 출력
   if (!isAuthInitialized) {
     return <p>인증 상태 초기화 중입니다...</p>;
   }
@@ -70,6 +91,8 @@ const JobPostingSearch = () => {
   if (error) {
     return <p className={styles.error}>오류 발생: {error}</p>;
   }
+
+  console.log("검색결과:", jobPostingSearch);
 
   return (
     <div className={styles.searchContainer}>
