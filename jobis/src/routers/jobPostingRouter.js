@@ -6,7 +6,7 @@ import JobPostingDetail from "../pages/JobPosting/JobPostingDetail";
 import FavoritesList from "../pages/JobPosting/FavoritesList";
 
 const jobPostingRouter = [
-    <Route path="/JobPostingSearch" element={<JobPostingSearch/>}/>,
+    <Route path="/jobPosting" element={<JobPostingSearch/>}/>,
     <Route path="/JobPostingList" element={<JobPostingList/>}/>,
     <Route path="/JobPostingDetail" element={<JobPostingDetail/>}/>,
     <Route path="/FavoritesList" element={<FavoritesList/>}/>,
