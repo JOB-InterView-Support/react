@@ -6,7 +6,7 @@ import Paging from "../../components/common/Paging"; // Paging 컴포넌트 임�
 import InsertButton from "../../components/common/button/InsertButton"; // InsertButton 컴포넌트 임포트
 
 const QnaList = () => {
-  const { isLoggedIn, isAuthInitialized, secureApiRequest } = useContext(AuthContext);
+  const { isLoggedIn, isAuthInitialized, secureApiRequest, role } = useContext(AuthContext);
   const [qnaList, setQnaList] = useState([]);
   const [totalItems, setTotalItems] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -15,10 +15,16 @@ const QnaList = () => {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
+  // 로그인 상태 확인 후 리다이렉트 처리
+  useEffect(() => {
+    if (!isLoggedIn && isAuthInitialized) {
+      navigate("/login"); // 로그인 페이지로 이동
+    }
+  }, [isLoggedIn, isAuthInitialized, navigate]);
+
   const fetchQnaList = async (page = 1) => {
     if (!isAuthInitialized || !isLoggedIn) {
-      navigate("/login");
-      return;
+      return; // 로그인 상태가 아닐 때 실행하지 않음
     }
 
     setIsLoading(true);
@@ -37,7 +43,7 @@ const QnaList = () => {
       setCurrentPage(page); // 현재 페이지 설정
     } catch (err) {
       console.error("QnA 목록 가져오기 실패:", err);
-      setError(err.response?.data?.message || "데이터를 가져오는 중 문제가 발생했습니다.");
+      setError("데이터를 가져오는 중 문제가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -51,8 +57,12 @@ const QnaList = () => {
     navigate("/qna/insert"); // 등록 페이지로 이동
   };
 
+  if (!isAuthInitialized) {
+    return <p>인증 상태 확인 중...</p>;
+  }
+
   if (error) {
-    return <p className={styles.error}>오류 발생: {error}</p>;
+    return <p className={styles.error}>{error}</p>;
   }
 
   return (
@@ -97,13 +107,12 @@ const QnaList = () => {
           />
         </>
       )}
-      {isLoggedIn && (
-    <div className={styles.buttonContainer}>
-      <InsertButton onClick={handleInsertClick} label="질문 등록" />
+      {isAuthInitialized && role === "USER" && (
+        <div className={styles.buttonContainer}>
+          <InsertButton onClick={handleInsertClick} label="질문 등록" />
+        </div>
+      )}
     </div>
-  )}
-    </div>
-    
   );
 };
 
