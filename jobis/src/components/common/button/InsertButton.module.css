@@ -1,0 +1,17 @@
+.insertButton {
+    background-color: #4da8ff;
+    color: black;
+    padding: 8px 30px; /* 좌우 여백(40px)을 늘림 */
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+    cursor: pointer;
+    margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
+    display: block; /* 부모 요소의 정렬 방식에 따라 필요할 수 있음 */
+  }
+  
+  .insertButton:hover {
+    background-color: #3a94e7; /* 호버 시 어두운 파란색 */
+  }
+  
