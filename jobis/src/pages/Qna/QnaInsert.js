@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./QnaInsert.module.css";
-import UpdateButton from "../../components/common/button/UpdateButton";
+import FileUploadButton from "../../components/common/button/FileUploadButton";
 
 const QnaInsert = () => {
   const { secureApiRequest } = useContext(AuthContext);
@@ -78,7 +78,7 @@ const QnaInsert = () => {
         ></textarea>
       </div>
       <div className={styles.formGroup}>
-        <UpdateButton onFileChange={handleFileChange} />
+        <FileUploadButton onFileChange={handleFileChange} />
         {file ? (
           <span className={styles.fileName}>{file.name}</span>
         ) : (
