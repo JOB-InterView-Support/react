@@ -17,13 +17,13 @@ const QnaList = () => {
 
   // 로그인 상태 확인 후 리다이렉트 처리
   useEffect(() => {
-    if (!isLoggedIn && isAuthInitialized) {
+    if (!isLoggedIn) {
       navigate("/login"); // 로그인 페이지로 이동
     }
-  }, [isLoggedIn, isAuthInitialized, navigate]);
+  }, [isLoggedIn,  navigate]);
 
   const fetchQnaList = async (page = 1) => {
-    if (!isAuthInitialized || !isLoggedIn) {
+    if (!isLoggedIn) {
       return; // 로그인 상태가 아닐 때 실행하지 않음
     }
 
@@ -51,15 +51,12 @@ const QnaList = () => {
 
   useEffect(() => {
     fetchQnaList(currentPage);
-  }, [isLoggedIn, isAuthInitialized]);
+  }, [isLoggedIn]);
 
   const handleInsertClick = () => {
     navigate("/qna/insert"); // 등록 페이지로 이동
   };
 
-  if (!isAuthInitialized) {
-    return <p>인증 상태 확인 중...</p>;
-  }
 
   if (error) {
     return <p className={styles.error}>{error}</p>;
@@ -107,7 +104,7 @@ const QnaList = () => {
           />
         </>
       )}
-      {isAuthInitialized && role === "USER" && (
+      {role === "USER" && (
         <div className={styles.buttonContainer}>
           <InsertButton onClick={handleInsertClick} label="질문 등록" />
         </div>
