@@ -80,7 +80,7 @@ function Header() {
           <li>채용공고</li>
           <li>체험 후기</li>
           <li><Link to="/qna">Q&A</Link></li>
-          <li>이용권</li>
+          <li><Link to="/ticketList">이용권</Link></li>
         </ul>
       </nav>
       <div className={styles.rightBtn}>
