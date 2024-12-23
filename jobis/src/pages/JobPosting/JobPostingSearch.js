@@ -26,18 +26,15 @@ const JobPostingSearch = () => {
 
   // 로그인 상태 및 인증 상태 확인 후 리다이렉트 처리
   useEffect(() => {
-    if (!isAuthInitialized) {
-      // 인증 상태 초기화 중일 때
-      return <p>인증 상태 초기화 중입니다...</p>;
-    }
+    
     if (!isLoggedIn) {
       // 로그인되지 않은 경우 로그인 페이지로 리다이렉트
       navigate("/login");
     }
-  }, [isLoggedIn, isAuthInitialized, navigate]);
+  }, [isLoggedIn, navigate]);
 
   const fetchJobPostingSearch = async (page = 1) => {
-    if (!isAuthInitialized || !isLoggedIn) {
+    if ( !isLoggedIn) {
       return; // 로그인 상태가 아닐 때 실행하지 않음
     }
 
@@ -73,7 +70,7 @@ const JobPostingSearch = () => {
   };
 
   useEffect(() => {
-    if (isAuthInitialized && isLoggedIn) {
+    if (isLoggedIn) {
       fetchJobPostingSearch();
     }
     return () => {
@@ -81,12 +78,10 @@ const JobPostingSearch = () => {
       console.log("컴포넌트 언마운트 중...");
       // 여기에 추가적인 cleanup 작업을 넣을 수 있습니다
     };
-  }, [isLoggedIn, isAuthInitialized]);
+  }, [isLoggedIn]);
 
   // 인증 상태가 초기화되지 않았을 때 메시지 출력
-  if (!isAuthInitialized) {
-    return <p>인증 상태 초기화 중입니다...</p>;
-  }
+  
 
   if (error) {
     return <p className={styles.error}>오류 발생: {error}</p>;
