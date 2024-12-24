@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
+import style from "./KakaoLogin.module.css";
+import kakaoLogo from "../../assets/images/kakaotalk.png";
 
 function KakaoLogin() {
   const navigate = useNavigate();
@@ -83,7 +85,13 @@ function KakaoLogin() {
     };
   }, [navigate, setAuthInfo, isRequesting]);
 
-  return <div>카카오 로그인 처리 중...</div>;
+  return (
+    <div className={style.container}>
+      <img src={kakaoLogo} className={style.kakaoLogo}/>
+      <div>카카오 로그인 처리 중...</div>
+      
+    </div>
+  );
 }
 
 export default KakaoLogin;
