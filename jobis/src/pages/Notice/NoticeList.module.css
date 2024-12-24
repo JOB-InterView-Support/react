@@ -1,0 +1,14 @@
+.noticecontainer{
+    border: 1px solid red;
+    display: flex;
+}
+
+.noticetitle{
+    font-weight: bold;
+}
+
+.noticetable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+  }
