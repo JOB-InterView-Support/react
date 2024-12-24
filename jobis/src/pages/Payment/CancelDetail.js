@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import apiClient from "../../utils/axios";
-import styles from './TicketDetail.module.css';
+import styles from './CancelDetail.module.css';
 
 
-function TicketDetail(){
+function CancelDetail(){
 
 
     return(
     <div className={styles.paymentContainer}>
-        <h1 className={styles.paymentTitle}>이용권 상세 내역</h1>
+        <h1 className={styles.paymentTitle}>이용권 환불불 내역</h1>
 
         <div className={styles.paymentBox}>
             <table className={styles.paymentTable}>
@@ -61,4 +61,4 @@ function TicketDetail(){
     
 }
 
-export default TicketDetail;
+export default CancelDetail;

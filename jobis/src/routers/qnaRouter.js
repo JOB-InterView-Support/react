@@ -8,9 +8,9 @@ import QnaUpdate from '../pages/Qna/QnaUpdate';
 
 const qnaRouter = [
     <Route path="/Qna" element={<QnaList/>}/>,
-    <Route path="/Qna/detail/:no" element={<QnaDetail/>}/>,
+    <Route path="/Qna/detail/:qno" element={<QnaDetail/>}/>,
     <Route path="/Qna/Insert/" element={<QnaInsert/>}/>,
-    <Route path="/Qna/Update/:no" element={<QnaUpdate/>}/>,
+    <Route path="/Qna/Update/:qno" element={<QnaUpdate/>}/>,
 ];
 
 export default qnaRouter;
