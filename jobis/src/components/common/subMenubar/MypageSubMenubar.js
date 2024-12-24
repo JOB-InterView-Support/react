@@ -17,15 +17,15 @@ function MypageSubMenubar() {
         </div>
       </Link>
 
-      {/* <Link to="/adminStatistics" className={styles.menuItem}> */}
+      <Link to="/myTicketList" className={styles.menuItem}>
       <div
         className={`${styles.menuItem} ${
-          location.pathname === "/adminStatistics" ? styles.active : ""
+          location.pathname === "/myTicketList" ? styles.active : ""
         }`}
       >
         이용권 내역
       </div>
-      {/* </Link> */}
+      </Link>
 
       <Link to="/deleteUser" className={styles.menuItem}>
         <div
@@ -37,15 +37,15 @@ function MypageSubMenubar() {
         </div>
       </Link>
 
-      {/* <Link to="/adminSalesHistory" className={styles.menuItem}> */}
+      <Link to="/myIntroductionList" className={styles.menuItem}>
       <div
         className={`${styles.menuItem} ${
-          location.pathname === "/adminSalesHistory" ? styles.active : ""
+          location.pathname === "/myIntroductionList" ? styles.active : ""
         }`}
       >
         자기소개서
       </div>
-      {/* </Link> */}
+      </Link> 
     </div>
   );
 }
