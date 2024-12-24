@@ -1,27 +1,37 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
+import { useNavigate, useLocation } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider";
 import styles from "./AdminMemberManagement.module.css";
 import AdminSubMenubar from "../../components/common/subMenubar/AdminSubMenubar";
 import Paging from "../../components/common/Paging";
 
 function AdminMemberManagement() {
-  const { role, isLoggedIn, secureApiRequest } = useContext(AuthContext); // secureApiRequest 가져오기
+  const { role, isLoggedIn, secureApiRequest } = useContext(AuthContext);
   const navigate = useNavigate();
+  const location = useLocation();
+
   const [members, setMembers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const [isAuthInitialized, setIsAuthInitialized] = useState(false); // 인증 초기화 상태
+  const [isAuthInitialized, setIsAuthInitialized] = useState(false);
 
   const itemsPerPage = 10;
+
+  useEffect(() => {
+    const page = location.state?.page || 1;
+    setCurrentPage(page);
+    if (role === "ADMIN") {
+      fetchData(page);
+    }
+  }, [location.state, role]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
     const storedRole = localStorage.getItem("role");
 
     if (accessToken && storedRole === "ADMIN") {
-      setIsAuthInitialized(true); // 인증 초기화 완료
+      setIsAuthInitialized(true);
     } else {
       alert("관리자만 접근할 수 있습니다.");
       navigate("/login");
@@ -36,7 +46,6 @@ function AdminMemberManagement() {
       );
       setMembers(response.data.content);
       setTotalItems(response.data.totalElements);
-      setCurrentPage(page);
     } catch (error) {
       console.error("데이터 가져오는 중 오류 발생:", error.message);
       if (error.message.includes("세션이 만료")) {
@@ -47,12 +56,6 @@ function AdminMemberManagement() {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    if (role === "ADMIN") {
-      fetchData(currentPage);
-    }
-  }, [role, currentPage]);
 
   return (
     <div>
@@ -81,7 +84,7 @@ function AdminMemberManagement() {
                     key={member.uuid}
                     onClick={() =>
                       navigate("/adminMemberDetail", {
-                        state: { uuid: member.uuid },
+                        state: { uuid: member.uuid, page: currentPage },
                       })
                     }
                   >
@@ -93,7 +96,9 @@ function AdminMemberManagement() {
                       {member.userRestrictionStatus === "Y" ? "정지" : "이용중"}
                     </td>
                     <td>{member.adminYn === "Y" ? "관리자" : "일반"}</td>
-                    <td>{member.userDeletionStatus === "Y" ? "탈퇴" : "비탈퇴"}</td>
+                    <td>
+                      {member.userDeletionStatus === "Y" ? "탈퇴" : "비탈퇴"}
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -102,7 +107,10 @@ function AdminMemberManagement() {
               totalItems={totalItems}
               itemsPerPage={itemsPerPage}
               currentPage={currentPage}
-              onPageChange={(page) => fetchData(page)}
+              onPageChange={(page) => {
+                setCurrentPage(page);
+                fetchData(page);
+              }}
             />
           </>
         )}

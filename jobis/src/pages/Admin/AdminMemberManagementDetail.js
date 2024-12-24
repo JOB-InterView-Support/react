@@ -18,8 +18,15 @@ function AdminMemberManagementDetail() {
 
   const [loading, setLoading] = useState(false);
 
-  // state에서 uuid 추출
-  const uuid = location.state?.uuid;
+  // state에서 uuid와 페이지 번호 추출
+  const { uuid, page } = location.state;
+
+  console.log("페이지 번호 : ", page)
+  // 뒤로가기 함수 수정
+  const goBack = () => {
+    navigate("/adminMemberManagement", { state: { page } });
+  };
+  
 
   const formatDateTime = (dateTime) => {
     if (!dateTime) return "";
@@ -43,23 +50,23 @@ function AdminMemberManagementDetail() {
       try {
         if (!uuid) {
           alert("유효하지 않은 접근입니다.");
-          navigate(-1);
-          return;
+          return; // 여기에서 navigate(-1)을 제거하여 사용자가 직접 뒤로 가기를 선택하도록 함
         }
-
+  
+        setLoading(true); // 로딩 상태 활성화
         const response = await secureApiRequest(
           `/admin/memberDetail?uuid=${uuid}`
         );
         setMember(response.data);
+        setLoading(false); // 로딩 상태 비활성화
       } catch (error) {
         console.error("회원 정보 가져오는 중 오류 발생:", error.message);
         alert("회원 정보를 불러올 수 없습니다.");
-        navigate(-1);
       }
     };
-
+  
     fetchMemberDetail();
-  }, [uuid, secureApiRequest, navigate]);
+  }, [uuid, secureApiRequest]); // navigate 제거
 
   const handleLiftSanction = async () => {
     if (!window.confirm(`${member.userName} 회원의 제재를 해제하시겠습니까?`)) {
@@ -136,7 +143,11 @@ function AdminMemberManagementDetail() {
   };
 
   const promoteToAdmin = async () => {
-    if (!window.confirm(`정말로 ${member.userName} 회원을 관리자로 승격시키겠습니까?`)) {
+    if (
+      !window.confirm(
+        `정말로 ${member.userName} 회원을 관리자로 승격시키겠습니까?`
+      )
+    ) {
       return;
     }
     setLoading(true);
@@ -150,7 +161,7 @@ function AdminMemberManagementDetail() {
           uuid: member.uuid,
         }),
       });
-  
+
       setMember({ ...member, adminYn: "Y" });
       alert("관리자로 승격되었습니다.");
       navigate("/adminMemberDetail");
@@ -161,10 +172,13 @@ function AdminMemberManagementDetail() {
       setLoading(false);
     }
   };
-  
 
   const demoteToUser = async () => {
-    if (!window.confirm(`정말로 ${member.userName} 회원을 일반 회원으로 변경하시겠습니까?`)) {
+    if (
+      !window.confirm(
+        `정말로 ${member.userName} 회원을 일반 회원으로 변경하시겠습니까?`
+      )
+    ) {
       return;
     }
     setLoading(true);
@@ -178,7 +192,7 @@ function AdminMemberManagementDetail() {
           uuid: member.uuid,
         }),
       });
-  
+
       setMember({ ...member, adminYn: "N" });
       alert("일반 회원으로 변경되었습니다.");
       navigate("/adminMemberDetail");
@@ -189,7 +203,6 @@ function AdminMemberManagementDetail() {
       setLoading(false);
     }
   };
-  
 
   if (!member) {
     return <p>데이터를 불러오는 중입니다...</p>;
@@ -265,7 +278,7 @@ function AdminMemberManagementDetail() {
         </tbody>
       </table>
       <div className={styles.btnContainer}>
-        <BackButton />
+        <BackButton onClick={goBack} />
         {member.userRestrictionStatus === "Y" ? (
           <button
             className={styles.sanctionsLiftedBtn}
