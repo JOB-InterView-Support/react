@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 import styles from "./TicketSubMenubar.module.css";
 
-function AdminSubMenubar() {
+function TicketSubMenubar() {
   const location = useLocation();
 
   return (
@@ -22,4 +22,4 @@ function AdminSubMenubar() {
   );
 }
 
-export default AdminSubMenubar;
+export default TicketSubMenubar;
