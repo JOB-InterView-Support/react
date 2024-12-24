@@ -3,7 +3,7 @@ import { AuthContext } from "../../AuthProvider";
 import styles from "./UpdateUser.module.css";
 
 const UpdateUser = () => {
-  const { secureApiRequest, isAuthInitialized } = useContext(AuthContext);
+  const { secureApiRequest } = useContext(AuthContext);
   const [user, setUser] = useState({
     userId: "",
     userName: "",
@@ -16,8 +16,6 @@ const UpdateUser = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!isAuthInitialized) return;
-
     const storedUserId = localStorage.getItem("userId");
     if (!storedUserId) {
       console.error("로그인 유저 정보 없음");
@@ -44,7 +42,7 @@ const UpdateUser = () => {
     };
 
     fetchUserInfo();
-  }, [secureApiRequest, isAuthInitialized]);
+  }, [secureApiRequest]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -53,32 +51,40 @@ const UpdateUser = () => {
 
   const handleUpdate = async (e) => {
     e.preventDefault();
-  
+
     try {
-      const updatedUser = {
-        userId: user.userId,
-        userPw: user.userPw || "", // 비밀번호 (공백 허용)
-        userName: user.userName,
-        userDefaultEmail: user.userDefaultEmail,
-        userPhone: `${user.userPhone1}${user.userPhone2}${user.userPhone3}`,
-      };
-  
-      console.log("Sending JSON Data:", updatedUser);
-  
-      await secureApiRequest(`/mypage/${user.userId}`, {
-        method: "PUT",
-        body: JSON.stringify(updatedUser), // JSON 데이터로 변환
-        headers: {
-          "Content-Type": "application/json", // 반드시 JSON 형식으로 지정
-        },
-      });
-  
-      alert("회원 정보가 성공적으로 수정되었습니다.");
+        const updatedUser = {
+            userId: user.userId,
+            userName: user.userName,
+            userDefaultEmail: user.userDefaultEmail,
+            userPhone: `${user.userPhone1}${user.userPhone2}${user.userPhone3}`,
+        };
+
+        // 비밀번호가 입력된 경우에만 추가
+        if (user.userPw && user.userPw.trim() !== "") {
+            updatedUser.userPw = user.userPw; // 사용자가 입력한 비밀번호
+        } else {
+            updatedUser.userPw = null; // 비밀번호 미입력 시 null로 전달
+        }
+
+        console.log("Sending JSON Data:", updatedUser);
+
+        await secureApiRequest(`/mypage/${user.userId}`, {
+            method: "PUT",
+            body: JSON.stringify(updatedUser),
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        alert("회원 정보가 성공적으로 수정되었습니다.");
     } catch (error) {
-      console.error("Error updating user:", error.response?.data || error.message);
-      alert("회원 정보 수정 요청에 실패했습니다.");
+        console.error("Error updating user:", error.response?.data || error.message);
+        alert("회원 정보 수정 요청에 실패했습니다.");
     }
-  };
+};
+
+
 
   if (loading) return <div>Loading...</div>;
 
