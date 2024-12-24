@@ -135,7 +135,7 @@ function Login() {
   const Rest_api_key = "b32fc4330179b4a298b4b01fa7156d4e"; //REST API KEY
   const redirect_uri = "http://localhost:8080/kakaoLogin"; //Redirect URI
 
-  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code`;
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`;
 
   const handleKakaoLogin = () => {
     window.location.href = kakaoURL;
