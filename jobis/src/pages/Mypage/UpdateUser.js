@@ -13,6 +13,9 @@ const UpdateUser = () => {
     userPhone1: "",
     userPhone2: "",
     userPhone3: "",
+    userKakaoEmail: "",
+    userNaverEmail: "",
+    userGoogleEmail: "",
   });
   const [loading, setLoading] = useState(true);
 
@@ -34,6 +37,9 @@ const UpdateUser = () => {
           userPhone1: phone.slice(0, 3),
           userPhone2: phone.slice(3, 7),
           userPhone3: phone.slice(7),
+          userKakaoEmail: response.data.userKakaoEmail || "",
+          userNaverEmail: response.data.userNaverEmail || "",
+          userGoogleEmail: response.data.userGoogleEmail || "",
         });
       } catch (error) {
         console.error(
@@ -90,6 +96,37 @@ const UpdateUser = () => {
       alert("회원 정보 수정 요청에 실패했습니다.");
     }
   };
+  //해지
+  const handleUnlinkEmail = async () => {
+    try {
+      await secureApiRequest(`/mypage/unlink-email`, {
+        method: "POST",
+        body: JSON.stringify({ userId: user.userId }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        userKakoEmail: "",
+        userNaverEmail: "",
+        userGoogleEmail: "",
+      }));
+
+      alert("연동 이메일이 성공적으로 해지되었습니다.");
+    } catch (error) {
+      console.error("이메일 연동 실패:", error.response?.data || error.message);
+      alert("연동 이메일 해지 요청에 실패했습니다.");
+    }
+  };
+  //연동동
+  const handleLinkEmail = () => {
+    alert("이메일 연동 로직 필요");
+  };
+
+  const linkedEmail =
+    user.userKakaoEmail || user.userNaverEmail || user.userGoogleEmail || "";
 
   if (loading) return <div>Loading...</div>;
 
@@ -138,6 +175,34 @@ const UpdateUser = () => {
               name="userDefaultEmail"
               onChange={handleChange}
             />
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>연동 이메일</label>
+            <input
+              type="email"
+              className={styles.input}
+              name="linkedEmail"
+              value={linkedEmail}
+              onChange={handleChange}
+              readOnly
+            />
+            {linkedEmail ? (
+              <button
+                type="button"
+                className={styles.minibutton}
+                onClick={handleUnlinkEmail}
+              >
+                해지
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.minibutton}
+                onClick={handleLinkEmail}
+              >
+                연동
+              </button>
+            )}
           </div>
           <div className={styles.formGroup}>
             <label className={styles.label}>휴대폰 번호</label>
