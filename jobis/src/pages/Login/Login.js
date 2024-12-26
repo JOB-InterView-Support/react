@@ -47,7 +47,9 @@ function Login() {
     localStorage.setItem("userId", userInfo.userId || "unknown");
     localStorage.setItem("userName", userInfo.userName || "unknown");
     localStorage.setItem("role", userInfo.role || "unknown");
+    localStorage.setItem("uuid", userInfo.uuid || "unknown"); // UUID 저장
   };
+  
 
   // 로그인 처리 함수
   const handleLogin = async () => {
@@ -62,9 +64,14 @@ function Login() {
 
       console.log("서버 응답 데이터:", response);
 
-      const { accessToken, refreshToken } = response.data;
-      console.log("Access Token:", accessToken);
-      console.log("Refresh Token:", refreshToken);
+      const {
+        accessToken,
+        refreshToken,
+        uuid,
+        userId: responseUserId,
+        userName,
+        role,
+      } = response.data;
 
       // JWT 페이로드 디코딩
       const tokenPayload = base64DecodeUnicode(accessToken.split(".")[1]);
@@ -76,28 +83,25 @@ function Login() {
       console.log("JWT 페이로드:", tokenPayload);
 
       const userInfo = {
-        userId: tokenPayload.userId,
-        userName: tokenPayload.userName,
-        role: tokenPayload.role,
+        userId: responseUserId,
+        userName,
+        role,
+        uuid, // UUID 추가
       };
 
       try {
         saveToLocalStorage(accessToken, refreshToken, userInfo);
         console.log("로컬 스토리지 저장 성공");
-        console.log("setAuthInfo 호출 데이터:", {
-          isLoggedIn: true,
-          role: userInfo.role,
-          username: userInfo.userName,
-        });
         setAuthInfo({
           isLoggedIn: true,
           role: userInfo.role,
           username: userInfo.userName,
+          uuid: userInfo.uuid, // 상태 업데이트에 UUID 추가
         });
         console.log("AuthContext 상태 업데이트 성공");
       } catch (storageError) {
         console.error("로컬 스토리지 또는 상태 업데이트 오류:", storageError);
-        throw storageError; // 에러를 다시 throw하지 않도록 주의
+        throw storageError;
       }
 
       alert("로그인 성공!");
@@ -127,6 +131,14 @@ function Login() {
     if (e.key === "Enter") {
       handleLogin();
     }
+  };
+  const Rest_api_key = "b32fc4330179b4a298b4b01fa7156d4e"; //REST API KEY
+  const redirect_uri = "http://localhost:8080/kakaoLogin"; //Redirect URI
+
+  const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`;
+
+  const handleKakaoLogin = () => {
+    window.location.href = kakaoURL;
   };
 
   return (
@@ -162,12 +174,20 @@ function Login() {
         </button>
       </div>
       <div className={styles.snsLogo}>
-        <img src={kakao} alt="kakao Logo" className={styles.logo} />
+        <img
+          src={kakao}
+          alt="kakao Logo"
+          className={styles.logo}
+          onClick={handleKakaoLogin}
+        />
         <img src={naver} alt="naver Logo" className={styles.logo} />
         <img src={google} alt="google Logo" className={styles.logo} />
       </div>
       <div className={styles.snsName}>
-        <div className={styles.kakaoName}>카카오</div>
+        <div className={styles.kakaoName} onClick={handleKakaoLogin}>
+          카카오
+        </div>
+
         <div className={styles.naverName}>네이버</div>
         <div className={styles.googleName}>구글</div>
       </div>
