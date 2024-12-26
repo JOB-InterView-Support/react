@@ -64,3 +64,10 @@ nav {
     width: 100%; /* 요소가 부모 컨테이너의 전체 너비를 사용 */
     margin-bottom: 5px;
 }
+
+.noLink {
+    text-decoration: none; /* 언더라인 제거 */
+    color: inherit; /* 부모 요소의 색상 상속 */
+    cursor: default; /* 손가락 포인터 대신 기본 커서 사용 (선택 사항) */
+  }
+  

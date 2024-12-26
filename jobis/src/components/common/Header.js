@@ -12,6 +12,7 @@ function Header() {
   const userName = localStorage.getItem("userName");
   const userId = localStorage.getItem("userId");
   const role = localStorage.getItem("role"); // 역할 정보 가져오기
+  const uuid = localStorage.getItem("uuid")
 
   // 로그인 여부 확인
   const isLoggedIn = !!accessToken;
@@ -37,6 +38,7 @@ function Header() {
       localStorage.removeItem("userId");
       localStorage.removeItem("userName");
       localStorage.removeItem("role");
+      localStorage.removeItem("uuid");
 
       alert("로그아웃 되었습니다.");
       navigate("/"); // 로그아웃 후 메인 페이지로 이동
@@ -52,6 +54,7 @@ function Header() {
       localStorage.removeItem("userId");
       localStorage.removeItem("userName");
       localStorage.removeItem("role");
+      localStorage.removeItem("uuid");
 
       navigate("/"); // 메인 페이지로 이동
     }
@@ -75,12 +78,13 @@ function Header() {
       </div>
       <nav>
         <ul className={styles.navList}>
-          <li><Link to="/notice">공지사항</Link></li>
+          <li><Link to="/notice" className={styles.noLink}>공지사항</Link></li>
           <li>AI 모의면접</li>
-          <li><Link to="/jobPosting">채용공고</Link></li>
-          <li><Link to="/review">체험 후기</Link></li>
-          <li><Link to="/qna">Q&A</Link></li>
-          <li><Link to="/ticketList">이용권</Link></li>
+          <li><Link to="/jobPosting" className={styles.noLink}>채용공고</Link></li>
+          <li><Link to="/review"className={styles.noLink}>체험 후기</Link></li>
+          <li><Link to="/qna" className={styles.noLink}>Q&A</Link></li>
+          <li><Link to="/ticketList" className={styles.noLink}>이용권</Link></li>
+
         </ul>
       </nav>
       <div className={styles.rightBtn}>

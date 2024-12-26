@@ -165,18 +165,27 @@ function Login() {
     window.location.href = googleURL;
   };
 
-  // 네이버 로그인 처리 함수
   const handleNaverLogin = () => {
-    const clientId = "nmC7X5UFqIvoeY6zxSga"; // 네이버 개발자센터에서 발급받은 Client ID
-    const redirectUri = "http://localhost:8080/naverLogin"; // 네이버 개발자센터에 등록한 Callback URI
-    const state = "wef564645"; // CSRF 방지를 위한 상태 토큰 (적당한 값으로 설정)
-
-    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
-      redirectUri
-    )}&state=${state}`;
-
-    window.location.href = naverURL;
+    const clientId = "nmC7X5UFqIvoeY6zxSga"; // 네이버 Client ID
+    const redirectUri = "http://localhost:8080/naverLogin"; // Redirect URI
+    const state = "wef564645"; // CSRF 방지를 위한 상태 토큰
+  
+    // 네이버 세션 초기화를 위한 로그아웃 URL 호출
+    const logoutURL = "https://nid.naver.com/nidlogin.logout";
+    fetch(logoutURL, { mode: "no-cors" }) // 로그아웃 요청 보내기
+      .then(() => {
+        // 로그아웃 완료 후 로그인 URL로 이동
+        const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+          redirectUri
+        )}&state=${state}`;
+        window.location.href = naverURL;
+      })
+      .catch((error) => {
+        console.error("네이버 로그아웃 중 오류 발생:", error);
+        alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+      });
   };
+  
 
 
 
