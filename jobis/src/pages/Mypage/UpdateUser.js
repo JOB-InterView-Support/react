@@ -183,7 +183,7 @@ const UpdateUser = () => {
 
   const handleNaverLink = () => {
     const clientId = process.env.REACT_APP_NAVER_CLIENT_ID; // 네이버 Client ID
-    const redirectUri = process.env.REACT_APP_NAVER_REDIRECT_URI; // Redirect URI
+    const redirectUri = process.env.REACT_APP_NAVER_LINK_REDIRECT_URI; // Redirect URI
     const state = process.env.REACT_APP_NAVER_STATE; // CSRF 방지를 위한 상태 토큰
 
 
