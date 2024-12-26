@@ -91,7 +91,7 @@ const QnaList = () => {
                 qnaList.map((qna, index) => (
                   <tr
                     key={`${qna.uuid}-${index}`} // 중복 키 방지: uuid와 index를 조합하여 고유 키 생성
-                    onClick={() => handleDetailClick(qna.uuid)}
+                    onClick={() => handleDetailClick(qna.qno)}
                   >
                     <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td> {/* 페이지에 따른 항목 번호 계산 */}
                     <td>{qna.qtitle}</td> {/* 제목 표시 */}
