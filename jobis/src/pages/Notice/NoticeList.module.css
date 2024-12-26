@@ -1,14 +1,50 @@
-.noticecontainer{
-    border: 1px solid red;
-    display: flex;
+.noticecontainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
 }
 
-.noticetitle{
+.noticetitle {
     font-weight: bold;
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
 }
 
 .noticetable {
     width: 100%;
     border-collapse: collapse;
-    text-align: center;
-  }
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.noticetable tbody tr {
+    border-bottom: 1px solid #ddd; /* 행 아래 구분선 */
+}
+
+.noticetable tbody tr:last-child {
+    border-bottom: none; /* 마지막 행의 구분선 제거 */
+}
+
+.noticeTbutton {
+    all: unset; /* 버튼 기본 스타일 제거 */
+    cursor: pointer; /* 클릭 가능한 영역처럼 보이도록 */
+    font-size: inherit; /* 부모 폰트 크기 상속 */
+}
+
+.noticeTbutton:hover {
+    color: #0056b3;
+}
+
+.noticetable td {
+    padding: 10px; /* 셀 내부 여백 */
+    font-size: 16px; /* 글자 크기 */
+    vertical-align: middle; /* 텍스트 중앙 정렬 */
+}
+
+.noticetable td:last-child {
+    text-align: right; /* 오른쪽 정렬 (날짜) */
+}
