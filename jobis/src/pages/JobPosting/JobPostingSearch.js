@@ -10,6 +10,9 @@ const JobPostingSearch = () => {
     loc_cd: "", // 지역 코드
     edu_lv: "", // 학력 코드
     job_type: "", // 경력 코드
+    count: "",
+    start: "",
+    sort: "",
   });
   const navigate = useNavigate();
 
@@ -32,6 +35,9 @@ const JobPostingSearch = () => {
       loc_cd: "",
       edu_lv: "",
       job_type: "",
+      count: 10,
+      start: 0,
+      sort: "ud",
     });
   };
 
