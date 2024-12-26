@@ -107,6 +107,9 @@ function TicketList() {
                     <button onClick={() => requestPayment()}>구매하기</button>
                 </div>
             </div>
+            {/* {role === Admin &&(
+                <button onClick={() => InsertProducts }>이용권 등록</button>
+            )} */}
         </div>
     )
 }
