@@ -142,30 +142,43 @@ function Login() {
   };
 
   const handleGoogleLogin = () => {
-   
-  
+
+
     const clientId = '1063994075690-fnp3q1405di377kql6850plpgujb31uq.apps.googleusercontent.com';
     const redirectUri = 'http://localhost:8080/googleLogin';
     console.log("REACT_APP_GOOGLE_CLIENT_ID:", clientId);
     console.log("REACT_APP_GOOGLE_REDIRECT_URI:", redirectUri);
-  
+
     if (!clientId || !redirectUri) {
       console.error("환경 변수가 제대로 로드되지 않았습니다.");
       alert("구글 로그인 설정이 잘못되었습니다.");
       return;
     }
-  
+
     const scope = "email profile";
     const state = "googleLogin";
-  
+
     const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
       redirectUri
     )}&response_type=code&scope=${encodeURIComponent(scope)}&state=${state}`;
-  
+
     window.location.href = googleURL;
   };
-  
-  
+
+  // 네이버 로그인 처리 함수
+  const handleNaverLogin = () => {
+    const clientId = "nmC7X5UFqIvoeY6zxSga"; // 네이버 개발자센터에서 발급받은 Client ID
+    const redirectUri = "http://localhost:8080/naverLogin"; // 네이버 개발자센터에 등록한 Callback URI
+    const state = "wef564645"; // CSRF 방지를 위한 상태 토큰 (적당한 값으로 설정)
+
+    const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&state=${state}`;
+
+    window.location.href = naverURL;
+  };
+
+
 
   return (
     <div className={styles.container}>
@@ -206,7 +219,12 @@ function Login() {
           className={styles.logo}
           onClick={handleKakaoLogin}
         />
-        <img src={naver} alt="naver Logo" className={styles.logo} />
+        <img
+          src={naver}
+          alt="naver Logo"
+          className={styles.logo}
+          onClick={handleNaverLogin}
+        />
         <img
           src={google}
           alt="google Logo"
@@ -218,7 +236,9 @@ function Login() {
         <div className={styles.kakaoName} onClick={handleKakaoLogin}>
           카카오
         </div>
-        <div className={styles.naverName}>네이버</div>
+        <div className={styles.naverName} onClick={handleNaverLogin}>
+          네이버
+        </div>
         <div className={styles.googleName} onClick={handleGoogleLogin}>
           구글
         </div>
