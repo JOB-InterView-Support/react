@@ -75,7 +75,7 @@ function Header() {
       </div>
       <nav>
         <ul className={styles.navList}>
-          <li>공지사항</li>
+          <li><Link to="/notice">공지사항</Link></li>
           <li>AI 모의면접</li>
           <li><Link to="/jobPosting">채용공고</Link></li>
           <li>체험 후기</li>

@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from "react"; // React 관련 
 import { AuthContext } from "../../AuthProvider"; // 인증 Context
 import styles from "./QnaDetail.module.css"; // CSS 모듈
 import { useParams, useNavigate } from "react-router-dom"; // React Router
-import InsertButton from "../../components/common/button/InsertButton"; // 버튼 컴포넌트
 
 function QnaDetail() {
     const { qno } = useParams(); // URL에서 qno(질문 번호) 추출
@@ -16,37 +15,45 @@ function QnaDetail() {
 
     // 게시글과 댓글 데이터를 가져오는 함수
     useEffect(() => {
-    const fetchQnaDetail = async () => {
-        console.log("Qna의 qno:", qno); // 디버깅 로그
+        const fetchQnaDetail = async () => {
+            try {
+                // QnA 상세 데이터를 서버에서 요청
+                const response = await secureApiRequest(`/qna/detail/${qno}`, {
+                    method: "GET",
+                });
 
-        try {
-            const response = await secureApiRequest(`/qna/detail/${qno}`, {
-                method: "GET",
-            });
-            console.log("API Response 서버 응답 로그 :", response); // 서버 응답 로그
-            setQna(response.qna);
-            setReplies(response.list);
-        } catch (error) {
-            setError("게시글 상세 조회 실패!");
-            console.error("Error fetching QnA details 게시글 조회 실패시 :", error); // 에러 로그
+                console.log("서버 응답 데이터:", response.data);
+
+                if (response.data?.qna) {
+                    setQna(response.data.qna); // QnA 데이터 설정
+                } else {
+                    setError("존재하지 않는 게시글입니다."); // 서버가 데이터를 반환하지 않은 경우 처리
+                }
+            } catch (error) {
+                if (error.response?.status === 404) {
+                    setError("존재하지 않는 게시글입니다."); // 404 응답 처리
+                } else {
+                    setError("서버 오류가 발생했습니다."); // 기타 오류 처리
+                }
+                console.error("Error fetching QnA details:", error);
+            }
+        };
+
+        if (isLoggedIn) {
+            fetchQnaDetail(); // 로그인 상태에서 데이터 요청
+        } else {
+            setError("로그인이 필요합니다."); // 인증되지 않은 경우 에러 처리
         }
-    };
-
-    if (isLoggedIn) {
-        fetchQnaDetail();
-    } else {
-        setError("로그인이 필요합니다."); // 인증되지 않은 경우 에러 처리
-    }
-}, [qno, isLoggedIn, secureApiRequest]);
-
+    }, [qno, isLoggedIn, secureApiRequest]);
 
     // 질문 삭제 함수
     const handleDelete = async () => {
         if (window.confirm("정말 삭제하시겠습니까?")) {
             try {
-                const response = await secureApiRequest(`/qna/${qno}`, {
+                // 서버로 DELETE 요청 전송
+                await secureApiRequest(`/qna/${qno}`, {
                     method: "DELETE",
-                }); // DELETE 요청
+                });
                 alert("삭제가 완료되었습니다.");
                 navigate("/qna"); // 목록 페이지로 이동
             } catch (error) {
@@ -60,11 +67,13 @@ function QnaDetail() {
     const handleReplyDelete = async (repno) => {
         if (window.confirm("댓글을 삭제하시겠습니까?")) {
             try {
-                const response = await secureApiRequest(`/reply/${repno}`, {
+                // 서버로 DELETE 요청 전송
+                await secureApiRequest(`/reply/${repno}`, {
                     method: "DELETE",
-                }); // DELETE 요청
+                });
+                // 댓글 목록에서 삭제된 댓글 필터링
                 setReplies((prevReplies) =>
-                    prevReplies.filter((reply) => reply.repno !== repno) // 댓글 목록에서 삭제
+                    prevReplies.filter((reply) => reply.repno !== repno)
                 );
                 alert("댓글이 삭제되었습니다.");
             } catch (error) {
@@ -85,69 +94,72 @@ function QnaDetail() {
     }
 
     return (
-        <div>
-            <h2>{qno}번 게시글 상세보기</h2>
-            <table border="1">
-                <tbody>
-                    <tr>
-                        <th>번호</th>
-                        <td>{qna.qnano}</td>
-                    </tr>
-                    <tr>
-                        <th>제목</th>
-                        <td>{qna.qnatitle}</td>
-                    </tr>
-                    <tr>
-                        <th>작성자</th>
-                        <td>{qna.qnawriter}</td>
-                    </tr>
-                    <tr>
-                        <th>등록날짜</th>
-                        <td>{qna.qnadate}</td>
-                    </tr>
-                    <tr>
-                        <th>내용</th>
-                        <td>{qna.qnacontent}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div className={styles.qnaDetailContainer}>
+            <h1 className={styles.qnaTitle}>{qna.qtitle}</h1> {/* 제목을 상단에 강조 */}
             <div className={styles.buttonGroup}>
-                <button onClick={() => navigate(-1)}>이전 페이지로 이동</button>
-                {isLoggedIn && userid === qna.qnaWriter && (
+                <button onClick={() => navigate(-1)} className={styles.backButton}>이전 페이지로 이동</button>
+                {isLoggedIn && userid === qna.qWriter && (
                     <>
-                        <button onClick={() => navigate(`/qna/update/${qno}`)}>수정</button>
-                        <button onClick={handleDelete}>삭제</button>
+                        <button onClick={() => navigate(`/qna/update/${qno}`)} className={styles.editButton}>수정</button>
+                        <button onClick={handleDelete} className={styles.deleteButton}>삭제</button>
                     </>
                 )}
             </div>
-            <h3>댓글</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>작성자</th>
-                        <th>내용</th>
-                        <th>작성일</th>
-                        <th>수정/삭제</th>
-                    </tr>
-                </thead>
+            <table className={styles.qnaTable}>
                 <tbody>
-                    {replies.map((reply) => (
-                        <tr key={reply.repno}>
-                            <td>{reply.replyWriter}</td>
-                            <td>{reply.replyContent}</td>
-                            <td>{reply.replyDate}</td>
+                    <tr>
+                        <td>{qna.qcontent}</td> {/* qna 데이터에서 내용 표시 */}
+                    </tr>
+                    {qna.qAttachmentTitle && (
+                        <tr>
+                            <th>첨부 파일</th>
                             <td>
-                                {isLoggedIn && userid === reply.replyWriter && (
-                                    <>
-                                        <button onClick={() => alert("수정 기능 미구현")}>수정</button>
-                                        <button onClick={() => handleReplyDelete(reply.repno)}>삭제</button>
-                                    </>
-                                )}
+                                <a
+                                    href={`/attachments/${qna.qAttachmentTitle}`}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                >
+                                    {qna.qAttachmentTitle}
+                                </a>
                             </td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
+            {replies.length > 0 ? ( /* 댓글이 있을 경우에만 표시 */
+                <>
+                    <h3>댓글</h3>
+                    <table className={styles.commentsTable}>
+                        <thead>
+                            <tr>
+                                <th>작성자</th>
+                                <th>내용</th>
+                                <th>작성일</th>
+                                <th>수정/삭제</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {replies.map((reply) => (
+                                <tr key={reply.repno}>
+                                    <td>{reply.replyWriter}</td>
+                                    <td>{reply.replyContent}</td>
+                                    <td>{new Date(reply.replyDate).toLocaleDateString()}</td>
+                                    <td>
+                                        {isLoggedIn && userid === reply.replyWriter && (
+                                            <>
+                                                <button onClick={() => alert("수정 기능 미구현")}>수정</button>
+                                                <button onClick={() => handleReplyDelete(reply.repno)}>삭제</button>
+                                            </>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </>
+            ) : (
+                <div className={styles.noComments}>댓글이 없습니다.</div>
+            )}
         </div>
     );
 }

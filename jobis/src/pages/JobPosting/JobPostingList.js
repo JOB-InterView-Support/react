@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { AuthContext } from "../../AuthProvider";
 import { useNavigate } from "react-router-dom";
 import styles from "./JobPostingList.module.css";
 
@@ -16,7 +17,6 @@ const JobPostingList = ({ filters }) => {
     try {
       const response = await axios.get("https://oapi.saramin.co.kr/job-search", {
         params: {
-          access_key: "your-access-key",  // 본인의 API 키로 변경
           ...filters,  // 필터 값 전달
           count: 10,  // 한 번에 가져올 공고 수
           start: 0,   // 페이지 번호
