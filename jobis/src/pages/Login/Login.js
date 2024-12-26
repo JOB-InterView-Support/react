@@ -49,7 +49,7 @@ function Login() {
     localStorage.setItem("role", userInfo.role || "unknown");
     localStorage.setItem("uuid", userInfo.uuid || "unknown"); // UUID 저장
   };
-  
+
 
   // 로그인 처리 함수
   const handleLogin = async () => {
@@ -132,14 +132,62 @@ function Login() {
       handleLogin();
     }
   };
-  const Rest_api_key = "b32fc4330179b4a298b4b01fa7156d4e"; //REST API KEY
-  const redirect_uri = "http://localhost:8080/kakaoLogin"; //Redirect URI
+  const Rest_api_key = 'b32fc4330179b4a298b4b01fa7156d4e'; // REST API KEY
+  const redirect_uri = 'http://localhost:8080/kakaoLogin'; // Redirect URI
 
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`;
 
   const handleKakaoLogin = () => {
     window.location.href = kakaoURL;
   };
+
+  const handleGoogleLogin = () => {
+
+
+    const clientId = '1063994075690-fnp3q1405di377kql6850plpgujb31uq.apps.googleusercontent.com';
+    const redirectUri = 'http://localhost:8080/googleLogin';
+    console.log("REACT_APP_GOOGLE_CLIENT_ID:", clientId);
+    console.log("REACT_APP_GOOGLE_REDIRECT_URI:", redirectUri);
+
+    if (!clientId || !redirectUri) {
+      console.error("환경 변수가 제대로 로드되지 않았습니다.");
+      alert("구글 로그인 설정이 잘못되었습니다.");
+      return;
+    }
+
+    const scope = "email profile";
+    const state = "googleLogin";
+
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=code&scope=${encodeURIComponent(scope)}&state=${state}`;
+
+    window.location.href = googleURL;
+  };
+
+  const handleNaverLogin = () => {
+    const clientId = "nmC7X5UFqIvoeY6zxSga"; // 네이버 Client ID
+    const redirectUri = "http://localhost:8080/naverLogin"; // Redirect URI
+    const state = "wef564645"; // CSRF 방지를 위한 상태 토큰
+  
+    // 네이버 세션 초기화를 위한 로그아웃 URL 호출
+    const logoutURL = "https://nid.naver.com/nidlogin.logout";
+    fetch(logoutURL, { mode: "no-cors" }) // 로그아웃 요청 보내기
+      .then(() => {
+        // 로그아웃 완료 후 로그인 URL로 이동
+        const naverURL = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodeURIComponent(
+          redirectUri
+        )}&state=${state}`;
+        window.location.href = naverURL;
+      })
+      .catch((error) => {
+        console.error("네이버 로그아웃 중 오류 발생:", error);
+        alert("로그아웃에 실패했습니다. 다시 시도해주세요.");
+      });
+  };
+  
+
+
 
   return (
     <div className={styles.container}>
@@ -180,16 +228,29 @@ function Login() {
           className={styles.logo}
           onClick={handleKakaoLogin}
         />
-        <img src={naver} alt="naver Logo" className={styles.logo} />
-        <img src={google} alt="google Logo" className={styles.logo} />
+        <img
+          src={naver}
+          alt="naver Logo"
+          className={styles.logo}
+          onClick={handleNaverLogin}
+        />
+        <img
+          src={google}
+          alt="google Logo"
+          className={styles.logo}
+          onClick={handleGoogleLogin}
+        />
       </div>
       <div className={styles.snsName}>
         <div className={styles.kakaoName} onClick={handleKakaoLogin}>
           카카오
         </div>
-
-        <div className={styles.naverName}>네이버</div>
-        <div className={styles.googleName}>구글</div>
+        <div className={styles.naverName} onClick={handleNaverLogin}>
+          네이버
+        </div>
+        <div className={styles.googleName} onClick={handleGoogleLogin}>
+          구글
+        </div>
       </div>
       <div className={styles.signupContainer}>
         <div>아직 회원이 아니신가요?</div>

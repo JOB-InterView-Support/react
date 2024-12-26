@@ -1,0 +1,47 @@
+.noticecontainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+.noticetitle {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;
+}
+
+.noticetable {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.noticeTbutton {
+    all: unset; /* 기본 스타일 제거 */
+    cursor: pointer; /* 클릭 가능한 영역처럼 보이도록 */
+    color: rgb(0, 0, 0); /* 텍스트 색상 */
+    font-size: inherit; /* 부모 요소의 폰트 크기를 상속 */
+}
+
+.noticecontent {
+    font-size: 18px;
+}
+
+.noticeinfo {
+    font-weight: bold;
+    font-size: 15px;
+    text-align: right;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;    
+}
+
+.spacer {
+    margin-left: 10px;
+}

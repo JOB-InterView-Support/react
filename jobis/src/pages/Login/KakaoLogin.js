@@ -51,18 +51,21 @@ function KakaoLogin() {
         const data = await response.json();
         console.log("서버 응답 데이터:", data);
 
-        const { accessToken, refreshToken, userId, userName, role } = data;
+        const { accessToken, refreshToken, userId, userName, role, uuid } = response.data;
 
+        // 로컬 스토리지에 데이터 저장
         localStorage.setItem("accessToken", accessToken);
         localStorage.setItem("refreshToken", refreshToken);
         localStorage.setItem("userId", userId || "unknown");
         localStorage.setItem("userName", userName || "unknown");
         localStorage.setItem("role", role || "unknown");
+        localStorage.setItem("uuid", uuid || "unknown"); // UUID 저장
 
         setAuthInfo({
           isLoggedIn: true,
           role: role,
           username: userName,
+          uuid: uuid, // UUID 추가
         });
 
         alert("카카오 로그인이 성공했습니다.");
