@@ -1,0 +1,75 @@
+.maincontainer {
+    padding: 20px;
+  }
+  
+  .menutitle {
+    font-size: 24px;
+    color: #003366;
+    margin-bottom: 20px;
+  }
+  
+  .introductionGrid {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .introductionCard {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    width: 250px;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .introductionCard h3 {
+    font-size: 18px;
+    color: #007bff;
+    margin-bottom: 10px;
+  }
+  
+  .introductionCard p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .introductionCardNew button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .introductionCardNew button:hover {
+    background-color: #0056b3;
+  }
+  
+  .circleicon {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid rgba(109, 160, 255, 0.74);
+    display: flex; /* 내부 요소를 정렬하기 위해 flex 사용 */
+    justify-content: center; /* 가로 정렬 */
+    align-items: center; /* 세로 정렬 */
+}
+
+.circleicon img {
+    width: 80%; /* 아이콘 크기 조정 */
+    height: 80%;
+    object-fit: contain; /* 이미지 비율 유지 및 자르기 방지 */
+}
+
+  
+  
