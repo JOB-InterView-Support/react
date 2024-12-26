@@ -3,74 +3,102 @@
   padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
 }
 
-.loading {
-  font-size: 1.5rem;
+h2 {
   text-align: center;
-}
-
-.error {
-  font-size: 1.5rem;
-  color: red;
-  text-align: center;
-}
-
-.noResults {
-  font-size: 1.2rem;
-  text-align: center;
+  color: #333;
+  font-size: 2rem;
+  margin-bottom: 20px;
 }
 
 .jobList {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
+  margin-bottom: 30px;
 }
 
 .jobCard {
-  background-color: #f9f9f9;
-  padding: 15px;
+  background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
-  transition: background-color 0.3s;
-  width: calc(33.333% - 20px);
-  box-sizing: border-box;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .jobCard:hover {
-  background-color: #e0e0e0;
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
-.jobTitle {
-  font-size: 1.2rem;
-  font-weight: bold;
+.jobCard h3 {
+  font-size: 1.5rem;
+  color: #2c3e50;
   margin-bottom: 10px;
 }
 
-.jobCompany {
+.jobCard p {
   font-size: 1rem;
-  margin-bottom: 5px;
+  color: #7f8c8d;
+  margin: 5px 0;
 }
 
-.jobLocation {
-  font-size: 0.9rem;
-  margin-bottom: 5px;
+.jobCard p strong {
+  color: #34495e;
 }
 
-.jobDate {
-  font-size: 0.9rem;
+.jobCard .salary {
+  font-weight: bold;
+  color: #e74c3c;
+}
+
+.noResults {
+  text-align: center;
+  color: #7f8c8d;
+  font-size: 1.2rem;
+  margin-top: 40px;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #e74c3c;
+  margin-top: 50px;
+}
+
+.loading {
+  font-style: italic;
+}
+
+.error {
+  font-weight: bold;
 }
 
 .backButton {
-  margin-top: 20px;
+  display: inline-block;
+  background-color: #3498db;
+  color: #fff;
   padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
   border-radius: 5px;
-  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;
+  display: block;
+  width: 200px;
 }
 
 .backButton:hover {
-  background-color: #0056b3;
+  background-color: #2980b9;
+}
+
+.backButton:focus {
+  outline: none;
 }
