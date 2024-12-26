@@ -1,62 +1,74 @@
-.maincontainer {
-    padding: 20px;
-  }
-  
-  .menutitle {
-    font-size: 24px;
-    color: #003366;
+.container {
+    width: 50%; /* 전체 폭을 조정 */
+    margin: 0 auto;
+    margin-bottom: 5%;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.title {
+    font-size: 32px;
+    font-weight: bold;
     margin-bottom: 20px;
-  }
-  
-  .introductionGrid {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  
-  .introductionCard {
-    background-color: #f8f9fa;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    text-align: left; /* 왼쪽 정렬 */
+    color: #004F99;
+}
+
+.subtitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left; /* 왼쪽 정렬 */
+    color: #006DD2;
+}
+
+.listcontainer {
+    border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
+    background-color: #F5F9FF; /* 연한 파란색 배경 */
+    border-radius: 15px; /* 둥근 테두리 */
     padding: 20px;
-    width: 250px;
-    text-align: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .introductionCard h3 {
-    font-size: 18px;
-    color: #007bff;
-    margin-bottom: 10px;
-  }
-  
-  .introductionCard p {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
-  }
-  
-  .introductionCardNew button {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    padding: 15px;
-    border-radius: 8px;
-    cursor: pointer;
+    height: 400px; /* 고정된 높이 */
+    overflow-y: auto; /* 스크롤 생성 (수직 스크롤) */
+    overflow-x: hidden; /* 수평 스크롤 제거 */
+}
+
+.introductionGrid {
+    display: grid; /* CSS Grid 사용 */
+    grid-template-columns: repeat(2, 45%); /* 각 열의 크기를 40%로 설정, 2열 배치 */
+    gap: 20px; /* 아이템 간격 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.introductionCard, .introductionCardNew {
     display: flex;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .introductionCardNew button:hover {
-    background-color: #0056b3;
-  }
-  
-  .circleicon {
-    width: 100px;
-    height: 100px;
+    justify-content: start;
+    background-color: #FFFFFF; /* 흰색 배경 */
+    border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
+    border-radius: 10px;
+    padding: 15px;
+    gap: 15px; /* 내부 아이템 간격 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 박스 그림자 */
+    transition: transform 0.2s ease-in-out;
+}
+
+.introductionCardNew {
+    background-color: rgba(109, 160, 255, 0.74) !important;
+    color: #fff !important;
+}
+
+.introductionCard:hover, .introductionCardNew:hover {
+    background-color: rgba(109, 160, 255, 0.74); /* 흰색 배경 */
+    color: white;
+    border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
+    cursor: pointer;
+}
+
+.circleicon {
+    width: 60px; /* 아이콘 크기 */
+    min-width: 60px;
+    height: 60px;
     border-radius: 50%;
     background-color: #fff;
     border: 1px solid rgba(109, 160, 255, 0.74);
@@ -71,5 +83,61 @@
     object-fit: contain; /* 이미지 비율 유지 및 자르기 방지 */
 }
 
-  
-  
+.introductionCard h3, .introductionCardNew span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #004F99; /* 텍스트 색상 */
+    margin: 0;
+}
+.introductionCardNew span {
+    color: #fff;
+}
+
+.introductionCard p {
+    font-size: 14px;
+    color: #666; /* 보조 텍스트 색상 */
+    margin: 5px 0 0;
+}
+
+.introductionCardNew button {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+
+.listcontainer::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 너비 */
+    background-color: transparent; /* 배경 투명 */
+}
+
+/* 스크롤바 막대 설정 */
+.listcontainer::-webkit-scrollbar-thumb {
+    background-color: #85affd; /* 기본 색상 */
+    border-radius: 16px; /* 둥근 모양 */
+}
+
+.listcontainer::-webkit-scrollbar-thumb:hover {
+    background-color: #5c95fe; /* 호버 시 색상 */
+}
+
+/* 스크롤바 트랙 설정 (세로 길이 줄이기) */
+.listcontainer::-webkit-scrollbar-track {
+    border-radius: 10px; /* 트랙 둥근 모양 */
+    background-color: transparent; /* 배경 투명 */
+    margin: 5px 0; /* 트랙 위아래 여백 추가 */
+}
+
+.listcontainer::-webkit-scrollbar-track:hover {
+    background-color: transparent; /* 호버 시 배경 투명 */
+}
+
+.listcontainer::-webkit-scrollbar-button {
+    display: none; /* 버튼 제거 */
+}
