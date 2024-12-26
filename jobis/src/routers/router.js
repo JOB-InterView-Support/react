@@ -25,6 +25,7 @@ const AppRouter = () => {
       {signupRouter}
       {mypageRouter}
       {qnaRouter}
+      {reviewRouter}
       {ticketRouter}
       {noticeRouter}
       {/* {payRouter}

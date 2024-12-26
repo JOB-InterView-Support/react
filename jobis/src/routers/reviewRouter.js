@@ -6,10 +6,10 @@ import ReviewInsert from "../pages/Review/ReviewInsert";
 import ReviewUpdate from "../pages/Review/ReviewUpdate";
 
 const reviewRouter = [
-    <Route path="/Review" element={<ReviewList/>}/>,
-    <Route path="/Review/detail/:no" element={<ReviewDetail/>}/>,
-    <Route path="/Review/Insert/" element={<ReviewInsert/>}/>,
-    <Route path="/Review/Update/:no" element={<ReviewUpdate/>}/>,
+    <Route path="/review" element={<ReviewList/>}/>,
+    <Route path="/review/detail/:no" element={<ReviewDetail/>}/>,
+    <Route path="/review/Insert/" element={<ReviewInsert/>}/>,
+    <Route path="/review/Update/:no" element={<ReviewUpdate/>}/>,
 ];
 
 export default reviewRouter;

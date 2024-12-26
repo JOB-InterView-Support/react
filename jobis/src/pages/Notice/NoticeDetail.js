@@ -23,13 +23,17 @@ function NoticeDetail() {
         }
     };
 
+    const handleMoveUpdate = () => {
+        navigate(`/notice/update/${no}`);
+        console.log("handleMoveUpdate : " + JSON.stringify(handleMoveUpdate.data));
+        }
+
     const handleNoticeDelete = async () => {
         try{
             if (window.confirm('정말 삭제하시겠습니까 네네?')) {
                 await secureApiRequest(`/notice/delete/${no}`, {
                     method : "delete",
                 });
-
                 navigate(-1);
             }
         } catch {
@@ -55,14 +59,19 @@ function NoticeDetail() {
                         <span className="spacer">조회수 : {notice.noticeVCount}</span>
 
                 </div>
-                <div className={styles.notciecontent}>{notice.noticeContent}</div>   
+                <div className={styles.noticecontent}>{notice.noticeContent}</div>   
                 <br></br>                
                 <br></br>
                 <br></br>
                 <br></br>
                 <br></br>
-            <button onClick={handleNoticeDelete}>삭 제</button>
-        </div>
+                {role === "ADMIN" && (
+                    <div className={styles.buttonContainer}>
+                        <button onClick={handleMoveUpdate}>수 정</button>
+                        <button onClick={handleNoticeDelete}>삭 제</button>
+                </div>
+    )}
+    </div>
     );
 }
 
