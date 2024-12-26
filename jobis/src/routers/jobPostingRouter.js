@@ -6,10 +6,10 @@ import JobPostingDetail from "../pages/JobPosting/JobPostingDetail";
 import FavoritesList from "../pages/JobPosting/FavoritesList";
 
 const jobPostingRouter = [
-    <Route path="/jobPosting" element={<JobPostingSearch/>}/>,
-    <Route path="/JobPostingList" element={<JobPostingList/>}/>,
-    <Route path="/JobPostingDetail" element={<JobPostingDetail/>}/>,
-    <Route path="/FavoritesList" element={<FavoritesList/>}/>,
+    <Route path="/jobPosting" element={<JobPostingSearch/>} />, // 기본 경로 설정
+    <Route path="//jobPostings/search" element={<JobPostingList/>} />,
+    <Route path="/jobpostingdetail" element={<JobPostingDetail/>} />, // 상세 페이지에 id 파라미터 추가
+    <Route path="/favoriteslist" element={<FavoritesList/>} />
 ];
 
 export default jobPostingRouter;

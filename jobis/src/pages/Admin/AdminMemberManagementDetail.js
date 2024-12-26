@@ -124,18 +124,18 @@ function AdminMemberManagementDetail() {
     }
 
     try {
-      await secureApiRequest(`/admin/deleteMember`, {
+      const response = await secureApiRequest("/admin/deleteMember", {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          uuid: member.uuid, // 삭제할 회원의 UUID 전달
+          uuid: member.uuid,
         }),
       });
-
+      // alert(response); // 응답 확인
       alert("회원 정보가 성공적으로 삭제되었습니다.");
-      navigate("/adminMemberManagement"); // 삭제 후 리스트 페이지로 이동
+      navigate("/adminMemberManagement");
     } catch (error) {
       console.error("회원 삭제 요청 중 오류 발생:", error.message);
       alert("회원 삭제 요청에 실패했습니다.");

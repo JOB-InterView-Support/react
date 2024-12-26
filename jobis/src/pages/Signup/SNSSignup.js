@@ -1,9 +1,21 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import style from "./Signup.module.css";
+import { useNavigate, useLocation } from "react-router-dom";
 import apiClient from "../../utils/axios";
-import { useNavigate } from "react-router-dom";
+import kakaoLogo from "../../assets/images/kakaotalk.png";
+import naverLogo from "../../assets/images/naver.png";
+import googleLogo from "../../assets/images/google.png";
 
-function Signup() {
+function SNSSignup() {
+  const location = useLocation();
+  const initialEmail = location.state?.email || ""; // 이메일 초기값 설정
+  const snsType = location.state?.snsType || ""; // snsType 초기값 설정
+
+  
+
+  const [isPhoneAvailable, setIsPhoneAvailable] = useState(false); // 전화번호 사용 가능 여부 상태
+  const [phoneMessage, setPhoneMessage] = useState(""); // 메시지 상태
+
   const navigate = useNavigate(); // 여기에서 navigate를 선언
   const [userId, setUserId] = useState("");
   const [isIdAvailable, setIsIdAvailable] = useState(false);
@@ -15,23 +27,13 @@ function Signup() {
   const [birthDate, setBirthDate] = useState("");
   const [birthDateError, setBirthDateError] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [phoneError, setPhoneError] = useState("");
-  const [email, setEmail] = useState("");
-  const [emailError, setEmailError] = useState("");
-  const [isEmailAvailable, setIsEmailAvailable] = useState(false); // 이메일 사용 가능 여부
-  const [verificationCode, setVerificationCode] = useState("");
-  const [verificationError, setVerificationError] = useState("");
-  const [isVerified, setIsVerified] = useState(false); // 인증 성공 여부
+  const [phoneError, setPhoneError] = useState(""); 
   const [allChecked, setAllChecked] = useState(false); // 전체 동의 상태
   const [serviceAgreement, setServiceAgreement] = useState(false); // 서비스 이용약관 동의 상태
   const [privacyPolicy, setPrivacyPolicy] = useState(false); // 개인정보 수집 및 이용 동의 상태
   const [marketingConsent, setMarketingConsent] = useState(false); // 마케팅 정보 수신 동의 상태
   const [name, setName] = useState(""); // 이름 상태 추가
   const [gender, setGender] = useState("male"); // 성별 상태 (기본값: 남자)
-  const [verificationTime, setVerificationTime] = useState(0); // 인증 타이머 (초 단위)
-  const [isVerificationActive, setIsVerificationActive] = useState(false); // 타이머 활성화 여부
-  const [isPhoneAvailable, setIsPhoneAvailable] = useState(false); // 전화번호 사용 가능 여부 상태
-  const [phoneMessage, setPhoneMessage] = useState(""); // 메시지 상태
 
   const handleAllCheck = (e) => {
     const checked = e.target.checked;
@@ -136,12 +138,9 @@ function Signup() {
     }
 
     try {
-      const response = await apiClient.post(
-        "/users/checkPhoneNumber",
-        {
-          phoneNumber,
-        }
-      );
+      const response = await apiClient.post("/users/checkPhoneNumber", {
+        phoneNumber,
+      });
 
       if (response.data === "dup") {
         alert("이미 사용 중인 전화번호입니다.");
@@ -158,108 +157,6 @@ function Signup() {
     }
   };
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    setIsEmailAvailable(false);
-  };
-
-  const checkDuplicateEmail = async () => {
-    if (!email) {
-      setEmailError("*이메일을 입력해주세요");
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      setEmailError("*유효하지 않은 이메일 형식입니다");
-      return;
-    }
-
-    try {
-      const response = await apiClient.post(
-        "/users/checkEmail",
-        {
-          email,
-        }
-      );
-
-      if (response.data === "dup") {
-        setEmailError("*이미 사용 중인 이메일입니다.");
-        setIsEmailAvailable(false);
-      } else {
-        setEmailError("");
-        setIsEmailAvailable(true);
-      }
-    } catch (error) {
-      console.error("이메일 확인 중 오류 발생:", error);
-      alert("이메일 확인 중 오류가 발생했습니다.");
-    }
-  };
-
-  // 타이머 업데이트를 위한 useEffect
-  useEffect(() => {
-    let timer;
-    if (verificationTime > 0) {
-      timer = setInterval(() => {
-        setVerificationTime((prevTime) => prevTime - 1);
-      }, 1000);
-    } else if (verificationTime === 0 && isVerificationActive) {
-      // 타이머가 끝났을 때 버튼 활성화
-      setIsVerificationActive(false);
-    }
-    return () => clearInterval(timer);
-  }, [verificationTime, isVerificationActive]);
-
-  // 인증번호 전송 버튼 클릭 시 호출
-  const handleSendVerificationEmail = async () => {
-    if (!isEmailAvailable) {
-      alert("이메일 중복 확인을 먼저 완료해주세요.");
-      return;
-    }
-
-    try {
-      const response = await apiClient.post(
-        "/users/sendVerificationEmail",
-        {
-          email,
-        }
-      );
-
-      alert(response.data);
-
-      // 인증 타이머 초기화 및 시작
-      setVerificationTime(180); // 3분 = 180초
-      setIsVerificationActive(true); // 타이머 활성화
-    } catch (error) {
-      console.error("인증 이메일 발송 중 오류 발생:", error);
-      alert("인증 이메일 발송 중 오류가 발생했습니다.");
-    }
-  };
-
-  const handleVerifyCode = async () => {
-    if (!verificationCode) {
-      setVerificationError("*인증번호를 입력해주세요.");
-      return;
-    }
-
-    try {
-      const response = await apiClient.post(
-        "/users/verifyCode",
-        {
-          email,
-          code: verificationCode,
-        }
-      );
-
-      alert(response.data);
-      setIsVerified(true);
-      setVerificationError("");
-    } catch (error) {
-      console.error("인증 코드 확인 중 오류 발생:", error);
-      setVerificationError("*인증번호가 틀리거나 만료되었습니다.");
-    }
-  };
-
   const checkDuplicateId = async () => {
     if (!userId) {
       alert("아이디를 입력하세요.");
@@ -272,12 +169,9 @@ function Signup() {
     }
 
     try {
-      const response = await apiClient.post(
-        "/users/checkuserId",
-        {
-          users: userId,
-        }
-      );
+      const response = await apiClient.post("/users/checkuserId", {
+        users: userId,
+      });
 
       if (response.data === "dup") {
         alert("이미 사용 중인 아이디입니다.");
@@ -287,7 +181,7 @@ function Signup() {
         setIsIdAvailable(true);
       }
     } catch (error) {
-      console.error("중복 확인 중 오류 발생:", error);
+      console.error("중복 확인 중 오류 발생:", error.message);
       alert("중복 확인 중 오류가 발생했습니다.");
     }
   };
@@ -302,10 +196,7 @@ function Signup() {
       alert("비밀번호를 확인해주세요.");
       return;
     }
-    if (!isEmailAvailable || !isVerified) {
-      alert("이메일 중복 확인 및 인증을 완료해주세요.");
-      return;
-    }
+   
     if (!birthDate || birthDateError) {
       alert("생년월일을 정확히 입력해주세요.");
       return;
@@ -328,13 +219,16 @@ function Signup() {
     // gender 값을 "M" 또는 "F"로 변환
     const genderValue = gender === "male" ? "M" : "F";
     const signupData = {
-      userId: userId,
-      userPw: password,
-      userDefaultEmail: email,
-      userName: name,
-      userBirthday: formattedBirthDate,
-      userPhone: phoneNumber,
-      userGender: genderValue,
+        user: {
+            userId: userId,
+            userPw: password,
+            userDefaultEmail: initialEmail,
+            userName: name,
+            userBirthday: formattedBirthDate,
+            userPhone: phoneNumber,
+            userGender: genderValue,
+        },
+        snsType: snsType, // 별도로 추가
     };
 
     // 전송 전에 데이터 로그 출력
@@ -342,7 +236,7 @@ function Signup() {
 
     try {
       const response = await apiClient.post(
-        "/users/signup",
+        "/users/snsSignup",
         signupData
       );
 
@@ -364,6 +258,7 @@ function Signup() {
       <div className={style.signupTitle}>
         환영합니다! <br /> 당신의 취업을 도와주는 JOBIS 입니다!
       </div>
+
       <hr className={style.topLine} />
       <table className={style.signupTable}>
         <tbody>
@@ -431,108 +326,50 @@ function Signup() {
               <input
                 type="text"
                 placeholder="이메일"
-                value={email}
-                onChange={handleEmailChange}
-                disabled={isVerified} // 인증 성공 시 입력 필드 비활성화
+                value={initialEmail}
+                readOnly
               />
-              <br />
-              {emailError && (
-                <span style={{ color: "red", marginLeft: "10px" }}>
-                  {emailError}
-                </span>
-              )}
-              {isEmailAvailable && !isVerified && (
-                <span style={{ color: "green", marginLeft: "10px" }}>
-                  *사용 가능한 이메일입니다.
-                </span>
-              )}
-              {isVerified && (
-                <span style={{ color: "green", marginLeft: "10px" }}>
-                  *이메일 인증이 완료되었습니다.
-                </span>
-              )}
-              {/* 인증 타이머 표시 */}
-              {isVerificationActive && !isVerified && (
-                <div
-                  style={{
-                    color: "red",
-                    fontWeight: "bold",
-                    marginTop: "10px",
-                  }}
-                >
-                  인증 유효 시간 : {Math.floor(verificationTime / 60)}:
-                  {String(verificationTime % 60).padStart(2, "0")} 분
-                </div>
-              )}
-            </td>
-            <td>
-              <button
-                className={style.checkButton}
-                type="button"
-                onClick={checkDuplicateEmail}
-                disabled={isVerified || isEmailAvailable} // 인증 성공 시 버튼 비활성화
-                style={{
-                  backgroundColor: isVerified ? "#d3d3d3" : "",
-                  cursor: isVerified ? "not-allowed" : "pointer",
-                }}
-              >
-                중복확인
-              </button>
-            </td>
-            <td>
-              <button
-                className={style.checkButton}
-                type="button"
-                onClick={handleSendVerificationEmail}
-                disabled={!isEmailAvailable || isVerified} // 인증 성공 시 버튼 비활성화
-                style={{
-                  backgroundColor: isVerified ? "#d3d3d3" : "",
-                  cursor: isVerified ? "not-allowed" : "pointer",
-                }}
-              >
-                인증하기
-              </button>
-            </td>
-          </tr>
-          <tr>
-            <td className={style.title}>인증번호</td>
-            <td>
-              <input
-                type="text"
-                placeholder="인증번호 입력"
-                value={verificationCode}
-                onChange={(e) => setVerificationCode(e.target.value)}
-                disabled={isVerified} // 인증 성공 시 입력 필드 비활성화
-              />
-              <br />
-              {isVerified ? (
-                <span style={{ color: "green", marginLeft: "10px" }}>
-                  *이메일 인증이 완료되었습니다.
-                </span>
-              ) : (
-                verificationError && (
-                  <span style={{ color: "red", marginLeft: "10px" }}>
-                    {verificationError}
+              <div className={style.emailType}>
+                *
+                {snsType && (
+                  <span>
+                    {snsType === "kakao"
+                      ? "카카오"
+                      : snsType === "naver"
+                      ? "네이버"
+                      : snsType === "google"
+                      ? "구글"
+                      : ""}{" "}
                   </span>
-                )
-              )}
+                )}
+                이메일 인증이 완료되었습니다.
+              </div>
             </td>
             <td>
-              <button
-                className={style.checkButton}
-                type="button"
-                onClick={handleVerifyCode}
-                disabled={isVerified} // 인증 성공 시 버튼 비활성화
-                style={{
-                  backgroundColor: isVerified ? "#d3d3d3" : "",
-                  cursor: isVerified ? "not-allowed" : "pointer",
-                }}
-              >
-                인증하기
-              </button>
+              <div>
+                {snsType === "kakao" && (
+                  <div className={style.snsTypeText}>
+                    <img src={kakaoLogo} className={style.Logo} />
+                    카카오
+                  </div>
+                )}
+
+                {snsType === "naver" && (
+                  <div className={style.snsTypeText}>
+                    <img src={naverLogo} className={style.Logo} />
+                    네이버
+                  </div>
+                )}
+
+                {snsType === "google" && (
+                  <div className={style.snsTypeText}>
+                    <img src={googleLogo} className={style.Logo} />
+                    구글
+                  </div>
+                )}
+              </div>
             </td>
           </tr>
-
           <tr>
             <td className={style.title}>이름</td>
             <td>
@@ -602,9 +439,9 @@ function Signup() {
                 disabled={isPhoneAvailable} // 전화번호가 사용 가능하면 비활성화
               />
               <br /> 예시: 01012345678
-               <span style={{ color: isPhoneAvailable ? "green" : "red" }}>
-                              {phoneMessage}
-                            </span>
+              <span style={{ color: isPhoneAvailable ? "green" : "red" }}>
+                {phoneMessage}
+              </span>
               {phoneError && (
                 <span style={{ color: "red", marginLeft: "10px" }}>
                   {phoneError}
@@ -678,4 +515,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default SNSSignup;

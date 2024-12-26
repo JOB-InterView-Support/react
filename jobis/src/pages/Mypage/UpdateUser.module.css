@@ -93,3 +93,18 @@
     border: none; /* 테두리 제거 */
     border-radius: 0; /* 둥근 모서리 제거 */
    }
+
+   .minibutton {
+     width: 13%;
+     margin-left: 8px;
+     background-color: rgba(109, 160, 255, 0.74);
+     color: white;
+     border: none;
+     border-radius: 4px;
+     font-weight: 900;
+    font-size: 15px;
+    cursor: pointer;
+   }
+   .minibutton:hover {
+    background-color: #1558b0;
+   }
