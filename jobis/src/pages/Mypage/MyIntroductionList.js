@@ -42,8 +42,9 @@ function MyIntroductionList() {
           console.log("응답 데이터 확인:", data);
       
           if (Array.isArray(data)) {
-            console.log("응답 데이터가 배열 형식입니다. 상태에 저장합니다.");
-            setIntroductions(data); // 상태에 저장
+            const filteredData = data.filter((intro) => intro.introIsDeleted === "N");
+            console.log("삭제되지 않은 데이터:", filteredData);
+            setIntroductions(filteredData);
           } else {
             console.error("응답 데이터 형식이 예상과 다릅니다:", data);
           }
@@ -65,8 +66,8 @@ function MyIntroductionList() {
   };
 
   const handleNewIntroduction = () => {
-    alert("새 자기소개서를 작성합니다.");
     console.log("새 자기소개서 작성 버튼이 클릭되었습니다.");
+    navigate("/MyIntroductionInsert");
     // 추가 로직 작성 가능 (페이지 이동, 모달 등)
   };
 
@@ -99,8 +100,10 @@ function MyIntroductionList() {
                 <img src={icon} alt="Add Icon" className={styles.icon} />
                 </div>
                 <h3>{intro.introTitle}</h3>
+                <div className={styles.minicontents}>
                 <p>{intro.introDate.split("T")[0]}</p>
-                <p>{intro.introContents.substring(0, 20)}...</p>
+                <p>{intro.introContents.length > 8 ? `${intro.introContents.substring(0, 8)}...` : intro.introContents}</p>
+                </div>
               </div>
             ))
           ) : (

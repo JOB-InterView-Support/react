@@ -45,3 +45,27 @@
 .spacer {
     margin-left: 10px;
 }
+
+.backButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: #000;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.backButton::before {
+    content: "←";
+    margin-right: 8px;
+    font-size: 16px;
+}
+
+.backButton:hover {
+    text-decoration: underline;
+    color: #0056b3;
+}

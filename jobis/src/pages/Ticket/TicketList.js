@@ -16,19 +16,56 @@ function TicketList() {
     const { isLoggedIn, secureApiRequest, role } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);  
     const navigate = useNavigate();
-     
-    useEffect(() => {
-        if (!isLoggedIn) {
-          navigate("/login"); // 로그인 페이지로 이동
-        }
-      }, [isLoggedIn,  navigate]);
-
+    const [products, setProducts] = useState([]); // Products 정보를 담을 상태
+    
 
     const [payment, setPayment] = useState(null);
-    const [amount] = useState({
-        currency: "KRW",
-        value: 50000,
-    });
+    
+    useEffect(() => {
+        if (!isLoggedIn) {
+            navigate("/login"); // 로그인 페이지로 이동
+        }
+    }, [isLoggedIn,  navigate]);
+    
+    
+
+    useEffect(() => {
+        // Products 데이터 가져오기
+        async function fetchProducts() {
+            setIsLoading(true);
+            try {
+                const accessToken = localStorage.getItem("accessToken");
+                const refreshToken = localStorage.getItem("refreshToken");
+                
+                const response = await apiClient.get("/products",  {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`, // 인증 헤더에 AccessToken 추가
+                        refreshToken: `Bearer ${refreshToken}`, // 인증 헤더에 RefreshToken 추가
+                    },
+                });
+                
+                
+                if (Array.isArray(response.data)) {
+                    const validatedProducts = response.data.map((product) => ({
+                        ...product,
+                        prodAmount: Number(product.prodAmount), // 보정
+                    }));
+                    setProducts(validatedProducts);
+                } else {
+                    console.error("API response is not an array:", response.data);
+                }
+                console.log("products " + JSON.stringify(products) );
+                console.log("response " + JSON.stringify(response.data) );
+            } catch (error) {
+                console.error("Failed to fetch products:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        } fetchProducts();
+    }, []);
+    
+   
+    
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     
     function selectPaymentMethod(method) {
@@ -58,60 +95,74 @@ function TicketList() {
     
     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
     // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
-    async function requestPayment() {
-        // 결제를 요청하기 전에 orderId, amount를 서버에 저장하세요.
-        // 결제 과정에서 악의적으로 결제 금액이 바뀌는 것을 확인하는 용도입니다.
-        await payment.requestPayment({
-            method: "CARD", // 카드 및 간편결제
-            amount: amount,
-            orderId: "K5C7xjYtjgAYK-4Mbe3S8", // 고유 주문번호
-            orderName: "토스 티셔츠 외 2건",
-            successUrl: window.location.origin + "/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-            failUrl: window.location.origin + "/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
-            customerEmail: "customer123@gmail.com",
-            customerName: "김토스",
-            customerMobilePhone: "01012341234",
-            // 카드 결제에 필요한 정보
-            card: {
-                useEscrow: false,
-                flowMode: "DEFAULT", // 통합결제창 여는 옵션
-                useCardPoint: false,
-                useAppCardOnly: false,
-            },
-        });
+    async function requestPayment(product) {
+        console.log("Product data for payment:", product); // product 객체 출력
+        if (!payment) {
+            console.error("Payment instance is not ready");
+            return;
+        }
+
+          // amount 객체 생성
+        const amount = {
+            currency: "KRW",
+            value: product.prodAmount, // 개별 product의 금액 설정
+        };
+
+        try {
+            await payment.requestPayment({
+                method: "CARD",
+                amount:  amount,  // 개별 product의 금액
+                orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
+                orderName: product.prodName,
+                successUrl: window.location.origin + "/paymentSuccess",
+                failUrl: window.location.origin + "/payments/fail",
+                customerEmail: "customer123@gmail.com",
+                customerName: "김토스",
+                customerMobilePhone: "01012341234",
+                card: {
+                    useEscrow: false,
+                    flowMode: "DEFAULT",
+                    useCardPoint: false,
+                    useAppCardOnly: false,
+                },
+            });
+        } catch (error) {
+            console.error("Payment request failed:", error);
+        }
     }
 
+
+    if (isLoading) {
+        return <div className={styles.loading}>로딩 중...</div>; // 로딩 표시
+      }
     return(
         <div>
             <TicketSubMenubar/>
-            <div className={styles.ticketContainer}>
-                <div className={styles.content}>
-                    <h3>6개월</h3>
-                    <h4>5 + 1회 이용권</h4>
-                    <p>자기소개서 분석 <br/>+<br/> AI 모의면접 <br/>+<br/> AI 면접 분석결과 확인</p>
-                    <h2>47000 원</h2>
-                    <button onClick={() => requestPayment()}>구매하기</button>
+                <div className={styles.ticketContainer}>
+                    {isLoading ? (
+                        <p>상품 정보를 불러오는 중입니다...</p>
+                    ) : (
+                        products.length > 0 ? (
+                            products.map((product) => (
+                                <div key={product.prodNumber} className={styles.content}>
+                                    <h3>{product.prodPeriod}</h3>
+                                    <h4>{product.prodName}</h4>
+                                    <p>{product.prodDescription}</p>
+                                    <h2>{product.prodAmount} 원</h2>
+                                    <button onClick={() => requestPayment(product)}>구매하기</button>
+                                </div>
+                            ))
+                        ) : (
+                            <p>상품이 없습니다.</p>
+                        )
+                    )}
                 </div>
-                <div className={styles.content}>
-                    <h3>1개월</h3>
-                    <h4>3회 이용권</h4>
-                    <p>자기소개서 분석 <br/>+<br/> AI 모의면접 <br/>+<br/> AI 면접 분석결과 확인</p>
-                    <h2>25000 원</h2>
-                    <button onClick={() => requestPayment()}>구매하기</button>
-                </div>
-                <div className={styles.content}>
-                    <h3>24시간</h3>
-                    <h4>1회 이용권</h4>
-                    <p>자기소개서 분석 <br/>+<br/> AI 모의면접 <br/>+<br/> AI 면접 분석결과 확인</p>
-                    <h2>9900 원</h2>
-                    <button onClick={() => requestPayment()}>구매하기</button>
-                </div>
-            </div>
+        </div>
+    );
             {/* {role === Admin &&(
                 <button onClick={() => InsertProducts }>이용권 등록</button>
             )} */}
-        </div>
-    )
+    
 }
 
 export default TicketList;

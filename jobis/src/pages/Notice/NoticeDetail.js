@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate,useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./NoticeDetail.module.css"; // CSS Modules
 import { DeleteButton } from "../../components/common/button/DeleteButton.js"
@@ -10,6 +10,10 @@ function NoticeDetail() {
     const {no} = useParams();
     const navigate = useNavigate();
     const [notice, setNotice] = useState(null);
+
+    const handleBack = () => {
+        navigate("/notice");
+    };
 
     const handleNoticeDetail = async () => {
         try{
@@ -65,11 +69,13 @@ function NoticeDetail() {
                 <br></br>
                 <br></br>
                 <br></br>
+                <button onClick={handleBack} className={styles.backButton}>이전으로</button>
                 {role === "ADMIN" && (
                     <div className={styles.buttonContainer}>
                         <button onClick={handleMoveUpdate}>수 정</button>
                         <button onClick={handleNoticeDelete}>삭 제</button>
                 </div>
+                
     )}
     </div>
     );
