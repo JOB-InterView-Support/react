@@ -43,7 +43,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: start;
+    justify-content: space-between;
     background-color: #FFFFFF; /* 흰색 배경 */
     border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
     border-radius: 10px;
@@ -116,7 +116,13 @@
     width: 100%;
 }
 
-
+.minicontents {
+    margin-left: auto; /* 우측 고정 */
+    text-align: right; /* 내용 오른쪽 정렬 */
+    display: flex; /* Flexbox로 세부 정렬 */
+    flex-direction: column; /* 세로 정렬 */
+    gap: 10px; /* p 태그 간의 간격 */
+}
 .listcontainer::-webkit-scrollbar {
     width: 6px; /* 스크롤바 너비 */
     background-color: transparent; /* 배경 투명 */
