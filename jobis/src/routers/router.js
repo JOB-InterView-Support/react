@@ -28,7 +28,8 @@ const AppRouter = () => {
       {reviewRouter}
       {ticketRouter}
       {noticeRouter}
-      {/* {payRouter}
+      {payRouter}
+      {/* 
       {reviewRouter}
        */}
       <Route path="/" element={<MainPage />} />
