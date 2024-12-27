@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import style from "./NaverLink.module.css";
 import naverLogo from "../../assets/images/naver.png";
@@ -6,15 +6,14 @@ import { AuthContext } from "../../AuthProvider";
 
 function NaverLink() {
   const navigate = useNavigate();
-  const { secureApiRequest } = useContext(AuthContext); // 인증 요청에 사용
+  const { secureApiRequest } = useContext(AuthContext);
+  const isRequestSent = useRef(false); // 요청 중복 방지 상태를 추적
 
   useEffect(() => {
-    let isMounted = true; // 컴포넌트가 마운트된 상태를 추적
-
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get("code");
     const state = urlParams.get("state");
-    const uuid = localStorage.getItem("uuid"); // 로컬스토리지에서 uuid 가져오기
+    const uuid = localStorage.getItem("uuid");
 
     if (!uuid) {
       alert("로그인 정보가 없습니다.");
@@ -28,8 +27,9 @@ function NaverLink() {
       return;
     }
 
-    const sendCodeToServer = async (code, uuid) => {
-      if (!isMounted) return; // 컴포넌트가 언마운트되었으면 요청 중단
+    const sendCodeToServer = async () => {
+      if (isRequestSent.current) return; // 이미 요청이 전송되었으면 중단
+      isRequestSent.current = true; // 요청 상태를 설정
 
       try {
         const response = await secureApiRequest("/naver/link", {
@@ -39,7 +39,7 @@ function NaverLink() {
 
         console.log("Axios 응답 성공:", response);
 
-        const responseData = response.data; // JSON 데이터 접근
+        const responseData = response.data;
         if (response.status === 200 || responseData.success === "true") {
           alert(responseData.message || "네이버 연동 성공했습니다.");
           navigate("/updateUser");
@@ -53,11 +53,7 @@ function NaverLink() {
       }
     };
 
-    sendCodeToServer(code, uuid);
-
-    return () => {
-      isMounted = false; // 컴포넌트 언마운트 시 상태 업데이트 방지
-    };
+    sendCodeToServer();
   }, [navigate, secureApiRequest]);
 
   return (

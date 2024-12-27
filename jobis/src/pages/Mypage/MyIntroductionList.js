@@ -65,8 +65,8 @@ function MyIntroductionList() {
   };
 
   const handleNewIntroduction = () => {
-    alert("새 자기소개서를 작성합니다.");
     console.log("새 자기소개서 작성 버튼이 클릭되었습니다.");
+    navigate("/MyIntroductionInsert");
     // 추가 로직 작성 가능 (페이지 이동, 모달 등)
   };
 

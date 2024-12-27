@@ -123,13 +123,9 @@ const UpdateUser = () => {
     }
   };
 
-
-
-
   const linkedKakaoEmail = user.userKakaoEmail || "";
   const linkedNaverEmail = user.userNaverEmail || "";
   const linkedGoogleEmail = user.userGoogleEmail || "";
-
 
   // 환경 변수 불러오기
   const Rest_api_key = process.env.REACT_APP_KAKAO_API_KEY; // Kakao REST API Key
@@ -143,7 +139,6 @@ const UpdateUser = () => {
   const handleKakaoLink = () => {
     window.location.href = kakaoURL;
   };
-
 
   const handleUnlinkKakaoEmail = async () => {
     try {
@@ -185,7 +180,6 @@ const UpdateUser = () => {
     const clientId = process.env.REACT_APP_NAVER_CLIENT_ID; // 네이버 Client ID
     const redirectUri = process.env.REACT_APP_NAVER_LINK_REDIRECT_URI; // Redirect URI
     const state = process.env.REACT_APP_NAVER_STATE; // CSRF 방지를 위한 상태 토큰
-
 
     // 네이버 세션 초기화를 위한 로그아웃 URL 호출
     const logoutURL = "https://nid.naver.com/nidlogin.logout";
@@ -238,7 +232,63 @@ const UpdateUser = () => {
     }
   };
 
+  const handleGoogleLink = () => {
+    const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_GOOGLE_LINK_REDIRECT_URI;
+    console.log("REACT_APP_GOOGLE_CLIENT_ID:", clientId);
+    console.log("REACT_APP_GOOGLE_LINK_REDIRECT_URI:", redirectUri);
 
+    if (!clientId || !redirectUri) {
+      console.error("환경 변수가 제대로 로드되지 않았습니다.");
+      alert("구글 로그인 설정이 잘못되었습니다.");
+      return;
+    }
+
+    const scope = "email profile";
+    const state = "googleLogin";
+
+    const googleURL = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(
+      redirectUri
+    )}&response_type=code&scope=${encodeURIComponent(scope)}&state=${state}`;
+
+    window.location.href = googleURL;
+  };
+
+  const handleUnlinkGoogleEmail = async () => {
+    try {
+      const uuid = localStorage.getItem("uuid"); // UUID 가져오기
+      if (!uuid) {
+        alert("로그인 정보가 없습니다.");
+        return;
+      }
+
+      // `/google/unlink`로 POST 요청
+      const response = await secureApiRequest("/google/unlink", {
+        method: "POST",
+        body: JSON.stringify({ uuid }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      console.log("Axios 응답:", response);
+
+      const responseData = response.data; // Axios 응답 데이터 접근
+      if (response.status === 200) {
+        // `userGoogleEmail`을 null로 변경
+        setUser((prevUser) => ({
+          ...prevUser,
+          userGoogleEmail: "",
+        }));
+        alert(responseData.message || "구글 이메일 연동이 해제되었습니다.");
+      } else {
+        alert(responseData.error || "구글 이메일 해제에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error unlinking Google email:", error);
+      alert("구글 이메일 해제에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
 
   if (loading) return <div>Loading...</div>;
 
@@ -368,6 +418,33 @@ const UpdateUser = () => {
                 type="button"
                 className={styles.minibutton}
                 onClick={handleNaverLink}
+              >
+                연동
+              </button>
+            )}
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>연동 구글 이메일</label>
+            <input
+              type="email"
+              className={styles.input}
+              name="linkedGoogleEmail"
+              value={linkedGoogleEmail || ""}
+              readOnly
+            />
+            {linkedGoogleEmail ? (
+              <button
+                type="button"
+                className={styles.minibutton}
+                onClick={handleUnlinkGoogleEmail}
+              >
+                해제
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.minibutton}
+                onClick={handleGoogleLink}
               >
                 연동
               </button>

@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useContext } from "react";
 import { AuthContext } from "../../AuthProvider";
@@ -7,6 +7,7 @@ import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenuba
 
 function MyIntroductionDetail() {
   const { id } = useParams(); // URL에서 id 가져오기
+  const navigate = useNavigate();
   const { secureApiRequest } = useContext(AuthContext);
   const [detail, setDetail] = useState(null); // 상세 데이터 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
@@ -47,27 +48,49 @@ function MyIntroductionDetail() {
     <div>
       <MypageSubMenubar />
       <div className={styles.container}>
-        <h1 className={styles.title}>
-          자기소개서 상세 보기 {detail.introTitle}
-        </h1>
-        <div className={styles.detailCard}>
-          <p>
-            <strong>지원 회사명:</strong> {detail.applicationCompanyName}
-          </p>
-          <p>
-            <strong>지원 직무:</strong> {detail.workType}
-          </p>
-          <p>
-            <strong>보유 자격증:</strong> {detail.certificate}
-          </p>
-          <p>
-            <strong>내용:</strong>
-          </p>
-          <div className={styles.content}>{detail.introContents}</div>
+        <h1 className={styles.title}>마이페이지</h1>
+        <div className={styles.headerRow}>
+          <h2
+            className={styles.subtitle}
+          >{`${detail.introTitle} 상세 페이지`}</h2>
+          <div className={styles.buttons}>
+            <button
+              className={styles.listButton}
+              onClick={() => navigate("/myIntroductionList")}
+            >
+              목록
+            </button>
+            <button
+              className={styles.editButton}
+              onClick={() => navigate(`/MyIntroductionUpdate/${id}`)}
+            >
+              수정
+            </button>
+            <button className={styles.deleteButton}>삭제</button>
+          </div>
         </div>
-        <div className={styles.buttons}>
-          <button className={styles.editButton}>수정</button>
-          <button className={styles.deleteButton}>삭제</button>
+        <div className={styles.maincontainer}>
+          <div className={styles.rowContainer}>
+            <div className={styles.infoBox}>
+              <strong>지원 회사명:</strong>
+              <div className={styles.content}>
+                {detail.applicationCompanyName}
+              </div>
+            </div>
+            <div className={styles.infoBox}>
+              <strong>지원 직무:</strong>
+              <div className={styles.content}>{detail.workType}</div>
+            </div>
+            <div className={styles.infoBox}>
+              <strong>보유 자격증:</strong>
+              <div className={styles.content}>{detail.certificate}</div>
+            </div>
+          </div>
+          <div className={styles.line}></div>
+          <div className={styles.contentWrapper}>
+            <strong>내용:</strong>
+            <div className={styles.bigcontent}>{detail.introContents}</div>
+          </div>
         </div>
       </div>
     </div>
