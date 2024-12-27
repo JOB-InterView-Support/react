@@ -39,10 +39,13 @@ function MypageSubMenubar() {
 
       <Link to="/myIntroductionList" className={styles.menuItem}>
       <div
-        className={`${styles.menuItem} ${
-          location.pathname === "/myIntroductionList" ? styles.active : ""
-        }`}
-      >
+          className={`${styles.menuItem} ${
+            location.pathname === "/myIntroductionList" ||
+            location.pathname.startsWith("/myIntroductionList/")
+              ? styles.active
+              : ""
+          }`}
+        >
         자기소개서
       </div>
       </Link> 
