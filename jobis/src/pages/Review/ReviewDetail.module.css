@@ -1,0 +1,155 @@
+/* review 상세 페이지 스타일 */
+
+.reviewDetailContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #ffffff; /* 배경색 흰색으로 수정 */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif; /* 기본 폰트 지정 */
+}
+
+.reviewTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #333333; /* 텍스트 색상 수정 */
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.backButton {
+  display: block;
+  margin-top: 20px; /* 상단 여백 추가 */
+  color: #007bff;
+  font-size: 14px;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  text-align: left; /* 왼쪽 정렬 */
+}
+
+.backButton:hover {
+  text-decoration: none;
+}
+
+
+.editButton {
+  background-color: #28a745; /* 수정 버튼 색상 수정 */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.deleteButton {
+  background-color: #dc3545; /* 삭제 버튼 색상 수정 */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.reviewTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.reviewTable th,
+.reviewTable td {
+  padding: 10px;
+}
+
+.reviewTable th {
+  background-color: #f8f9fa; /* 헤더 배경색 변경 */
+  text-align: left;
+  font-weight: bold;
+  color: #495057;
+}
+
+.reviewTable td {
+  color: #212529; /* 텍스트 색상 변경 */
+}
+
+.commentsTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.commentsTable th,
+.commentsTable td {
+  padding: 10px;
+}
+
+.commentsTable th {
+  background-color: #f8f9fa; /* 댓글 헤더 배경색 변경 */
+  text-align: left;
+  font-weight: bold;
+  color: #495057;
+}
+
+.noComments {
+  text-align: center;
+  color: #666666;
+  font-style: italic;
+  margin-top: 20px;
+}
+
+.attachmentSection {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.attachmentSection img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 10px;
+}
+
+.attachmentSection a {
+  display: inline-block;
+  margin-top: 10px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.attachmentSection a:hover {
+  text-decoration: underline;
+}
+
+.bottomLeftLink {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.bottomLeftLink:hover {
+  text-decoration: none;
+}
+
+.attachmentImage {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin-top: 10px;
+}

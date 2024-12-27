@@ -7,9 +7,9 @@ import ReviewUpdate from "../pages/Review/ReviewUpdate";
 
 const reviewRouter = [
     <Route path="/review" element={<ReviewList/>}/>,
-    <Route path="/review/detail/:no" element={<ReviewDetail/>}/>,
+    <Route path="/review/detail/:rno" element={<ReviewDetail/>}/>,
     <Route path="/review/Insert/" element={<ReviewInsert/>}/>,
-    <Route path="/review/Update/:no" element={<ReviewUpdate/>}/>,
+    <Route path="/review/Update/:rno" element={<ReviewUpdate/>}/>,
 ];
 
 export default reviewRouter;
