@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./NoticeList.module.css"; // CSS Modules
 import Paging from "../../components/common/Paging"; // Paging 컴포넌트 임포트
-//import InsertButton from "../../components/common/button/InsertButton"; // InsertButton 컴포넌트 임포트
+import InsertButton from "../../components/common/button/InsertButton"; // InsertButton 컴포넌트 임포트
 
 function NoticeList() {
   const { isLoggedIn, isAuthInitialized, secureApiRequest, role } = useContext(AuthContext);
@@ -93,7 +93,7 @@ function NoticeList() {
       {role === "ADMIN" && (
         // ADMIN 역할인 경우에만 등록 버튼 표시
         <div className={styles.buttonContainer}>
-          <button onClick={handleMoveInsert}>등 록</button>
+          <InsertButton onClick={handleMoveInsert} label="공지 등록"/>
         </div>
       )}
     </div>

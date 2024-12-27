@@ -1,0 +1,76 @@
+.noticecontainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+}
+
+.noticetitle {
+    font-weight: bold;
+    color: rgb(0, 0, 0);
+    font-size: 24px;
+    text-align: left;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+}
+
+.noticecontent {
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.textarea {
+    width: 100%;
+    height: 200px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+    background-color: #f9f9f9;
+}
+
+.fileInput {
+    margin-top: 20px;
+}
+
+.fileInput input {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.previewImage {
+    max-width: 100%;
+    max-height: 200px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.backButton, .insertButton {
+    background-color: #4da8ff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.backButton:hover, .insertButton:hover {
+    background-color: #3a94e7;
+}
+
+.insertButton {
+    margin-left: auto; /* 오른쪽 정렬 */
+}

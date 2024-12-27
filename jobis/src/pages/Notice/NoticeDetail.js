@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate,useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./NoticeDetail.module.css"; // CSS Modules
 import { DeleteButton } from "../../components/common/button/DeleteButton.js"
