@@ -2,8 +2,20 @@
     max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
+    padding-bottom: 0;
     background-color: #f9f9f9;
 }
+/* .noticecontainer {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    padding-bottom: 0; /* 네모박스 하단 여백 제거 */
+    /* background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+} */ 
+
 
 .noticetitle {
     font-weight: bold;
