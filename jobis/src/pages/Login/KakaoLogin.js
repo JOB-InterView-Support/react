@@ -31,6 +31,8 @@ function KakaoLogin() {
           body: JSON.stringify({ code }),
         });
 
+        console.log("HTTP 응답 상태:", response.status);
+
         if (response.status === 409) {
           const data = await response.json();
           console.warn("등록되지 않은 이메일:", data.email);
@@ -51,7 +53,11 @@ function KakaoLogin() {
         const data = await response.json();
         console.log("서버 응답 데이터:", data);
 
-        const { accessToken, refreshToken, userId, userName, role, uuid } = response.data;
+        // 데이터 유효성 검사
+        const { accessToken, refreshToken, userId, userName, role, uuid } = data;
+        if (!accessToken || !refreshToken || !userId || !userName) {
+          throw new Error("필수 데이터가 누락되었습니다.");
+        }
 
         // 로컬 스토리지에 데이터 저장
         localStorage.setItem("accessToken", accessToken);
@@ -90,9 +96,8 @@ function KakaoLogin() {
 
   return (
     <div className={style.container}>
-      <img src={kakaoLogo} className={style.kakaoLogo}/>
+      <img src={kakaoLogo} className={style.kakaoLogo} alt="Kakao Logo" />
       <div>카카오 로그인 처리 중...</div>
-      
     </div>
   );
 }

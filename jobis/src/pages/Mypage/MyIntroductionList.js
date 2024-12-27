@@ -73,8 +73,10 @@ function MyIntroductionList() {
   return (
     <div>
       <MypageSubMenubar />
-      <div className={styles.maincontainer}>
-        <h1 className={styles.menutitle}>자기소개서</h1>
+      <div className={styles.container}>
+        <h1 className={styles.title}>마이페이지</h1>
+        <h1 className={styles.subtitle}>자기소개서</h1>
+        <div className={styles.listcontainer}>
         <div className={styles.introductionGrid}>
           {/* 새 자기소개서 작성 버튼 */}
           <div className={styles.introductionCardNew}>
@@ -93,6 +95,9 @@ function MyIntroductionList() {
                 className={styles.introductionCard}
                 onClick={() => handleItemClick(intro.introNo)} // 클릭 이벤트 추가
               >
+                <div className={styles.circleicon}>
+                <img src={icon} alt="Add Icon" className={styles.icon} />
+                </div>
                 <h3>{intro.introTitle}</h3>
                 <p>{intro.introDate.split("T")[0]}</p>
                 <p>{intro.introContents.substring(0, 20)}...</p>
@@ -102,6 +107,7 @@ function MyIntroductionList() {
             <p>등록된 자기소개서가 없습니다.</p>
           )}
         </div>
+      </div>
       </div>
     </div>
   );
