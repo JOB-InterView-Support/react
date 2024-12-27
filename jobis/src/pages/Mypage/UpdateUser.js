@@ -7,43 +7,27 @@ import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenuba
 const UpdateUser = () => {
 
   const handleFaceRegistration = () => {
-    const uuid = localStorage.getItem("uuid");
+    const uuid = localStorage.getItem("uuid"); // UUID 가져오기
+    console.log("uuid : ", uuid);
     if (!uuid) {
       alert("로그인 정보가 없습니다.");
       return;
     }
-  
-    // Python 엔드포인트 URL
-    const faceRegistrationURL = `${process.env.REACT_APP_PYTHON_API_BASE_URL}/face/register?uuid=${uuid}`;
 
-  
-    // 새 창 열기
-    const newWindow = window.open(
-      faceRegistrationURL,
-      "_blank", // 새 창
-      "width=800,height=600,top=100,left=100" // 창 크기 및 위치
-    );
-  
-    if (!newWindow) {
-      alert("팝업 차단이 활성화되어 있습니다. 팝업 차단을 해제해주세요.");
-      return;
-    }
-  
-    // 새 창이 닫혔는지 감지
-    const interval = setInterval(() => {
-      if (newWindow.closed) {
-        clearInterval(interval); // 타이머 정리
-        alert("얼굴 등록 프로세스가 종료되었습니다.");
-      }
-    }, 1000);
+    // URL 쿼리 파라미터를 초기화하고 이동
+    window.history.replaceState({}, '', '/faceRegistration');
+    navigate("/faceRegistration");
+
   };
-  
-  
-  
-  
-  
 
-  
+
+
+
+
+
+
+
+
 
 
   const navigate = useNavigate();

@@ -1,0 +1,18 @@
+/* 전체 컨테이너를 화면 중앙에 정렬 */
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 수직 가운데 정렬 */
+    align-items: center; /* 좌우 가운데 정렬 */
+    height: 70vh; /* 화면 전체 높이 */
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* 비디오 박스 스타일 (크기를 키움) */
+  .videoBox {
+    width: 800px; /* 기존 640px에서 1.25배 */
+    height: 600px; /* 기존 480px에서 1.25배 */
+    border: 1px solid black; /* 테두리 */
+  }
+  

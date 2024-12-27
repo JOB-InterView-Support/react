@@ -10,6 +10,7 @@ import MyIntroductionUpdate from "../pages/Mypage/MyIntroductionUpdate";
 import KakaoLink from '../pages/Mypage/KakaoLink';
 import NaverLink from '../pages/Mypage/NaverLink';
 import GoogleLink from '../pages/Mypage/GoogleLink';
+import FaceRegistration from '../pages/Mypage/FeceRegistration';
 
 const mypageRouter = [
     <Route path="/updateUser" element={<UpdateUser />} />,
@@ -22,6 +23,7 @@ const mypageRouter = [
     <Route path="/kakaoLink/" element={<KakaoLink />} />,
     <Route path="/naverLink/" element={<NaverLink />} />,
     <Route path="/googleLink/" element={<GoogleLink />} />,
+    <Route path="/faceRegistration" element={<FaceRegistration />} />,
 ];
 
 export default mypageRouter;
