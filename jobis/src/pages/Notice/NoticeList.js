@@ -55,7 +55,7 @@ function NoticeList() {
   };
 
   useEffect(() => {
-      if (isAuthInitialized && !isLoggedIn) {
+      if (!isAuthInitialized && !isLoggedIn) {
         console.log("로그인되지 않은 상태입니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
     } else {
