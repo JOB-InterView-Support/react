@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./NoticeInsert.module.css";
+import InsertButton from "../../components/common/button/InsertButton";
 
 function NoticeInsert() {
     const { secureApiRequest } = useContext(AuthContext);
@@ -57,15 +58,15 @@ function NoticeInsert() {
             <div className={styles.formGroup}>
                 <input
                     type="text"
-                    placeholder="제목을 입력하세요"
+                    placeholder="공지 제목을 입력하세요."
                     value={noticetitle}
                     onChange={(e) => setNoticeTitle(e.target.value)}
-                    className={styles.noticetitle}
+                    className={styles.noticenewtitle}
                 />
             </div>
             <div className={styles.formGroup}>
                 <textarea
-                    placeholder="내용을 입력하세요"
+                    placeholder="공지 내용을 입력하세요."
                     value={noticecontent}
                     onChange={(e) => setNoticeContent(e.target.value)}
                     className={styles.textarea}
@@ -77,7 +78,7 @@ function NoticeInsert() {
             </div>
             <div className={styles.buttonGroup}>
                 <button onClick={handleBack} className={styles.backButton}>이전으로</button>
-                <button onClick={handleNoticeInsert} className={styles.insertButton}>공지 등록</button>
+                <InsertButton onClick={handleNoticeInsert} label="공지 등록"/>
             </div>
         </div>
     );    

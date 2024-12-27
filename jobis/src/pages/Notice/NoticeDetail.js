@@ -11,6 +11,10 @@ function NoticeDetail() {
     const navigate = useNavigate();
     const [notice, setNotice] = useState(null);
 
+    const handleBack = () => {
+        navigate("/notice");
+    };
+
     const handleNoticeDetail = async () => {
         try{
             const response = await secureApiRequest(`/notice/detail/${no}`, {
@@ -65,11 +69,13 @@ function NoticeDetail() {
                 <br></br>
                 <br></br>
                 <br></br>
+                <button onClick={handleBack} className={styles.backButton}>이전으로</button>
                 {role === "ADMIN" && (
                     <div className={styles.buttonContainer}>
                         <button onClick={handleMoveUpdate}>수 정</button>
                         <button onClick={handleNoticeDelete}>삭 제</button>
                 </div>
+                
     )}
     </div>
     );
