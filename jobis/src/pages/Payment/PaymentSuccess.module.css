@@ -1,0 +1,78 @@
+.paymentContainer {
+    width: 80%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    
+  }
+  
+  .paymentTitle {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2f4f9e;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .paymentBox {
+    border: 1px solid #ddd;
+    
+    padding: 20px;
+    margin-bottom: 20px;
+    background-color: #f9f9f9;
+  }
+  
+  .paymentTable {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .paymentTable th {
+    text-align: left;
+    font-weight: bold;
+    padding: 10px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+    width: 30%;
+  }
+  
+  .paymentTable td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .buttonGroup {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .cancelButton,
+  .backButton {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  .cancelButton {
+    background-color: #2f4f9e;
+    color: #fff;
+    margin-right: 10px;
+  }
+  
+  .cancelButton:hover {
+    background-color: #1d3c77;
+  }
+  
+  .backButton {
+    background-color: #ccc;
+    color: #333;
+  }
+  
+  .backButton:hover {
+    background-color: #bbb;
+  }
+  

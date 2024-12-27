@@ -100,8 +100,10 @@ function MyIntroductionList() {
                 <img src={icon} alt="Add Icon" className={styles.icon} />
                 </div>
                 <h3>{intro.introTitle}</h3>
+                <div className={styles.minicontents}>
                 <p>{intro.introDate.split("T")[0]}</p>
-                <p>{intro.introContents.substring(0, 20)}...</p>
+                <p>{intro.introContents.length > 8 ? `${intro.introContents.substring(0, 8)}...` : intro.introContents}</p>
+                </div>
               </div>
             ))
           ) : (

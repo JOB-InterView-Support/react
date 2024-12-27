@@ -114,8 +114,8 @@ function TicketList() {
                 amount:  amount,  // 개별 product의 금액
                 orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
                 orderName: product.prodName,
-                successUrl: window.location.origin + "/success",
-                failUrl: window.location.origin + "/fail",
+                successUrl: window.location.origin + "/paymentSuccess",
+                failUrl: window.location.origin + "/payments/fail",
                 customerEmail: "customer123@gmail.com",
                 customerName: "김토스",
                 customerMobilePhone: "01012341234",
