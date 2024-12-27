@@ -87,7 +87,7 @@ function MyIntroductionDetail() {
         <div className={styles.headerRow}>
           <h2
             className={styles.subtitle}
-          >{`${detail.introTitle} 상세 페이지`}</h2>
+          >{`${detail.introTitle}`}</h2>
           <div className={styles.buttons}>
             <button
               className={styles.listButton}
