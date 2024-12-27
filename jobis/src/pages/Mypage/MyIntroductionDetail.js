@@ -50,20 +50,32 @@ function MyIntroductionDetail() {
       <div className={styles.container}>
         <h1 className={styles.title}>마이페이지</h1>
         <div className={styles.headerRow}>
-        <h2 className={styles.subtitle}>{`${detail.introTitle} 상세 페이지`}</h2>
-        <div className={styles.buttons}>
-            <button className={styles.listButton} onClick={() => navigate("/myIntroductionList")}>
+          <h2
+            className={styles.subtitle}
+          >{`${detail.introTitle} 상세 페이지`}</h2>
+          <div className={styles.buttons}>
+            <button
+              className={styles.listButton}
+              onClick={() => navigate("/myIntroductionList")}
+            >
               목록
             </button>
-            <button className={styles.editButton}>수정</button>
+            <button
+              className={styles.editButton}
+              onClick={() => navigate(`/MyIntroductionUpdate/${id}`)}
+            >
+              수정
+            </button>
             <button className={styles.deleteButton}>삭제</button>
-        </div>
+          </div>
         </div>
         <div className={styles.maincontainer}>
           <div className={styles.rowContainer}>
             <div className={styles.infoBox}>
               <strong>지원 회사명:</strong>
-              <div className={styles.content}>{detail.applicationCompanyName}</div>
+              <div className={styles.content}>
+                {detail.applicationCompanyName}
+              </div>
             </div>
             <div className={styles.infoBox}>
               <strong>지원 직무:</strong>

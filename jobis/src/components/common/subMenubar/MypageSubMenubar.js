@@ -41,6 +41,7 @@ function MypageSubMenubar() {
       <div
           className={`${styles.menuItem} ${
             location.pathname === "/myIntroductionList" ||
+            location.pathname === "/MyIntroductionInsert" ||
             location.pathname.startsWith("/myIntroductionList/")
               ? styles.active
               : ""
