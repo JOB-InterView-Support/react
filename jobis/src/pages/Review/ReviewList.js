@@ -74,9 +74,9 @@ const ReviewList = () => {
   };
 
   // 5. Review 테이블의 특정 행 클릭 시 상세 페이지로 이동
-  const handleDetailClick = (rNo) => {
-    console.log("Navigating to:", `/review/detail/${rNo}`);
-    navigate(`/review/detail/${rNo}`); // Review 번호를 경로로 전달
+  const handleDetailClick = (rno) => {
+    console.log("Navigating to:", `/review/detail/${rno}`);
+    navigate(`/review/detail/${rno}`); // Review 번호를 경로로 전달
   };
 
   // 6. 에러가 발생한 경우 에러 메시지를 렌더링
@@ -133,8 +133,8 @@ const ReviewList = () => {
       {role === "USER" && (
         // USER 권한일 경우만 "리뷰 등록" 버튼 표시
         <div className={styles.buttonContainer}>
-          <InsertButton onClick={handleInsertClick} label="리뷰 등록" />
-        </div>
+        <InsertButton onClick={handleInsertClick} label="리뷰 등록"/>
+      </div>
       )}
     </div>
   );

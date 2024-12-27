@@ -1,10 +1,10 @@
 import React from "react";
 import styles from "./InsertButton.module.css";
 
-function InsertButton({ onClick }) {
+function InsertButton({ onClick, label }) {
   return (
     <button className={styles.insertButton} onClick={onClick}>
-      질문 등록
+      {label}
     </button>
   );
 }

@@ -1,121 +1,106 @@
-import React, { useEffect, useState, useContext } from "react"; // React 관련 라이브러리
-import { AuthContext } from "../../AuthProvider"; // 인증 Context
-import styles from "./ReviewDetail.module.css"; // CSS 모듈
-import { useParams, useNavigate } from "react-router-dom"; // React Router
-import InsertButton from "../../components/common/button/InsertButton"; // 버튼 컴포넌트
+import React, { useEffect, useState, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../AuthProvider";
+import styles from "./ReviewDetail.module.css";
 
 function ReviewDetail() {
-    const { rno } = useParams(); // URL에서 rno(리뷰 번호) 추출
-    const navigate = useNavigate(); // 페이지 이동을 위한 훅
-    const [review, setReview] = useState(null); // 리뷰 데이터를 저장하는 상태
-    const [replies, setReplies] = useState([]); // 댓글 데이터를 저장하는 상태
-    const [error, setError] = useState(null); // 에러 메시지 저장 상태
+    const { isLoggedIn, secureApiRequest, userid } = useContext(AuthContext);
+    const { rno } = useParams();
+    const navigate = useNavigate();
+    const [review, setReview] = useState(null);
+    const [error, setError] = useState(null);
 
-    // 인증 관련 정보
-    const { isLoggedIn, userid, secureApiRequest } = useContext(AuthContext);
-
-    // 게시글과 댓글 데이터를 가져오는 함수
-    useEffect(() => {
+    // 리뷰 상세 데이터 가져오기
     const fetchReviewDetail = async () => {
-        console.log("Review의 rno:", rno); // 디버깅 로그
-
         try {
             const response = await secureApiRequest(`/review/detail/${rno}`, {
                 method: "GET",
             });
-            console.log("API Response 서버 응답 로그 :", response); // 서버 응답 로그
-            setReview(response.review);
-            setReplies(response.list);
+            console.log("서버 응답 데이터:", response.data);
+            setReview(response.data); // 데이터 상태에 저장
         } catch (error) {
-            setError("게시글 상세 조회 실패!");
-            console.error("Error fetching Review details 게시글 조회 실패시 :", error); // 에러 로그
+            setError("리뷰 데이터를 가져오는 데 실패했습니다.");
+            console.error("Error fetching review details: ", error);
         }
     };
 
-    if (isLoggedIn) {
+    useEffect(() => {
         fetchReviewDetail();
-    } else {
-        setError("로그인이 필요합니다."); // 인증되지 않은 경우 에러 처리
-    }
-}, [rno, isLoggedIn, secureApiRequest]);
+    }, [rno]);
 
-
-    // 리뷰 삭제 함수
-    const handleDelete = async () => {
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-            try {
-                const response = await secureApiRequest(`/review/${rno}`, {
-                    method: "DELETE",
-                }); // DELETE 요청
-                alert("삭제가 완료되었습니다.");
-                navigate("/review"); // 목록 페이지로 이동
-            } catch (error) {
-                console.error("Delete error:", error);
-                alert("삭제 실패!");
-            }
-        }
-    };
-
-    
-
-    // 데이터가 로딩 중일 때 표시
+    // 로딩 상태 표시
     if (!review && !error) {
         return <div className={styles.loading}>로딩 중...</div>;
     }
 
-    // 에러 발생 시 표시
+    // 에러 상태 표시
     if (error) {
         return <div className={styles.error}>{error}</div>;
     }
 
     return (
-        <div>
-            <h2>{rno}번 게시글 상세보기</h2>
-            <table border="1">
-                <tbody>
-                    <tr>
-                        <th>번호</th>
-                        <td>{review.reviewno}</td>
-                    </tr>
-                    <tr>
-                        <th>제목</th>
-                        <td>{review.reviewtitle}</td>
-                    </tr>
-                    <tr>
-                        <th>작성자</th>
-                        <td>{review.reviewwriter}</td>
-                    </tr>
-                    <tr>
-                        <th>등록날짜</th>
-                        <td>{review.reviewdate}</td>
-                    </tr>
-                    <tr>
-                        <th>내용</th>
-                        <td>{review.reviewcontent}</td>
-                    </tr>
-                </tbody>
-            </table>
-            <div className={styles.buttonGroup}>
-                <button onClick={() => navigate(-1)}>이전 페이지로 이동</button>
-                {isLoggedIn && userid === review.reviewWriter && (
-                    <>
-                        <button onClick={() => navigate(`/review/update/${rno}`)}>수정</button>
-                        <button onClick={handleDelete}>삭제</button>
-                    </>
-                )}
+        <div className={styles.reviewDetailContainer}>
+            <h1 className={styles.reviewtitle}>{review.rtitle || "제목 없음"}</h1>
+            <div className={styles.reviewInfo}>
+                <p>작성자: {review.rwriter || "익명"}</p>
+                <p>작성일: {review.rwdate || "작성일 없음"}</p>
+                <p>조회수: {review.rcount || 0}</p>
             </div>
-            <h3>댓글</h3>
-            <table>
-                <thead>
-                    <tr>
-                        <th>작성자</th>
-                        <th>내용</th>
-                        <th>작성일</th>
-                        <th>수정/삭제</th>
-                    </tr>
-                </thead>
-                
-            </table>
+            <div className={styles.reviewcontent}>
+                {review.rcontent || "내용 없음"}
+            </div>
+
+            {review.rattachmentTitle && (
+                <div className={styles.attachmentSection}>
+                    <h4>첨부 파일:</h4>
+                    {review.rattachmentTitle.match(/\.(jpeg|jpg|gif|png)$/i) ? (
+                        <img
+                            src={`/attachments/${review.rattachmentTitle}`}
+                            alt="첨부 이미지"
+                            className={styles.attachmentImage}
+                        />
+                    ) : (
+                        <a
+                            href={`/attachments/${review.rAttachmentTitle}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {review.rAttachmentTitle}
+                        </a>
+                    )}
+                </div>
+            )}
+
+            {isLoggedIn && userid === review.rWriter && (
+                <div className={styles.buttonContainer}>
+                    <button onClick={() => navigate(`/review/update/${rno}`)} className={styles.editButton}>
+                        수정
+                    </button>
+                    <button
+                        onClick={async () => {
+                            if (window.confirm("정말 삭제하시겠습니까?")) {
+                                try {
+                                    await secureApiRequest(`/review/delete/${rno}`, {
+                                        method: "DELETE",
+                                    });
+                                    alert("삭제가 완료되었습니다.");
+                                    navigate("/review");
+                                } catch (err) {
+                                    alert("삭제 실패!");
+                                    console.error("Error deleting review:", err);
+                                }
+                            }
+                        }}
+                        className={styles.deleteButton}
+                    >
+                        삭제
+                    </button>
+                </div>
+            )}
+
+            <button onClick={() => navigate(-1)} className={styles.backButton}>
+                뒤로가기
+            </button>
         </div>
     );
 }

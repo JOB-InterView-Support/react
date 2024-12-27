@@ -132,8 +132,8 @@ function Login() {
       handleLogin();
     }
   };
-  const Rest_api_key = 'b32fc4330179b4a298b4b01fa7156d4e'; // REST API KEY
-  const redirect_uri = 'http://localhost:8080/kakaoLogin'; // Redirect URI
+  const Rest_api_key = process.env.REACT_APP_KAKAO_API_KEY; // REST API KEY
+  const redirect_uri = process.env.REACT_APP_KAKAO_REDIRECT_URI; // Redirect URI
 
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`;
 
@@ -144,8 +144,8 @@ function Login() {
   const handleGoogleLogin = () => {
 
 
-    const clientId = '1063994075690-fnp3q1405di377kql6850plpgujb31uq.apps.googleusercontent.com';
-    const redirectUri = 'http://localhost:8080/googleLogin';
+    const clientId =  process.env.REACT_APP_GOOGLE_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_GOOGLE_REDIRECT_URI;
     console.log("REACT_APP_GOOGLE_CLIENT_ID:", clientId);
     console.log("REACT_APP_GOOGLE_REDIRECT_URI:", redirectUri);
 
@@ -166,9 +166,9 @@ function Login() {
   };
 
   const handleNaverLogin = () => {
-    const clientId = "nmC7X5UFqIvoeY6zxSga"; // 네이버 Client ID
-    const redirectUri = "http://localhost:8080/naverLogin"; // Redirect URI
-    const state = "wef564645"; // CSRF 방지를 위한 상태 토큰
+    const clientId = process.env.REACT_APP_NAVER_CLIENT_ID; // 네이버 Client ID
+    const redirectUri = process.env.REACT_APP_NAVER_REDIRECT_URI; // Redirect URI
+    const state = process.env.REACT_APP_NAVER_STATE; // CSRF 방지를 위한 상태 토큰
   
     // 네이버 세션 초기화를 위한 로그아웃 URL 호출
     const logoutURL = "https://nid.naver.com/nidlogin.logout";
