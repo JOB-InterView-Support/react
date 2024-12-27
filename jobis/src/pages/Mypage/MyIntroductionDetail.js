@@ -12,6 +12,7 @@ function MyIntroductionDetail() {
   const [detail, setDetail] = useState(null); // 상세 데이터 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -40,6 +41,40 @@ function MyIntroductionDetail() {
     fetchDetail();
   }, [id, secureApiRequest]);
 
+  const openDeleteModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const confirmWithdrawal = async () => {
+    try {
+      const response = await secureApiRequest(`/mypage/intro/delete/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          introIsDeleted: "Y",
+          introDeletedDate: new Date().toISOString(),
+        }),
+      });
+
+      if (response.status === 200) {
+        alert("자기소개서가 삭제되었습니다.");
+        navigate("/myIntroductionList");
+      } else {
+        alert("삭제에 실패했습니다.");
+      }
+    } catch (err) {
+      console.error("삭제 중 오류 발생:", err.message);
+    } finally {
+      closeModal();
+    }
+  };
+
   if (loading) return <div>로딩 중...</div>;
   if (error) return <div className={styles.error}>{error}</div>;
   if (!detail) return <div>데이터가 없습니다.</div>;
@@ -66,7 +101,7 @@ function MyIntroductionDetail() {
             >
               수정
             </button>
-            <button className={styles.deleteButton}>삭제</button>
+            <button className={styles.deleteButton} onClick={openDeleteModal}>삭제</button>
           </div>
         </div>
         <div className={styles.maincontainer}>
@@ -93,6 +128,23 @@ function MyIntroductionDetail() {
           </div>
         </div>
       </div>
+      {isModalOpen && (
+        <div className={styles.modal}>
+          <div className={styles.modalContent}>
+            <h2>삭제 확인</h2>
+            <p>정말로 <span>{detail.introTitle}</span>를<br /> 삭제 하시겠습니까?</p>
+            <button
+              className={styles.confirmButton}
+              onClick={confirmWithdrawal}
+            >
+              확인
+            </button>
+            <button className={styles.cancelButton} onClick={closeModal}>
+              취소
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

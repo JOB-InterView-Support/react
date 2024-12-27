@@ -42,8 +42,9 @@ function MyIntroductionList() {
           console.log("응답 데이터 확인:", data);
       
           if (Array.isArray(data)) {
-            console.log("응답 데이터가 배열 형식입니다. 상태에 저장합니다.");
-            setIntroductions(data); // 상태에 저장
+            const filteredData = data.filter((intro) => intro.introIsDeleted === "N");
+            console.log("삭제되지 않은 데이터:", filteredData);
+            setIntroductions(filteredData);
           } else {
             console.error("응답 데이터 형식이 예상과 다릅니다:", data);
           }

@@ -58,11 +58,16 @@
     color: #fff !important;
 }
 
-.introductionCard:hover, .introductionCardNew:hover {
-    background-color: rgba(109, 160, 255, 0.74); /* 흰색 배경 */
+.introductionCard:hover, .introductionCardNew:hover { /* 흰색 배경 */
     color: white;
     border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
     cursor: pointer;
+}
+.introductionCard:hover {
+    background-color: rgba(109, 160, 255, 0.74);
+}
+.introductionCardNew:hover {
+    background-color: rgba(56, 126, 255, 0.74) !important;
 }
 
 .circleicon {
