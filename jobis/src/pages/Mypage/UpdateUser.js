@@ -5,6 +5,47 @@ import styles from "./UpdateUser.module.css";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
 
 const UpdateUser = () => {
+
+  const handleFaceRegistration = () => {
+    const uuid = localStorage.getItem("uuid");
+    if (!uuid) {
+      alert("로그인 정보가 없습니다.");
+      return;
+    }
+  
+    // Python 엔드포인트 URL
+    const faceRegistrationURL = `${process.env.REACT_APP_PYTHON_API_BASE_URL}/face/register?uuid=${uuid}`;
+
+  
+    // 새 창 열기
+    const newWindow = window.open(
+      faceRegistrationURL,
+      "_blank", // 새 창
+      "width=800,height=600,top=100,left=100" // 창 크기 및 위치
+    );
+  
+    if (!newWindow) {
+      alert("팝업 차단이 활성화되어 있습니다. 팝업 차단을 해제해주세요.");
+      return;
+    }
+  
+    // 새 창이 닫혔는지 감지
+    const interval = setInterval(() => {
+      if (newWindow.closed) {
+        clearInterval(interval); // 타이머 정리
+        alert("얼굴 등록 프로세스가 종료되었습니다.");
+      }
+    }, 1000);
+  };
+  
+  
+  
+  
+  
+
+  
+
+
   const navigate = useNavigate();
   const { secureApiRequest } = useContext(AuthContext);
   const [user, setUser] = useState({
@@ -18,6 +59,7 @@ const UpdateUser = () => {
     userKakaoEmail: "",
     userNaverEmail: "",
     userGoogleEmail: "",
+    userFaceIdStatus: "N", // 초기값 N
   });
   const [loading, setLoading] = useState(true);
 
@@ -42,6 +84,7 @@ const UpdateUser = () => {
           userKakaoEmail: response.data.userKakaoEmail || "",
           userNaverEmail: response.data.userNaverEmail || "",
           userGoogleEmail: response.data.userGoogleEmail || "",
+          userFaceIdStatus: response.data.userFaceIdStatus || "N", // Face ID 상태 추가
         });
       } catch (error) {
         console.error(
@@ -133,8 +176,6 @@ const UpdateUser = () => {
 
   // Kakao URL 생성
   const kakaoURL = `https://kauth.kakao.com/oauth/authorize?client_id=${Rest_api_key}&redirect_uri=${redirect_uri}&response_type=code&prompt=login`;
-
-  console.log(kakaoURL); // 확인용 로그
 
   const handleKakaoLink = () => {
     window.location.href = kakaoURL;
@@ -447,6 +488,19 @@ const UpdateUser = () => {
                 onClick={handleGoogleLink}
               >
                 연동
+              </button>
+            )}
+          </div>
+          <div className={styles.formGroup}>
+            <label className={styles.label}>얼굴 로그인</label>
+            {user.userFaceIdStatus === "Y" ? (
+              <button className={styles.minibutton}>해제</button>
+            ) : (
+              <button
+                className={styles.minibutton}
+                onClick={handleFaceRegistration}
+              >
+                등록
               </button>
             )}
           </div>
