@@ -1,0 +1,200 @@
+/* PC 기본 스타일 */
+.container {
+  width: 800px; /* PC 기본 고정 너비 */
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  color: #333;
+}
+
+.maincontainer {
+  border: 2px solid #87ceeb;
+  background-color: #fff;
+  border-radius: 15px;
+  padding: 25px;
+  margin-bottom: 100px;
+}
+
+.title {
+  font-size: 32px;
+  font-weight: bold;
+  text-align: left;
+  color: #004F99;
+}
+
+.subtitle {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: left;
+  margin: 0;
+  margin-bottom: 20px;
+  padding: 0;
+  color: #006DD2;
+}
+
+.rowContainer {
+  display: flex;
+  flex-wrap: wrap; /* 줄바꿈 허용 */
+  justify-content: center; /* 중앙 배치 */
+  gap: 10px; /* 간격 최소화 */
+  margin-right: 15px;
+  padding-left: 0;
+  margin-left: 0;
+}
+.rowContainer > * {
+  margin-left: 0; /* 자식 요소의 좌측 여백 제거 */
+}
+
+.line {
+  border-top: 2px solid rgb(206, 205, 205);
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
+.infoBox {
+  flex: 0 1 calc(30%); /* 한 행에 3개 배치, 간격 고려 */
+  width: 150px; /* PC 화면에서 고정 너비 */
+  padding-bottom: 15px;
+  border-radius: 10px;
+  text-align: left;
+  box-sizing: border-box; /* 패딩과 보더를 포함한 크기 계산 */
+}
+
+.infoBoxFull strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 900;
+  margin-left: 20px;
+}
+
+.infoBox strong {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 5px;
+  font-weight: 900;
+}
+
+.infoBox .content {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  margin-top: 5px;
+}
+
+.contentWrapper {
+  margin-top: 20px;
+  padding-top: 10px;
+  position: relative;
+}
+
+.contentWrapper strong {
+  position: absolute;
+  top: 10px;
+  left: 20px;
+  font-weight: 900;
+  padding: 5px;
+}
+
+.titlecontent {
+  background-color: rgba(109, 160, 255, 0.18);
+  border: none; /* 테두리 제거 */
+  width: 90%; /* 전체 폭 */
+  padding: 10px; /* 내부 여백 */
+  font-size: 16px;
+  border-radius: 8px; /* 모서리 둥글게 */
+  margin-left: 20px;
+}
+
+.content {
+  padding: 15px;
+  background-color: rgba(109, 160, 255, 0.18);
+  border: none; /* 테두리 제거 */
+  border-radius: 8px;
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+}
+
+.infoBoxFull {
+  margin-bottom: 20px;
+}
+
+.bigcontent {
+  padding: 15px;
+  background-color: rgba(109, 160, 255, 0.18);
+  border: none; /* 테두리 제거 */
+  width: 89%; /* 전체 폭 */
+  margin-right: 18px;
+  margin-left: 20px;
+  margin-top: 35px;
+  border-radius: 8px;
+  font-family: Arial, sans-serif; /* 폰트 통일 */
+  font-weight: 500; /* 폰트 두께 */
+  font-size: 16px; /* 폰트 크기 */
+  line-height: 1.6;
+  color: #333;
+  resize: none; /* 사용자가 크기 조정 못하게 설정 */
+  overflow-y: auto; /* 내용이 많아지면 스크롤 생성 */
+  min-height: 100px; /* 최소 높이 */
+}
+
+.headerRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0; /* 여백 제거 */
+  padding: 0; /* 패딩 제거 */
+}
+
+.buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.editButton,
+.deleteButton,
+.listButton {
+  padding: 10px 25px;
+  font-size: 16px;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.listButton {
+  background-color: rgb(109, 160, 255);
+}
+
+.listButton:hover {
+  background-color: rgb(75, 137, 253); /* 호버 시 더 진한 파란색 */
+}
+
+.editButton {
+  background-color: #28a745;
+}
+
+.editButton:hover {
+  background-color: #218838;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+/* 모바일 화면용 스타일 */
+@media (max-width: 768px) {
+  .container {
+      width: 90%; /* 모바일 화면에서는 전체 너비 */
+      padding: 0 15px; /* 양쪽 여백 추가 */
+  }
+
+  .infoBox {
+      width: 100%; /* 모바일 화면에서는 전체 너비 */
+  }
+}
