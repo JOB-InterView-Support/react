@@ -77,23 +77,26 @@ function MyIntroductionUpdate() {
             <button className={styles.editButton} onClick={handleUpdate}>
               수정 완료
             </button>
-            <button 
-            className={styles.deleteButton} 
-            onClick={() => navigate(`/MyIntroductionList/${id}`)}>수정 취소</button>
+            <button
+              className={styles.deleteButton}
+              onClick={() => navigate(`/MyIntroductionList/${id}`)}
+            >
+              수정 취소
+            </button>
           </div>
         </div>
         <div className={styles.maincontainer}>
+          <div className={styles.infoBoxFull}>
+            <strong>자기소개서 제목:</strong>
+            <input
+              type="text"
+              className={styles.titlecontent}
+              name="introTitle"
+              value={formData.introTitle}
+              onChange={handleInputChange}
+            />
+          </div>
           <div className={styles.rowContainer}>
-            <div className={styles.infoBox}>
-              <strong>자기소개서 제목:</strong>
-              <input
-                type="text"
-                className={styles.content}
-                name="introTitle"
-                value={formData.introTitle}
-                onChange={handleInputChange}
-              />
-            </div>
             <div className={styles.infoBox}>
               <strong>지원 회사명:</strong>
               <input
