@@ -1,33 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./UpdateUser.module.css";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
 
 const UpdateUser = () => {
-
-  const handleFaceRegistration = () => {
-    const uuid = localStorage.getItem("uuid"); // UUID 가져오기
-    console.log("uuid : ", uuid);
-    if (!uuid) {
-      alert("로그인 정보가 없습니다.");
-      return;
-    }
-
-    // URL 쿼리 파라미터를 초기화하고 이동
-    window.history.replaceState({}, '', '/faceRegistration');
-    navigate("/faceRegistration");
-
-  };
-
-
-
-
-
-
-
-
-
 
 
   const navigate = useNavigate();
@@ -43,8 +20,9 @@ const UpdateUser = () => {
     userKakaoEmail: "",
     userNaverEmail: "",
     userGoogleEmail: "",
-    userFaceIdStatus: "N", // 초기값 N
+    userFaceIdStatus: "", // 초기값 N
   });
+  const [faceIdImage, setFaceIdImage] = useState(null); // Face ID 이미지
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -70,6 +48,10 @@ const UpdateUser = () => {
           userGoogleEmail: response.data.userGoogleEmail || "",
           userFaceIdStatus: response.data.userFaceIdStatus || "N", // Face ID 상태 추가
         });
+        // Face ID 상태가 Y이면 이미지 로드
+        if (response.data.userFaceIdStatus === "Y") {
+          fetchFaceIdImage();
+        }
       } catch (error) {
         console.error(
           "로그인 유저 정보 없음:",
@@ -82,6 +64,39 @@ const UpdateUser = () => {
 
     fetchUserInfo();
   }, [secureApiRequest]);
+
+  // Face ID 이미지 로드 함수
+  const fetchFaceIdImage = async () => {
+    const uuid = localStorage.getItem("uuid");
+    if (!uuid) {
+      console.error("UUID 없음");
+      alert("UUID를 확인할 수 없습니다.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/faceId/image/${uuid}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.image) {
+          setFaceIdImage(`data:image/jpeg;base64,${data.image}`);
+        } else {
+          console.error("이미지 데이터 없음");
+          alert("이미지를 가져오는 데 실패했습니다.");
+        }
+      } else {
+        console.error("API 요청 실패:", response.statusText);
+        alert("서버에서 이미지를 로드하는 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Face ID 이미지 로드 실패:", error);
+      alert("네트워크 오류로 이미지를 가져오지 못했습니다.");
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -478,16 +493,26 @@ const UpdateUser = () => {
           <div className={styles.formGroup}>
             <label className={styles.label}>얼굴 로그인</label>
             {user.userFaceIdStatus === "Y" ? (
-              <button className={styles.minibutton}>해제</button>
+              <div className={styles.faceIdImageContainer}>
+                {faceIdImage ? (
+                  <img
+                    src={faceIdImage}
+                    alt="Face ID 이미지"
+                    className={styles.faceIdImage}
+                  />
+                ) : (
+                  <div>이미지 없음</div>
+                )}
+                <button className={styles.imgDeleteBtn}>해제</button>
+              </div>
             ) : (
-              <button
-                className={styles.minibutton}
-                onClick={handleFaceRegistration}
-              >
-                등록
-              </button>
+              <Link to="/faceRegistration" className={styles.linkBtn}>
+                <button className={styles.minibutton}>등록</button>
+              </Link>
             )}
           </div>
+
+
 
           <div className={styles.buttonContainer}>
             <button onClick={handleUpdate} className={styles.button}>
