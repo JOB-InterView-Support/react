@@ -1,28 +1,21 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./JobPostingSearch.module.css";
+import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
 const JobPostingSearch = () => {
   const { secureApiRequest } = useContext(AuthContext);
-
   const initialFilters = {
-    ind_cd: "",    // 산업/업종 코드
-    loc_cd: "",    // 1차 근무지/지역 코드
-    loc_mcd: "",   // 2차 근무지/지역 코드
-    loc_bcd: "",   // 3차 근무지/지역 코드
-    job_mid_cd: "",// 상위 직무 코드
-    job_cd: "",    // 직무 코드
-    edu_lv: "",    // 학력 수준
-    job_type: "",  // 직무 형태 (정규직/파트타임/계약직 등)
-    count: 10,     // 한 페이지당 항목 수
-    start: 0,      // 검색 시작 페이지
-    salary: "",    // 연봉
-    experience: "",// 경력
+    ind_cd: "",
+    loc_cd: "",
+    edu_lv: "",
+    job_cd: "",
   };
-
   const [filters, setFilters] = useState(initialFilters);
-  const [jobPostings, setJobPostings] = useState([]); // 채용공고 데이터 상태
+  const [loading, setLoading] = useState(false);  // 로딩 상태 추가
+  const [error, setError] = useState(null); // 에러 상태 추가
   const navigate = useNavigate();
 
   const handleInputChange = (e) => {
@@ -42,22 +35,24 @@ const JobPostingSearch = () => {
   }, [navigate]);
 
   const handleSearch = async () => {
+    setLoading(true);  // 검색 시작 시 로딩 상태 활성화
+    setError(null); // 에러 초기화
     try {
       const queryParams = new URLSearchParams(filters).toString();
-      const response = await secureApiRequest(`/api/jobpostings/search?${queryParams}`, {
+      const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
         method: "GET",
       });
 
       if (response.data) {
-        // 응답 데이터에서 채용공고 목록 추출
-        setJobPostings(response.data.jobPostings);
-        navigate("/jobPostings/search", {
-          state: { jobPostings: response.data.jobPostings, filters },
+        navigate("/jobPosting/search", {
+          state: { jobPosting: response.data.jobPosting, filters },
         });
       }
     } catch (error) {
       console.error("채용공고 검색 중 오류가 발생했습니다:", error);
-      alert("채용공고 검색 중 오류가 발생했습니다.");
+      setError("채용공고 검색 중 오류가 발생했습니다.");
+    } finally {
+      setLoading(false);  // 검색 완료 후 로딩 상태 해제
     }
   };
 
@@ -66,166 +61,77 @@ const JobPostingSearch = () => {
   };
 
   return (
-    <div className={styles.container}>
-      <h2>채용공고 검색</h2>
-      <div className={styles.filters}>
-        <select name="ind_cd" value={filters.ind_cd} onChange={handleInputChange} className={styles.select}>
-          <option value="">산업/업종 선택</option>
-          <option value="1">서비스업</option>
-          <option value="2">제조·화학</option>
-          <option value="3">IT·웹·통신</option>
-          <option value="4">은행·금융업</option>
-          <option value="5">미디어·디자인</option>
-          <option value="6">교육업</option>
-          <option value="7">의료·제약·복지</option>
-          <option value="8">판매·유통</option>
-          <option value="9">건설업</option>
-          <option value="10">기관·협회</option>
-        </select>
+    <div>
+      <JobPostingSubMenubar />
+      <div className={styles.container}>
+        <h2>채용공고 검색</h2>
+        <div className={styles.filters}>
+          <select name="ind_cd" value={filters.ind_cd} onChange={handleInputChange} className={styles.select}>
+            <option value="">산업/업종 선택</option>
+            {/* 산업 옵션은 배열로 관리 */}
+            {["서비스업", "제조·화학", "IT·웹·통신", "은행·금융업", "미디어·디자인", "교육업", "의료·제약·복지", "판매·유통", "건설업", "기관·협회"]
+              .map((industry, index) => (
+                <option key={index} value={index + 1}>
+                  {industry}
+                </option>
+              ))}
+          </select>
+          <select
+            name="loc_cd"
+            value={filters.loc_cd}
+            onChange={handleInputChange}
+            className={styles.select}
+          >
+            <option value="">지역 선택</option>
+            {/* 지역 옵션 */}
+            {["전체", "서울", "경기", "광주", "대구", "대전", "부산", "울산", "인천", "강원", "경남", "경북", "전남", "전북", "충북", "충남", "제주", "세종"]
+              .map((location, index) => (
+                <option key={index} value={index + 1}>
+                  {location}
+                </option>
+              ))}
+          </select>
 
-        <select
-          name="loc_cd"
-          value={filters.loc_cd}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">1차 근무지/지역 선택</option>
-          <option value="101000">서울</option>
-          <option value="102000">경기</option>
-          <option value="103000">광주</option>
-          <option value="104000">대구</option>
-          <option value="105000">대전</option>
-          <option value="106000">부산</option>
-          <option value="107000">울산</option>
-          <option value="108000">인천</option>
-        </select>
+          <select
+            name="edu_lv"
+            value={filters.edu_lv}
+            onChange={handleInputChange}
+            className={styles.select}
+          >
+            <option value="">학력 선택</option>
+            {/* 학력 선택 */}
+            {["학력무관", "고졸이상", "대졸(2,3년)이상", "대졸(4년)이상", "석사이상", "박사이상"]
+              .map((education, index) => (
+                <option key={index} value={index}>
+                  {education}
+                </option>
+              ))}
+          </select>
 
-        <select
-          name="loc_mcd"
-          value={filters.loc_mcd}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">2차 근무지/지역 선택</option>
-          <option value="101">강남</option>
-          <option value="102">강북</option>
-          <option value="103">서초</option>
-        </select>
+          <select
+            name="job_cd"
+            value={filters.job_cd}
+            onChange={handleInputChange}
+            className={styles.select}
+          >
+            <option value="">직무 선택</option>
+            {/* 직무 선택 */}
+            {["기획·전략", "마케팅·홍보·조사", "회계·세무·재무", "인사·노무·HRD", "총무·법무·사무", "IT개발·데이터", "기획·전략", "영업·판매·무역"]
+              .map((job, index) => (
+                <option key={index} value={index}>
+                  {job}
+                </option>
+              ))}
+          </select>
 
-        <select
-          name="loc_bcd"
-          value={filters.loc_bcd}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">3차 근무지/지역 선택</option>
-          <option value="201">역삼</option>
-          <option value="202">교대</option>
-          <option value="203">강남구청</option>
-        </select>
-
-        <select
-          name="job_mid_cd"
-          value={filters.job_mid_cd}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">상위 직무 코드 선택</option>
-          <option value="A">개발</option>
-          <option value="B">디자인</option>
-          <option value="C">마케팅</option>
-        </select>
-
-        <select
-          name="job_cd"
-          value={filters.job_cd}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">직무 코드 선택</option>
-          <option value="01">소프트웨어 엔지니어</option>
-          <option value="02">UI/UX 디자이너</option>
-          <option value="03">디지털 마케팅</option>
-        </select>
-
-        <select
-          name="edu_lv"
-          value={filters.edu_lv}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">학력 선택</option>
-          <option value="0">학력무관</option>
-          <option value="1">고졸이상</option>
-          <option value="2">대졸(2,3년)이상</option>
-          <option value="3">대졸(4년)이상</option>
-          <option value="4">석사이상</option>
-          <option value="5">박사이상</option>
-        </select>
-
-        <select
-          name="job_type"
-          value={filters.job_type}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">직무 형태</option>
-          <option value="full_time">정규직</option>
-          <option value="part_time">파트타임</option>
-          <option value="contract">계약직</option>
-        </select>
-
-        <select
-          name="salary"
-          value={filters.salary}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">연봉</option>
-          <option value="1">2000만원 이하</option>
-          <option value="2">2000만원 ~ 3000만원</option>
-          <option value="3">3000만원 ~ 4000만원</option>
-          <option value="4">4000만원 ~ 5000만원</option>
-          <option value="5">5000만원 이상</option>
-        </select>
-
-        <select
-          name="experience"
-          value={filters.experience}
-          onChange={handleInputChange}
-          className={styles.select}
-        >
-          <option value="">경력</option>
-          <option value="0">무관</option>
-          <option value="1">1년 이하</option>
-          <option value="2">1~3년</option>
-          <option value="3">3~5년</option>
-          <option value="4">5년 이상</option>
-        </select>
-
-        <button onClick={handleSearch} className={styles.searchButton}>
-          검색
-        </button>
-        <button onClick={resetFilters} className={styles.resetButton}>
-          초기화
-        </button>
-      </div>
-
-      <div className={styles.results}>
-        {jobPostings.length > 0 ? (
-          jobPostings.map((job) => (
-            <div key={job.job_id} className={styles.jobCard}>
-              <h3>{job.title}</h3>
-              <p>{job.company_name}</p>
-              <p>근무지: {job.location}</p>
-              <p>직무: {job.job_type}</p>
-              <p>학력: {job.edu_lv}</p>
-              <p>마감일: {job.deadline}</p>
-            </div>
-          ))
-        ) : (
-          <p>검색 결과가 없습니다.</p>
-        )}
+          <button onClick={handleSearch} className={styles.searchButton} disabled={loading}>
+            {loading ? "검색 중..." : "검색"}
+          </button>
+          <button onClick={resetFilters} className={styles.resetButton}>
+            초기화
+          </button>
+        </div>
+        {error && <div className={styles.error}>{error}</div>} {/* 에러 메시지 출력 */}
       </div>
     </div>
   );

@@ -1,29 +1,59 @@
-.container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  .title {
-    font-size: 24px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .detail {
-    font-size: 18px;
-    margin-bottom: 10px;
-    color: #333;
-  }
-  
-  .message {
-    text-align: center;
-    color: #666;
-  }
-  
-  .error {
-    text-align: center;
-    color: red;
-  }
-  
+/* JobPostingDetail.module.css */
+.jobPostingDetail {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.jobPostingDetail h1 {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.jobPostingDetail p {
+  font-size: 16px;
+  color: #555;
+  line-height: 1.6;
+  margin: 10px 0;
+}
+
+.jobPostingDetail strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.jobPostingDetail .jobDetails {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+.jobPostingDetail .jobDetails div {
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.jobPostingDetail .jobDetails div p {
+  margin: 5px 0;
+}
+
+.jobPostingDetail .jobDetails div a {
+  color: #0073e6;
+  text-decoration: none;
+}
+
+.jobPostingDetail .jobDetails div a:hover {
+  text-decoration: underline;
+}
+
+/* 정보가 없을 경우 스타일 */
+.jobPostingDetail .infoUnavailable {
+  color: #aaa;
+  font-style: italic;
+}
