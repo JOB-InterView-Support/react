@@ -85,15 +85,15 @@ const UpdateUser = () => {
           setFaceIdImage(`data:image/jpeg;base64,${data.image}`);
         } else {
           console.error("이미지 데이터 없음");
-          alert("이미지를 가져오는 데 실패했습니다.");
+          // alert("이미지를 가져오는 데 실패했습니다.");
         }
       } else {
         console.error("API 요청 실패:", response.statusText);
-        alert("서버에서 이미지를 로드하는 중 오류가 발생했습니다.");
+        // alert("서버에서 이미지를 로드하는 중 오류가 발생했습니다.");
       }
     } catch (error) {
       console.error("Face ID 이미지 로드 실패:", error);
-      alert("네트워크 오류로 이미지를 가져오지 못했습니다.");
+      // alert("네트워크 오류로 이미지를 가져오지 못했습니다.");
     }
   };
 
@@ -140,30 +140,7 @@ const UpdateUser = () => {
       alert("회원 정보 수정 요청에 실패했습니다.");
     }
   };
-  //해지
-  const handleUnlinkEmail = async () => {
-    try {
-      await secureApiRequest(`/mypage/unlink-email`, {
-        method: "POST",
-        body: JSON.stringify({ userId: user.userId }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
 
-      setUser((prevUser) => ({
-        ...prevUser,
-        userKakoEmail: "",
-        userNaverEmail: "",
-        userGoogleEmail: "",
-      }));
-
-      alert("연동 이메일이 성공적으로 해지되었습니다.");
-    } catch (error) {
-      console.error("이메일 연동 실패:", error.response?.data || error.message);
-      alert("연동 이메일 해지 요청에 실패했습니다.");
-    }
-  };
 
   const linkedKakaoEmail = user.userKakaoEmail || "";
   const linkedNaverEmail = user.userNaverEmail || "";
@@ -329,6 +306,46 @@ const UpdateUser = () => {
       alert("구글 이메일 해제에 실패했습니다. 다시 시도해주세요.");
     }
   };
+
+  const handleDeleteFaceId = async () => {
+    try {
+      const uuid = localStorage.getItem("uuid"); // UUID 가져오기
+      if (!uuid) {
+        alert("로그인 정보가 없습니다.");
+        return;
+      }
+  
+      // `/mypage/faceId/{uuid}`로 PUT 요청
+      const response = await secureApiRequest(`/mypage/faceId/${uuid}`, {
+        method: "PUT",
+        body: JSON.stringify({ uuid }), // JSON 데이터로 uuid 전달
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      console.log("API 응답:", response);
+  
+      const responseData = response.data; // 응답 데이터 접근
+      if (response.status === 200) {
+        // `userFaceIdStatus`를 "N"으로 변경
+        setUser((prevUser) => ({
+          ...prevUser,
+          userFaceIdStatus: "N",
+        }));
+        setFaceIdImage(null); // Face ID 이미지 초기화
+        alert(responseData.message || "얼굴 로그인 상태가 초기화되었습니다.");
+      } else {
+        alert(responseData.error || "얼굴 로그인 상태 초기화에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error deleting Face ID:", error);
+      alert("서버 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+  
+
+
 
   if (loading) return <div>Loading...</div>;
 
@@ -499,11 +516,22 @@ const UpdateUser = () => {
                     src={faceIdImage}
                     alt="Face ID 이미지"
                     className={styles.faceIdImage}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      setFaceIdImage(null);
+                    }}
                   />
                 ) : (
-                  <div>이미지 없음</div>
+                  <div className={styles.errorMessage}>
+                    이미지가 손상되었습니다. 해제 후 다시 등록해주세요.
+                  </div>
                 )}
-                <button className={styles.imgDeleteBtn}>해제</button>
+                <button
+                  className={styles.imgDeleteBtn}
+                  onClick={handleDeleteFaceId}
+                >
+                  해제
+                </button>
               </div>
             ) : (
               <Link to="/faceRegistration" className={styles.linkBtn}>
@@ -511,8 +539,6 @@ const UpdateUser = () => {
               </Link>
             )}
           </div>
-
-
 
           <div className={styles.buttonContainer}>
             <button onClick={handleUpdate} className={styles.button}>
