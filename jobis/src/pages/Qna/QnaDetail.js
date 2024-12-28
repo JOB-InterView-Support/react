@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react"; // React 관련 
 import { AuthContext } from "../../AuthProvider"; // 인증 Context
 import styles from "./QnaDetail.module.css"; // CSS 모듈
 import { useParams, useNavigate } from "react-router-dom"; // React Router
+import DeleteModal from "../../components/common/DeleteModal"; // DeleteModal 컴포넌트 추가
 
 function QnaDetail() {
     const { qno } = useParams(); // URL에서 qno(질문 번호) 추출
@@ -9,6 +10,7 @@ function QnaDetail() {
     const [qna, setQna] = useState(null); // 질문 데이터를 저장하는 상태
     const [replies, setReplies] = useState([]); // 댓글 데이터를 저장하는 상태
     const [error, setError] = useState(null); // 에러 메시지 저장 상태
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false); // 삭제 모달 상태
 
     // 인증 관련 정보
     const { isLoggedIn, userid, secureApiRequest } = useContext(AuthContext);
@@ -48,18 +50,16 @@ function QnaDetail() {
 
     // 질문 삭제 함수
     const handleDelete = async () => {
-        if (window.confirm("정말 삭제하시겠습니까?")) {
-            try {
-                // 서버로 DELETE 요청 전송
-                await secureApiRequest(`/qna/${qno}`, {
-                    method: "DELETE",
-                });
-                alert("삭제가 완료되었습니다.");
-                navigate("/qna"); // 목록 페이지로 이동
-            } catch (error) {
-                console.error("Delete error:", error);
-                alert("삭제 실패!");
-            }
+        try {
+            // 서버로 DELETE 대신 PUT 요청 전송
+            await secureApiRequest(`/qna/${qno}/delete`, {
+                method: "PUT",
+            });
+            alert("삭제가 완료되었습니다.");
+            navigate("/qna"); // 목록 페이지로 이동
+        } catch (error) {
+            console.error("Delete error:", error);
+            alert("삭제 실패!");
         }
     };
 
@@ -95,32 +95,43 @@ function QnaDetail() {
 
     return (
         <div className={styles.qnaDetailContainer}>
+            <DeleteModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setDeleteModalOpen(false)}
+                onConfirm={() => {
+                    setDeleteModalOpen(false);
+                    handleDelete();
+                }}
+            />
             <h1 className={styles.qnaTitle}>{qna.qtitle}</h1> {/* 제목을 상단에 강조 */}
             <div className={styles.buttonGroup}>
                 <button onClick={() => navigate(-1)} className={styles.backButton}>이전 페이지로 이동</button>
                 {isLoggedIn && userid === qna.qWriter && (
                     <>
                         <button onClick={() => navigate(`/qna/update/${qno}`)} className={styles.editButton}>수정</button>
-                        <button onClick={handleDelete} className={styles.deleteButton}>삭제</button>
+                        <button onClick={() => setDeleteModalOpen(true)} className={styles.deleteButton}>삭제</button>
                     </>
                 )}
             </div>
             <table className={styles.qnaTable}>
                 <tbody>
                     <tr>
+                        <th>내용</th>
                         <td>{qna.qcontent}</td> {/* qna 데이터에서 내용 표시 */}
                     </tr>
-                    {qna.qAttachmentTitle && (
+                    {qna.qattachmenttitle && (
                         <tr>
                             <th>첨부 파일</th>
                             <td>
-                                <a
-                                    href={`/attachments/${qna.qAttachmentTitle}`}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                >
-                                    {qna.qAttachmentTitle}
-                                </a>
+                            <a
+                                href={`/attachments/${qna.qattachmenttitle}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                {qna.qattachmenttitle}
+                            </a>
+
+                                
                             </td>
                         </tr>
                     )}
