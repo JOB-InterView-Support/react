@@ -1,33 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./UpdateUser.module.css";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
 
 const UpdateUser = () => {
-
-  const handleFaceRegistration = () => {
-    const uuid = localStorage.getItem("uuid"); // UUID 가져오기
-    console.log("uuid : ", uuid);
-    if (!uuid) {
-      alert("로그인 정보가 없습니다.");
-      return;
-    }
-
-    // URL 쿼리 파라미터를 초기화하고 이동
-    window.history.replaceState({}, '', '/faceRegistration');
-    navigate("/faceRegistration");
-
-  };
-
-
-
-
-
-
-
-
-
 
 
   const navigate = useNavigate();
@@ -43,8 +20,9 @@ const UpdateUser = () => {
     userKakaoEmail: "",
     userNaverEmail: "",
     userGoogleEmail: "",
-    userFaceIdStatus: "N", // 초기값 N
+    userFaceIdStatus: "", // 초기값 N
   });
+  const [faceIdImage, setFaceIdImage] = useState(null); // Face ID 이미지
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -70,6 +48,10 @@ const UpdateUser = () => {
           userGoogleEmail: response.data.userGoogleEmail || "",
           userFaceIdStatus: response.data.userFaceIdStatus || "N", // Face ID 상태 추가
         });
+        // Face ID 상태가 Y이면 이미지 로드
+        if (response.data.userFaceIdStatus === "Y") {
+          fetchFaceIdImage();
+        }
       } catch (error) {
         console.error(
           "로그인 유저 정보 없음:",
@@ -82,6 +64,39 @@ const UpdateUser = () => {
 
     fetchUserInfo();
   }, [secureApiRequest]);
+
+  // Face ID 이미지 로드 함수
+  const fetchFaceIdImage = async () => {
+    const uuid = localStorage.getItem("uuid");
+    if (!uuid) {
+      console.error("UUID 없음");
+      alert("UUID를 확인할 수 없습니다.");
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `http://127.0.0.1:8000/faceId/image/${uuid}`
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        if (data.image) {
+          setFaceIdImage(`data:image/jpeg;base64,${data.image}`);
+        } else {
+          console.error("이미지 데이터 없음");
+          // alert("이미지를 가져오는 데 실패했습니다.");
+        }
+      } else {
+        console.error("API 요청 실패:", response.statusText);
+        // alert("서버에서 이미지를 로드하는 중 오류가 발생했습니다.");
+      }
+    } catch (error) {
+      console.error("Face ID 이미지 로드 실패:", error);
+      // alert("네트워크 오류로 이미지를 가져오지 못했습니다.");
+    }
+  };
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -125,30 +140,7 @@ const UpdateUser = () => {
       alert("회원 정보 수정 요청에 실패했습니다.");
     }
   };
-  //해지
-  const handleUnlinkEmail = async () => {
-    try {
-      await secureApiRequest(`/mypage/unlink-email`, {
-        method: "POST",
-        body: JSON.stringify({ userId: user.userId }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
 
-      setUser((prevUser) => ({
-        ...prevUser,
-        userKakoEmail: "",
-        userNaverEmail: "",
-        userGoogleEmail: "",
-      }));
-
-      alert("연동 이메일이 성공적으로 해지되었습니다.");
-    } catch (error) {
-      console.error("이메일 연동 실패:", error.response?.data || error.message);
-      alert("연동 이메일 해지 요청에 실패했습니다.");
-    }
-  };
 
   const linkedKakaoEmail = user.userKakaoEmail || "";
   const linkedNaverEmail = user.userNaverEmail || "";
@@ -315,6 +307,46 @@ const UpdateUser = () => {
     }
   };
 
+  const handleDeleteFaceId = async () => {
+    try {
+      const uuid = localStorage.getItem("uuid"); // UUID 가져오기
+      if (!uuid) {
+        alert("로그인 정보가 없습니다.");
+        return;
+      }
+  
+      // `/mypage/faceId/{uuid}`로 PUT 요청
+      const response = await secureApiRequest(`/mypage/faceId/${uuid}`, {
+        method: "PUT",
+        body: JSON.stringify({ uuid }), // JSON 데이터로 uuid 전달
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      console.log("API 응답:", response);
+  
+      const responseData = response.data; // 응답 데이터 접근
+      if (response.status === 200) {
+        // `userFaceIdStatus`를 "N"으로 변경
+        setUser((prevUser) => ({
+          ...prevUser,
+          userFaceIdStatus: "N",
+        }));
+        setFaceIdImage(null); // Face ID 이미지 초기화
+        alert(responseData.message || "얼굴 로그인 상태가 초기화되었습니다.");
+      } else {
+        alert(responseData.error || "얼굴 로그인 상태 초기화에 실패했습니다.");
+      }
+    } catch (error) {
+      console.error("Error deleting Face ID:", error);
+      alert("서버 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
+    }
+  };
+  
+
+
+
   if (loading) return <div>Loading...</div>;
 
   return (
@@ -478,14 +510,33 @@ const UpdateUser = () => {
           <div className={styles.formGroup}>
             <label className={styles.label}>얼굴 로그인</label>
             {user.userFaceIdStatus === "Y" ? (
-              <button className={styles.minibutton}>해제</button>
+              <div className={styles.faceIdImageContainer}>
+                {faceIdImage ? (
+                  <img
+                    src={faceIdImage}
+                    alt="Face ID 이미지"
+                    className={styles.faceIdImage}
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      setFaceIdImage(null);
+                    }}
+                  />
+                ) : (
+                  <div className={styles.errorMessage}>
+                    이미지가 손상되었습니다. 해제 후 다시 등록해주세요.
+                  </div>
+                )}
+                <button
+                  className={styles.imgDeleteBtn}
+                  onClick={handleDeleteFaceId}
+                >
+                  해제
+                </button>
+              </div>
             ) : (
-              <button
-                className={styles.minibutton}
-                onClick={handleFaceRegistration}
-              >
-                등록
-              </button>
+              <Link to="/faceRegistration" className={styles.linkBtn}>
+                <button className={styles.minibutton}>등록</button>
+              </Link>
             )}
           </div>
 
