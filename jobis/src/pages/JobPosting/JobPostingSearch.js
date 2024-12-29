@@ -38,7 +38,16 @@ const JobPostingSearch = () => {
     setLoading(true);  // 검색 시작 시 로딩 상태 활성화
     setError(null); // 에러 초기화
     try {
-      const queryParams = new URLSearchParams(filters).toString();
+      const queryParams = new URLSearchParams();
+
+    // 필터 객체에서 빈 값이 아닌 필터만 추가
+    if (filters.ind_cd) queryParams.append('ind_cd', filters.ind_cd);
+    if (filters.loc_cd) queryParams.append('loc_cd', filters.loc_cd);
+    if (filters.edu_lv) queryParams.append('edu_lv', filters.edu_lv);
+    if (filters.job_cd) queryParams.append('job_cd', filters.job_cd);
+
+    console.log("Query Parameters:", queryParams.toString()); // 쿼리 문자열 확인
+
       const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
         method: "GET",
       });

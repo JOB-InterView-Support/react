@@ -7,8 +7,8 @@ function JobPostingSubMenubar() {
 
   return (
     <div className={styles.container}>
-      <Link to="/JobPostingSearch" className={styles.menuItem}>
-        <div className={`${styles.menuItem} ${location.pathname === "/JobPostingSearch" ? styles.active : ""}`}>
+      <Link to="/JobPosting" className={styles.menuItem}>
+        <div className={`${styles.menuItem} ${location.pathname === "/JobPosting" ? styles.active : ""}`}>
           채용공고
         </div>
       </Link>
