@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./NoticeInsert.module.css";
 import InsertButton from "../../components/common/button/InsertButton";
+import axios from "axios";
 
 function NoticeInsert() {
     const { secureApiRequest } = useContext(AuthContext);
@@ -10,6 +11,7 @@ function NoticeInsert() {
     const [noticecontent, setNoticeContent] = useState("");
     const [noticefile, setNoticeFile] = useState(null);
     const [noticepreview, setNoticePreview] = useState(null);
+    const uuid = localStorage.getItem("uuid");
     const navigate = useNavigate();
 
     const handleBack = () => {
@@ -18,19 +20,33 @@ function NoticeInsert() {
 
     const handleNoticeInsert = async () => {
         try {
-            if (window.confirm('공지를 등록하시겠습니까?')) {
+            if (window.confirm("공지를 등록하시겠습니까?")) {
                 const formData = new FormData();
-                formData.append("noticetitle", noticetitle);
-                formData.append("noticecontent", noticecontent);
+                formData.append("uuid", uuid);
+                formData.append("noticeTitle", noticetitle);
+                formData.append("noticeContent", noticecontent);
+    
                 if (noticefile) {
                     formData.append("file", noticefile);
                 }
-
-                const response = await secureApiRequest(`/notice/insert`, {
-                    method: "POST",
-                    body: formData,
+    
+                const accessToken = localStorage.getItem("accessToken");
+                const refreshToken = localStorage.getItem("refreshToken");
+    
+                if (!accessToken || !refreshToken) {
+                    alert("로그인이 필요합니다.");
+                    return;
+                }
+    
+                const response = await axios.post("http://localhost:8080/notice/insert", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        "Authorization": `Bearer ${accessToken}`, // AccessToken 추가
+                        "RefreshToken": `Bearer ${refreshToken}`, // RefreshToken 추가
+                    },
                 });
-                console.log("response : " + JSON.stringify(response.data));
+    
+                console.log("response:", response.data);
                 navigate(-1);
             }
         } catch (err) {
@@ -38,7 +54,7 @@ function NoticeInsert() {
             alert("공지 등록에 실패했습니다.");
         }
     };
-
+    
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setNoticeFile(selectedFile);
