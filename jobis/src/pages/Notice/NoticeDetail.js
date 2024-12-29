@@ -66,10 +66,8 @@ function NoticeDetail() {
                 <div className={styles.noticecontent}>{notice.noticeContent}</div>   
                 {notice.noticePath && (
                 <div className={styles.noticeImageContainer}>
-                    <img
-                        src={`http://localhost:8080/uploads/${notice.noticePath}`} // 백엔드에서 제공한 이미지 경로 사용
-                        alt="첨부 이미지"
-                        className={styles.noticeImage}
+                    <img src={`http://localhost:8080/uploads/${notice.noticePath}`} // 백엔드에서 제공한 이미지 경로 사용
+                        alt={notice.noticePath.replace(/^N_/, '')} className={styles.noticeImage}
                     />
                 </div>
             )}
