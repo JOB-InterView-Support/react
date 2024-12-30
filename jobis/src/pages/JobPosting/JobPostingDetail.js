@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../AuthProvider";
 import { useParams } from 'react-router-dom';
 import styles from "./JobPostingDetail.module.css";
+import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
 const JobPostingDetail = () => {
   const { jobId } = useParams();
@@ -73,6 +74,8 @@ const JobPostingDetail = () => {
   });
 
   return (
+    <div>
+      <JobPostingSubMenubar />
     <div className={styles.jobDetailContainer}>
       <h1>{position?.title || "채용공고 정보 없음"}</h1>
       <p><strong>회사:</strong> <a href={companyUrl} target="_blank" rel="noopener noreferrer">{companyName}</a></p>
@@ -87,6 +90,7 @@ const JobPostingDetail = () => {
       <p><strong>공고진행여부:</strong> {active ? "진행중" : "마감"}</p>
       <p><strong>키워드:</strong> {keyword || "정보 없음"}</p>
       <p><strong>채용 공고 링크:</strong> <a href={url} target="_blank" rel="noopener noreferrer">상세보기</a></p>
+    </div>
     </div>
   );
 };

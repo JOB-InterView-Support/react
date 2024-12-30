@@ -100,3 +100,14 @@ h2 {
 .backButton:focus {
   outline: none;
 }
+
+.favoriteIcon {
+  font-size: 24px;
+  color: gray; /* 기본 빈 별 색 */
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.favorited {
+  color: gold; /* 즐겨찾기된 노란 별 색 */
+}
