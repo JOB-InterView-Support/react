@@ -93,7 +93,7 @@ function MyIntroductionList() {
               }`}
               onClick={() => handleFilterChange("N")}
             >
-              기본
+              작성본
             </button>
             <button
               className={`${styles.filterButton} ${

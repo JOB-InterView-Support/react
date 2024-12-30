@@ -407,6 +407,7 @@ const UpdateUser = () => {
                 maxLength={3}
                 onChange={handleChange}
               />
+              {' '}
               <input
                 type="text"
                 className={`${styles.input} ${styles.phoneInput}`}
@@ -415,6 +416,7 @@ const UpdateUser = () => {
                 maxLength={4}
                 onChange={handleChange}
               />
+              {' '}
               <input
                 type="text"
                 className={`${styles.input} ${styles.phoneInput}`}
