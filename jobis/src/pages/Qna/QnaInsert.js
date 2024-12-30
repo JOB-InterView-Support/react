@@ -17,7 +17,7 @@ const QnaInsert = () => {
   const [content, setContent] = useState(""); // 질문 내용
   const [file, setFile] = useState(null); // 첨부 파일
   const [preview, setPreview] = useState(null); // 이미지 미리보기 URL
-  const [isSecret, setIsSecret] = useState(false); // 비밀글 여부
+  const [isSecret, setIsSecret] = useState(true); // 비밀글 여부
   const navigate = useNavigate(); // 페이지 이동 함수
 
   // 파일 선택 시 호출되는 함수
