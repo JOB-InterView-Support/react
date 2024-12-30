@@ -32,18 +32,27 @@ function NoticeDetail() {
         console.log("handleMoveUpdate : " + JSON.stringify(handleMoveUpdate.data));
         }
 
-    const handleNoticeDelete = async () => {
-        try{
-            if (window.confirm('정말 삭제하시겠습니까 네네?')) {
-                await secureApiRequest(`/notice/delete/${no}`, {
-                    method : "delete",
-                });
-                navigate(-1);
+        const handleNoticeDelete = async () => {
+            try {
+                if (window.confirm('정말 삭제하시겠습니까?')) {
+                    console.log("삭제 요청 전송:", `/notice/detail/${no}`);
+                    
+                    // PUT 메서드로 변경
+                    const response = await secureApiRequest(`/notice/detail/${no}`, {
+                        method: "PUT", // PUT 메서드 사용
+                    });
+        
+                    console.log("삭제 요청 응답:", response);
+        
+                    navigate(-1); // 이전 페이지로 이동
+                }
+            } catch (error) {
+                console.error("삭제 요청 중 오류 발생:", error);
+                alert("전송 실패");
             }
-        } catch {
-            alert("전송실패");
-        }
-    }
+        };
+        
+
 
     useEffect(() => {
         handleNoticeDetail();
