@@ -155,28 +155,44 @@
 
 .buttonGroup {
     display: flex;
-    gap: 10px;
+    gap: 0; /* 버튼 사이의 간격을 제거 */
     margin-left: auto; /* subtitle 우측에 배치 */
-  }
-  
-  .filterButton {
+    border: 1px solid #5c95fe; /* 전체 버튼 그룹 테두리 */
+    border-radius: 5px; /* 둥근 테두리 */
+    overflow: hidden; /* 버튼들이 붙도록 처리 */
+}
+
+.filterButton {
     padding: 10px 20px;
-    border: 1px solid #ccc;
     background-color: #f9f9f9;
+    color: #004F99;
     cursor: pointer;
-  }
-  
-  .filterButton.active {
-    background-color: #007bff;
+    border: none; /* 개별 버튼의 테두리 제거 */
+    font-size: 16px; /* 버튼 텍스트 크기 */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.filterButton:not(.active):hover {
+    background-color: #e6e6e6; /* 비활성화 버튼 호버 효과 */
+}
+
+.filterButton.active {
+    background-color: #5c95fe;
     color: white;
-    border-color: #007bff;
-  }
+}
+
+.filterButton:first-child {
+    border-right: 1px solid #ccc; /* 첫 번째 버튼 오른쪽 테두리 */
+}
+
+.filterButton:last-child {
+    border-left: none; /* 마지막 버튼 테두리 제거 */
+}
 
   .subtitleContainer {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 0; /* 여백 제거 */
-    padding: 0; /* 패딩 제거 */
-  }
+    }
   
