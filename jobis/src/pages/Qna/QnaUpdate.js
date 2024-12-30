@@ -66,6 +66,7 @@ const QnaUpdate = () => {
             await axios.put(`http://localhost:8080/qna/update/${qno}`, formData, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                    refreshToken: `Bearer ${localStorage.getItem("refreshToken")}`,
                 },
             });
             alert("질문이 성공적으로 수정되었습니다.");
@@ -96,14 +97,26 @@ const QnaUpdate = () => {
                     className={styles.textarea}
                 ></textarea>
             </div>
-            {existingFile && (
+                        {existingFile && (
                 <div className={styles.existingFile}>
                     <p>기존 첨부파일: {existingFile}</p>
-                    <a href={`/attachments/${existingFile}`} target="_blank" rel="noopener noreferrer">
-                        파일 다운로드
-                    </a>
+                    {existingFile.endsWith(".png") || existingFile.endsWith(".jpg") || existingFile.endsWith(".jpeg") ? (
+                        <div className={styles.previewContainer}>
+                            <img
+                                src={`/qna/attachments/${existingFile}`}
+                                alt="기존 첨부 이미지"
+                                className={styles.previewImage}
+                                style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+                            />
+                        </div>
+                    ) : (
+                        <a href={`/qna/attachments/${existingFile}`} target="_blank" rel="noopener noreferrer">
+                            파일 다운로드
+                        </a>
+                    )}
                 </div>
             )}
+
             <div className={styles.formGroup}>
                 <label>새 첨부 파일:</label>
                 <input type="file" onChange={(e) => handleFileChange(e.target.files[0])} />
