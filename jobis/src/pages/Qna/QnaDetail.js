@@ -120,27 +120,27 @@ function QnaDetail() {
                         <td>{qna.qcontent}</td> {/* qna 데이터에서 내용 표시 */}
                     </tr>
                     {qna.qattachmenttitle && typeof qna.qattachmenttitle === "string" && (
-                        <tr>
-                            <th>첨부 파일</th>
-                            <td>
-                                {qna.qattachmenttitle.endsWith(".png") || qna.qattachmenttitle.endsWith(".jpg") || qna.qattachmenttitle.endsWith(".jpeg") ? (
-                                    <img
-                                        src={`/attachments/${qna.qattachmenttitle}`}
-                                        alt="첨부 이미지"
-                                        style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
-                                    />
-                                ) : (
-                                    <a
-                                        href={`/attachments/${qna.qattachmenttitle}`}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    >
-                                        {qna.qattachmenttitle}
-                                    </a>
-                                )}
-                            </td>
-                        </tr>
+            <tr>
+                <th>첨부 파일</th>
+                <td>
+                    {qna.qattachmenttitle.endsWith(".png") || qna.qattachmenttitle.endsWith(".jpg") || qna.qattachmenttitle.endsWith(".jpeg") ? (
+                        <img
+                            src={`/attachments/${qna.qattachmenttitle}`}
+                            alt="첨부 이미지"
+                            style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+                        />
+                    ) : (
+                        <a
+                            href={`/attachments/${qna.qattachmenttitle}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            {qna.qattachmenttitle}
+                        </a>
                     )}
+                </td>
+            </tr>
+        )}
 
 
                 </tbody>

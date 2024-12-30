@@ -44,35 +44,46 @@ const JobPostingList = () => {
 
     const fetchFavorites = async () => {
       try {
-        const response = await secureApiRequest(`/favorites/${uuid}`, { method: "GET" });
-        setFavorites(response?.data?.jobs?.job || []); // 즐겨찾기 목록 설정
+        console.log("즐겨찾기 데이터를 가져옵니다. 사용자 UUID:", uuid);
+        const response = await secureApiRequest(`/favorites/search?uuid=${uuid}`, { method: "GET" });
+        console.log("가져온 즐겨찾기 응답 데이터:", response);
+        setFavorites(response?.data || []); // 즐겨찾기 목록 설정
       } catch (err) {
-        console.error("Error fetching favorites:", err);
+        console.error("즐겨찾기 데이터를 가져오는 중 오류 발생:", err);
       }
-    };
+   };
 
     fetchJobPostings();
     fetchFavorites();
   }, [currentPage, uuid, secureApiRequest]);
 
   // 즐겨찾기 추가/삭제
-  const toggleFavorite = async (jobPostingId) => {
+  const toggleFavorite = async (jobPostingId, event) => {
+    event.stopPropagation(); // 클릭 이벤트 전파 방지
     try {
-      // 이미 즐겨찾기에 있으면 삭제, 없으면 추가
+      console.log("즐겨찾기 상태를 변경합니다. 채용 공고 ID:", jobPostingId);
+      // 이미 즐겨찾기에 있는 경우 삭제, 없으면 추가
       if (favorites.some((fav) => fav.job_posting_id === jobPostingId)) {
+        console.log("즐겨찾기에서 삭제 중... 채용 공고 ID:", jobPostingId);
         // 즐겨찾기 삭제
         await secureApiRequest(`/favorites/${jobPostingId}`, { method: "DELETE" });
         setFavorites(favorites.filter((fav) => fav.job_posting_id !== jobPostingId));
+        console.log("즐겨찾기에서 삭제 완료. 채용 공고 ID:", jobPostingId);
       } else {
-        // 즐겨찾기 추가
+        console.log("즐겨찾기에 추가 중... 채용 공고 ID:", jobPostingId);
+        // 즐겨찾기 추가 시 job_favorites_no를 명시적으로 추가
         await secureApiRequest(`/favorites`, {
           method: "POST",
-          body: JSON.stringify({ job_posting_id: jobPostingId }),
+          body: JSON.stringify({
+            job_posting_id: jobPostingId,
+            job_favorites_no: "generatedValue",  // 이 값을 자동 생성하거나, 시퀀스를 사용하여 삽입할 수 있음
+          }),
         });
         setFavorites([...favorites, { job_posting_id: jobPostingId }]);
+        console.log("즐겨찾기에 추가 완료. 채용 공고 ID:", jobPostingId);
       }
     } catch (err) {
-      console.error("Error toggling favorite:", err);
+      console.error("즐겨찾기 상태 변경 중 오류 발생:", err);
     }
   };
 
@@ -95,7 +106,7 @@ const JobPostingList = () => {
               <div
                 key={job.id}
                 className={styles.jobCard}
-                onClick={() => handleJobClick(job.id)}
+                onClick={() => handleJobClick(job.id)} // 카드 클릭 시 상세보기로 이동
               >
                 <h3>{job.position?.title || "제목 없음"}</h3>
                 <p>업종: {job.position?.industry?.name || "정보 없음"}</p>
@@ -105,7 +116,7 @@ const JobPostingList = () => {
                   className={`${styles.favoriteIcon} ${
                     favorites.some((fav) => fav.job_posting_id === job.id) ? styles.favorited : ""
                   }`}
-                  onClick={() => toggleFavorite(job.id)}
+                  onClick={(e) => toggleFavorite(job.id, e)} // 별 클릭 시 즐겨찾기 추가/삭제
                 >
                   {/* 즐겨찾기 아이콘 */}
                   {favorites.some((fav) => fav.job_posting_id === job.id) ? "★" : "☆"}

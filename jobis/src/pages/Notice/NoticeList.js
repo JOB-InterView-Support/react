@@ -18,14 +18,14 @@ function NoticeList() {
   const itemsPerPage = 10; // 한 페이지에 보여줄 아이템 수
 
   const handleMoveDetail = (no) => {
-    // 공지사항 상세보기 페이지로 이동
-    navigate(`/notice/detail/${no}`);
+    navigate(`/notice/detail/${no}`); // 공지사항 상세보기 페이지로 이동
   };
 
   const fetchNoticeList = async (page = 1) => {
-    // 공지사항 목록을 가져오는 함수
     setIsLoading(true); // 로딩 시작
     setError(null); // 에러 초기화
+
+    console.log(`Fetching notices for page: ${page}`); // 현재 페이지 로그
 
     try {
       const response = await secureApiRequest(`/notice`, {
@@ -33,39 +33,50 @@ function NoticeList() {
         params: { page, size: itemsPerPage },
       });
 
-      // 응답 받은 데이터를 콘솔에 출력
-      console.log("response : " + JSON.stringify(response.data.list));
-
-      setnoticeList(response.data.list || []); // 공지사항 리스트 상태 업데이트
+      console.log("API response data:", response.data); // API 응답 로그
+      setnoticeList(response.data.list || []); // 공지사항 리스트 업데이트
       setTotalItems(response.data.paging.totalItems || 0); // 전체 아이템 수 업데이트
-      setCurrentPage(page); // 현재 페이지 상태 업데이트
-    } catch {
-      setError("데이터 전송 실패"); // 에러 발생 시 에러 메시지 설정
+      setCurrentPage(page); // 현재 페이지 업데이트
+      console.log("Updated notice list:", response.data.list); // 업데이트된 리스트 로그
+    } catch (err) {
+      console.error("Failed to fetch notice list:", err); // 에러 로그
+      setError("데이터 전송 실패"); // 에러 상태 설정
     } finally {
-      // 로딩 종료
-      setIsLoading(false);
+      setIsLoading(false); // 로딩 종료
+      console.log("Loading finished for page:", page); // 로딩 완료 로그
     }
   };
 
   const handleMoveInsert = () => {
-    // 공지사항 등록 페이지로 이동
-    navigate(`/notice/insert`);
-    console.log("handleMoveInsert : " + JSON.stringify(handleMoveInsert.data)); 
-    // 버튼 클릭 시 handleMoveInsert의 데이터를 콘솔에 찍음 (이 부분은 동작하지 않음)
+    navigate(`/notice/insert`); // 공지사항 등록 페이지로 이동
+    console.log("Navigating to insert page"); // 이동 로그
   };
 
   useEffect(() => {
-      if (!isAuthInitialized && !isLoggedIn) {
-        console.log("로그인되지 않은 상태입니다. 로그인 페이지로 이동합니다.");
+    if (!isAuthInitialized && !isLoggedIn) {
+      console.log("로그인되지 않은 상태입니다. 로그인 페이지로 이동합니다.");
       navigate("/login");
     } else {
-      fetchNoticeList(currentPage); // 로그인 상태이면 공지사항 목록을 가져옴
+      fetchNoticeList(currentPage); // 로그인 상태이면 공지사항 목록 가져오기
     }
   }, [isLoggedIn, isAuthInitialized, navigate]);
 
+  const handlePageChange = (page) => {
+    console.log(`Page changed to: ${page}`); // 페이지 변경 로그
+    fetchNoticeList(page); // 페이지 변경 시 데이터 가져오기
+  };
+
   // 로딩 상태 및 공지사항 리스트 상태 출력
   console.log("isLoading:", isLoading);
-  console.log("noticeList:", noticeList);
+  console.log("Current notice list:", noticeList);
+
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    const year = date.getUTCFullYear();
+    const month = String(date.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(date.getUTCDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
 
   return (
     <div className={styles.noticecontainer}>
@@ -75,11 +86,14 @@ function NoticeList() {
           {noticeList.map((notice) => (
             <tr key={notice.noticeNo}>
               <td>
-                <button onClick={() => handleMoveDetail(notice.noticeNo)} className={styles.noticeTbutton}>
+                <button
+                  onClick={() => handleMoveDetail(notice.noticeNo)}
+                  className={styles.noticeTbutton}
+                >
                   {notice.noticeTitle}
                 </button>
               </td>
-              <td>{notice.noticeWDate}</td>
+              <td>{formatDate(notice.noticeWDate)}</td>
             </tr>
           ))}
         </tbody>
@@ -88,15 +102,16 @@ function NoticeList() {
         totalItems={totalItems}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
-        onPageChange={(page) => fetchNoticeList(page)} // 페이지 변경 시 공지사항 목록을 새로 가져옴
+        onPageChange={(page) => {// 페이지 변경 시 호출
+        fetchNoticeList(page);}}
       />
       {role === "ADMIN" && (
-        // ADMIN 역할인 경우에만 등록 버튼 표시
         <div className={styles.buttonContainer}>
-          <InsertButton onClick={handleMoveInsert} label="공지 등록"/>
+          <InsertButton onClick={handleMoveInsert} label="공지 등록" />
         </div>
       )}
     </div>
   );
 }
+
 export default NoticeList;

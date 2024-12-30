@@ -58,6 +58,12 @@ function MyIntroductionInsert() {
             <button className={styles.editButton} onClick={handleSave}>
               저장
             </button>
+            <button
+              className={styles.listButton}
+              onClick={() => navigate("/myIntroductionList")}
+            >
+              취소
+            </button>
           </div>
         </div>
         <div className={styles.maincontainer}>

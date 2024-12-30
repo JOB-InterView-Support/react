@@ -12,7 +12,7 @@ const ReviewList = () => {
     const [reviewList, setReviewList] = useState([]);
     const [totalItems, setTotalItems] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(10); // 페이지당 아이템 수 고정
+    const itemsPerPage = 10; // 한 페이지당 표시할 항목 수
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -41,11 +41,10 @@ const ReviewList = () => {
 
     try {
       // 현재 페이지와 페이지 크기를 서버에 요청
-      console.log("Review 목록 요청 - 페이지:", page);
-      const response = await secureApiRequest(`/review`, {
+      console.log(`Review 목록 요청 - 페이지: ${page}`);
+      const response = await secureApiRequest(`/review?page=${page}&size=10`, {
         method: "GET",
-        params: { page, size: itemsPerPage },
-      });
+    });
 
       // 서버 응답 데이터 처리
       console.log("Review 목록 응답 데이터:", response.data);
@@ -65,8 +64,7 @@ const ReviewList = () => {
   useEffect(() => {
     if (isLoggedIn) {
       fetchReviewList(currentPage); // Review 목록 데이터를 요청
-    }
-  }, [isLoggedIn, currentPage]);
+    }}, [isLoggedIn, currentPage]);
 
   // 4. "리뷰 등록" 버튼 클릭 시 등록 페이지로 이동
   const handleInsertClick = () => {
@@ -126,7 +124,7 @@ const ReviewList = () => {
             totalItems={totalItems}
             itemsPerPage={itemsPerPage}
             currentPage={currentPage}
-            onPageChange={(page) => fetchReviewList(page)} // 페이지 변경 시 실행
+            onPageChange={(page) => setCurrentPage(page)} // 페이지 변경 시 실행
           />
         </>
       )}
