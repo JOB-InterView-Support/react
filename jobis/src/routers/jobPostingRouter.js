@@ -9,7 +9,7 @@ const jobPostingRouter = [
     <Route path="/jobPosting" element={<JobPostingSearch />} />,
     <Route path="/jobPosting/search" element={<JobPostingList />} />,
     <Route path="/jobPosting/:id" element={<JobPostingDetail />} />,
-    <Route path="/jobfavorites" element={<FavoritesList />} />
+    <Route path="/Favorites" element={<FavoritesList />} />
 ];
 
 export default jobPostingRouter;

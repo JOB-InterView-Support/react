@@ -13,8 +13,8 @@ function JobPostingSubMenubar() {
         </div>
       </Link>
 
-      <Link to="/" className={styles.menuItem}>
-        <div className={`${styles.menuItem} ${location.pathname === "/" ? styles.active : ""}`}>
+      <Link to="/Favorites" className={styles.menuItem}>
+        <div className={`${styles.menuItem} ${location.pathname === "/Favorites" ? styles.active : ""}`}>
           즐겨찾기
         </div>
       </Link>

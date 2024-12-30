@@ -40,17 +40,17 @@ export function PaymentSuccess() {
       const json = await response.json();
       console.log("json : " + JSON.stringify(json))
 
-      if (!response.ok) {
-        // TODO: 구매 실패 비즈니스 로직 구현
+      if (!requestData.status === "DONE") {
+        // 구매 실패 시
         console.log(json);
         navigate(`/fail?code=${json.code}&message=${json.message}`);
-        return;
-    }else if(response.ok == 200)
-    
-    // TODO: 결제 성공 비즈니스 로직을 구현하세요.
+    }else if(requestData.status === "DONE")
+      
+    // 결제 성공 비즈니스 로직을 구현하세요.
     // console.log(json);
-    alert('결제 성공 했음')
+    console.log('결제 성공 했음')
     return json;
+    
     }
     confirm().then((data) => {
       setResponseData(data);
@@ -80,7 +80,7 @@ export function PaymentSuccess() {
         </div>
         <div className={styles.paymentBox} >
           <div className={styles.paymentBox}>
-            <b>paymentKey</b>
+            <b>결제 번호</b>
           </div>
           <div className={styles.paymentBox} id="paymentKey" >
             {`${searchParams.get("paymentKey")}`}
