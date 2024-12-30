@@ -126,6 +126,7 @@ function TicketList() {
                     useAppCardOnly: false,
                 },
             });
+            console.log(typeof(orderId));
         } catch (error) {
             console.error("Payment request failed:", error);
         }
