@@ -137,7 +137,7 @@ function MyIntroductionList() {
                 </div>
               ))
             ) : (
-              <p>등록된 자기소개서가 없습니다.</p>
+              <p className={styles.nullmessage}>등록된 자기소개서가 없습니다.</p>
             )}
           </div>
         </div>
