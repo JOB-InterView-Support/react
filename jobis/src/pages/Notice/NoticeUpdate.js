@@ -103,7 +103,7 @@ function NoticeUpdate() {
                 <div className={styles.noticeImageContainer}>
                     <img
                         src={`http://localhost:8080/attachments/${notice.noticePath}`}
-                        alt={notice.noticePath.replace(/^N_/, "")}
+                        alt={notice.noticePath.split('/').pop()}
                         className={styles.noticeImage}
                     />
                 </div>

@@ -43,8 +43,8 @@ function NoticeDetail() {
                     });
         
                     console.log("삭제 요청 응답:", response);
-        
-                    navigate(-1); // 이전 페이지로 이동
+                    alert("공지사항이 성공적으로 삭제되었습니다.");
+                    navigate(`/notice`); // 이전 페이지로 이동
                 }
             } catch (error) {
                 console.error("삭제 요청 중 오류 발생:", error);
@@ -77,7 +77,7 @@ function NoticeDetail() {
                 <div className={styles.noticeImageContainer}>
                     <a href={notice.noticePath} download>
                     <img src={notice.noticePath} // 백엔드에서 제공한 이미지 경로
-                        alt={notice.noticePath.replace(/^.+\/N_|^N_/, '')}  className={styles.noticeImage}
+                        alt={notice.noticePath.split('/').pop()}  className={styles.noticeImage}
                     /></a>
                 </div>
             )}
