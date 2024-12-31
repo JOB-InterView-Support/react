@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Link } from "react-router-dom";
 import styles from "./PaymentSuccess.module.css"
 import { AuthContext } from "../../AuthProvider"
-import axios from "axios";
+import apiClient from "../../utils/axios";
 
 export function PaymentSuccess() {
   const navigate = useNavigate();
@@ -24,23 +24,16 @@ export function PaymentSuccess() {
 
     async function confirm() {
       try {
-        const response = await axios(`${BACKEND_URL}/payments/confirm`, {
-          headers: {Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-            RefreshToken: `Bearer ${localStorage.getItem('refreshToken')}`
-          },
-          method: "POST",
-          body: JSON.stringify(requestData),
-        });
-
-        const json = await response.json();
-
-        if (requestData.status == "DONE") {
-          // 결제 성공 처리
-          console.log("결제 성공:", json);
-          setResponseData(json);
+        const response = await apiClient.post(`/payments/confirm`, requestData)
+          
+        console.log("response : ", response.data);
+  
+        if (response.data.status === "DONE") {
+          console.log("결제 성공:", response.data);
+          setResponseData(response.data);
         } else {
-          // 결제 실패 처리
-          navigate(`/fail?code=${json.code}&message=${json.message}`);
+          navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
+          console.log("response : " + response)
         }
       } catch (error) {
         console.error("결제 확인 중 오류 발생:", error);
