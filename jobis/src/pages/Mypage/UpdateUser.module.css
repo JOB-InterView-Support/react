@@ -37,6 +37,12 @@
   border-bottom: 0.5px solid rgba(109, 160, 255, 0.74);
   padding-bottom: 7px;
 }
+.noTickets {
+  text-align: center;
+  color: #888;
+  margin-top: 20px;
+  font-size: 30px;
+}
 
 .label {
   border-right: 2px solid rgba(109, 160, 255, 0.74);
