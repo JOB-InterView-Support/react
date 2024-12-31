@@ -34,24 +34,30 @@
     border: 1px solid #ddd;
     padding: 10px;
     text-align: center;
+    height: 19px;
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
   }
   
+
   .qna-table td {
     cursor: pointer;
   }
 
+  
+
   .qna-table th {
-    background-color: #f2f2f2;
+    background-color: rgba(109, 160, 255, 0.2);
     font-weight: bold;
     color: #333;
   }
   
   .qna-table tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: rgba(109, 160, 255, 0.06);
   }
   
   .qna-table tbody tr:hover {
-    background-color: #f1f1f1;
+    background-color: rgba(109, 160, 255, 0.3);
   }
   
   /* 페이징 버튼 스타일 */
