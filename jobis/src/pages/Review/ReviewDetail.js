@@ -69,9 +69,9 @@ function ReviewDetail() {
             {/* 리뷰 제목 */}
             <h1 className={styles.reviewtitle}>{review.rtitle || "제목 없음"}</h1>
             <div className={styles.reviewInfo}>
-                <p>작성자: {review.rwriter || "익명"}</p>
-                <p>작성일: {review.rwdate || "작성일 없음"}</p>
-                <p>조회수: {review.rcount || 0}</p>
+                <p>작성자: {review.rwriter}</p>
+                <p>작성일: {review.rwdate}</p>
+                <p>조회수: {review.rcount}</p>
             </div>
             <div className={styles.reviewcontent}>{review.rcontent || "내용 없음"}</div>
 

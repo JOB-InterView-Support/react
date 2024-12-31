@@ -132,6 +132,7 @@ const UpdateUser = () => {
       });
 
       alert("회원 정보가 성공적으로 수정되었습니다.");
+      navigate("/");
     } catch (error) {
       console.error(
         "Error updating user:",

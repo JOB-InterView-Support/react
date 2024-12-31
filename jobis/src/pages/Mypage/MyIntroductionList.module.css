@@ -7,7 +7,7 @@
 }
 
 .title {
-    font-size: 32px;
+    font-size: 30px;
     font-weight: bold;
     margin-bottom: 20px;
     text-align: left; /* 왼쪽 정렬 */
@@ -181,7 +181,12 @@
     background-color: #5c95fe;
     color: white;
 }
-
+.nullmessage{
+    color: #004F99;;
+    font-weight: 900;
+    font-size: 20px;
+    text-align: center;
+} 
 .filterButton:first-child {
     border-right: 1px solid #ccc; /* 첫 번째 버튼 오른쪽 테두리 */
 }
