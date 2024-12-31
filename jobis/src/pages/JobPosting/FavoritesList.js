@@ -18,9 +18,11 @@ const FavoritesList = () => {
       setError(null);
       try {
         const favoritesResponse = await secureApiRequest(
-          `/favorites/search?uuid=${uuid}`, // 수정된 부분
+          `/favorites/search?uuid=${uuid}`,
           { method: "GET" }
         );
+
+        console.log("즐겨찾기 응답 데이터:", favoritesResponse?.data); // 응답 데이터 확인
 
         if (!favoritesResponse?.data) {
           setFavorites([]);
@@ -36,7 +38,12 @@ const FavoritesList = () => {
               );
 
               const jobData = jobResponse?.data?.jobs?.job || null;
-              
+
+              // jobData가 존재하지 않는 경우의 디버깅
+              if (!jobData) {
+                console.log(`Job data for jobPostingId ${favorite.jobPostingId} is missing.`);
+              }
+
               return {
                 ...favorite,
                 jobTitle: jobData?.position?.title || "제목 없음",
@@ -45,7 +52,6 @@ const FavoritesList = () => {
                 salary: jobData?.salary?.name || "정보 없음",
                 company: jobData?.company?.detail?.name || "정보 없음"
               };
-              console.log(favorite);
             } catch (error) {
               console.error("채용공고 상세 정보 조회 실패:", error);
               return {
@@ -110,7 +116,7 @@ const FavoritesList = () => {
         <div className={styles.favoriteList}>
           {favorites.length > 0 ? (
             favorites.map((favorite) => (
-              <div key={favorite.jobFavoritesNo} className={styles.favoriteCard}>
+              <div key={favorite.jobPostingId} className={styles.favoriteCard}>
                 <div className={styles.cardHeader}>
                   <h3>{favorite.jobTitle}</h3>
                   <span className={styles.company}>{favorite.company}</span>

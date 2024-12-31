@@ -1,15 +1,13 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 
 const FavoriteStar = ({ initialFavorited, onToggle, jobPostingId }) => {
   const [isFavorited, setIsFavorited] = useState(initialFavorited);
 
   useEffect(() => {
     setIsFavorited(initialFavorited);
-  }, [initialFavorited]);
+  }, [initialFavorited, jobPostingId]);
 
   const handleClick = (e) => {
-    e.stopPropagation();  // 이벤트 전파 방지
     setIsFavorited(!isFavorited);
     onToggle(!isFavorited);  // 새로운 즐겨찾기 상태 전달
   };
@@ -21,10 +19,5 @@ const FavoriteStar = ({ initialFavorited, onToggle, jobPostingId }) => {
   );
 };
 
-FavoriteStar.propTypes = {
-  initialFavorited: PropTypes.bool.isRequired,
-  onToggle: PropTypes.func.isRequired,
-  jobPostingId: PropTypes.string.isRequired
-};
 
 export default FavoriteStar;

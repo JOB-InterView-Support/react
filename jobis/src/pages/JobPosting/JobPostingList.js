@@ -4,7 +4,7 @@ import { AuthContext } from "../../AuthProvider";
 import styles from "./JobPostingList.module.css";
 import Paging from "../../components/common/Paging";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
-import FavoriteStar from "./FavoriteStar"; // Import the FavoriteStar component
+import FavoriteStar from "./FavoriteStar";
 
 const JobPostingList = () => {
   const [jobPostings, setJobPostings] = useState([]);
@@ -17,6 +17,8 @@ const JobPostingList = () => {
   const navigate = useNavigate();
   const { secureApiRequest, uuid } = useContext(AuthContext);
 
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+
   useEffect(() => {
     const fetchJobPostings = async () => {
       setLoading(true);
@@ -27,8 +29,24 @@ const JobPostingList = () => {
           { method: 'GET' }
         );
         if (response?.data?.jobs?.job) {
-          setJobPostings(response.data.jobs.job);
-          setTotalItems(response.data.totalItems);
+          // 채용공고 데이터를 날짜 내림차순, 이름 오름차순으로 정렬
+          const sortedJobPostings = response.data.jobs.job.sort((a, b) => {
+            // 날짜 내림차순 정렬
+            const dateA = new Date(a.position?.createdDate);
+            const dateB = new Date(b.position?.createdDate);
+            if (dateA > dateB) return -1;
+            if (dateA < dateB) return 1;
+
+            // 날짜가 동일하면 이름 오름차순 정렬
+            const titleA = a.position?.title.toLowerCase() || "";
+            const titleB = b.position?.title.toLowerCase() || "";
+            if (titleA < titleB) return -1;
+            if (titleA > titleB) return 1;
+            return 0;
+          });
+
+          setJobPostings(sortedJobPostings); // 정렬된 채용공고 리스트
+          setTotalItems(response.data.jobs.total); // 전체 항목 수
         } else {
           setError('채용공고 데이터를 찾을 수 없습니다.');
         }
@@ -61,17 +79,17 @@ const JobPostingList = () => {
           jobFavoritesNo: crypto.randomUUID(),
           uuid: uuid,
           jobPostingId: jobPostingId,
-          jobCreatedDate: new Date().toISOString()
+          jobCreatedDate: new Date().toISOString(),
         };
-
+  
         const response = await secureApiRequest(`/favorites`, {
           method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
-          body: JSON.stringify(favoriteData)
+          body: JSON.stringify(favoriteData),
         });
-
+  
         if (response?.data) {
           setFavorites([...favorites, response.data]);
         }
@@ -80,14 +98,35 @@ const JobPostingList = () => {
           `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
           { method: "DELETE" }
         );
-        setFavorites(favorites.filter(fav => fav.jobPostingId !== jobPostingId));
+        setFavorites(favorites.filter((fav) => fav.jobPostingId !== jobPostingId));
       }
     } catch (err) {
       console.error("즐겨찾기 상태 변경 중 오류 발생:", err);
     }
   };
-
   const handleJobClick = (id) => navigate(`/jobPosting/${id}`);
+
+  const pageButtons = () => {
+    const pageArr = [];
+    let startPage = Math.max(1, currentPage - 2); // 현재 페이지 기준으로 2개 앞
+    let endPage = Math.min(totalPages, currentPage + 2); // 현재 페이지 기준으로 2개 뒤
+
+    // 첫 번째 페이지와 마지막 페이지 버튼을 항상 포함
+    if (currentPage > 3) {
+      pageArr.push(1);
+    }
+
+    // 5개의 버튼
+    for (let i = startPage; i <= endPage; i++) {
+      pageArr.push(i);
+    }
+
+    if (currentPage < totalPages - 2) {
+      pageArr.push(totalPages);
+    }
+
+    return pageArr;
+  };
 
   if (loading) return <p>채용공고 목록을 불러오는 중...</p>;
   if (error) return <p>{error}</p>;
@@ -122,13 +161,19 @@ const JobPostingList = () => {
             <p className={styles.noResults}>검색된 채용공고가 없습니다.</p>
           )}
         </div>
+
         {totalItems > 0 && (
-          <Paging
-            totalItems={totalItems}
-            itemsPerPage={itemsPerPage}
-            currentPage={currentPage}
-            onPageChange={(page) => setCurrentPage(page)}
-          />
+          <div className={styles.pagingContainer}>
+            {pageButtons().map((page) => (
+              <button
+                key={page}
+                className={page === currentPage ? styles.active : ""}
+                onClick={() => setCurrentPage(page)}
+              >
+                {page}
+              </button>
+            ))}
+          </div>
         )}
       </div>
     </div>

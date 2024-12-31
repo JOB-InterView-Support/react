@@ -7,14 +7,14 @@ function JobPostingSubMenubar() {
 
   return (
     <div className={styles.container}>
-      <Link to="/JobPosting" className={styles.menuItem}>
-        <div className={`${styles.menuItem} ${location.pathname === "/JobPosting" ? styles.active : ""}`}>
+      <Link to="/jobPosting" className={styles.menuItem}>
+        <div className={`${styles.menuItem} ${location.pathname === "/jobPosting" ? styles.active : ""}`}>
           채용공고
         </div>
       </Link>
 
-      <Link to="/Favorites" className={styles.menuItem}>
-        <div className={`${styles.menuItem} ${location.pathname === "/Favorites" ? styles.active : ""}`}>
+      <Link to="/favorites/search" className={styles.menuItem}>
+        <div className={`${styles.menuItem} ${location.pathname === "/favorites/search" ? styles.active : ""}`}>
           즐겨찾기
         </div>
       </Link>
