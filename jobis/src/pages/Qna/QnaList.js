@@ -74,8 +74,8 @@ const QnaList = () => {
   }
 
   return (
-    <div className={styles["qna-list-container"]}>
-      <h1>QnA 목록</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>QnA</h1>
       {isLoading ? (
         <p>데이터를 불러오는 중입니다...</p> // 로딩 중일 때 표시
       ) : (

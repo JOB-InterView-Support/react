@@ -9,12 +9,42 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif; /* 기본 폰트 지정 */
   }
-  
+  .innerContainer {
+    border: 2px solid #c0c0c0;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 25px;
+    margin-bottom: 100px;
+  }
+
+  .editButton,
+  .deleteButton,
+  .listButton {
+    padding: 10px 25px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .listButton{
+    background-color: rgb(109,160,255);
+  }
+  .listButton:hover {
+    background-color: rgb(75, 137, 253); /* 호버 시 더 진한 파란색 */
+  }
+  .Container {
+    width: 50%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
   .qnaTitle {
     font-size: 28px;
     font-weight: bold;
     margin-bottom: 20px;
-    text-align: center;
+    text-align: left;
     color: #333333; /* 텍스트 색상 수정 */
   }
   
@@ -25,42 +55,17 @@
     margin-bottom: 20px;
   }
   
-  .backButton {
-    display: block;
-    margin-top: 20px; /* 상단 여백 추가 */
-    color: #007bff;
-    font-size: 14px;
-    text-decoration: underline;
-    cursor: pointer;
-    background: none;
-    border: none;
-    padding: 0;
-    text-align: left; /* 왼쪽 정렬 */
-  }
-  
-  .backButton:hover {
-    text-decoration: none;
-  }
-  
-  
   .editButton {
-    background-color: #28a745; /* 수정 버튼 색상 수정 */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
+    background-color: #28a745;
   }
-  
+  .editButton:hover {
+    background-color: #218838;
+  }
   .deleteButton {
-    background-color: #dc3545; /* 삭제 버튼 색상 수정 */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
+    background-color: #dc3545;
+  }
+  .deleteButton:hover {
+    background-color: #c82333;
   }
   
   .qnaTable {
@@ -101,6 +106,13 @@
     text-align: left;
     font-weight: bold;
     color: #495057;
+  }
+
+  .title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: #004F99;
   }
   
   .noComments {
