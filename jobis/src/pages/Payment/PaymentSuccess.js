@@ -20,6 +20,10 @@ export function PaymentSuccess() {
     console.log('orderId : ', requestData.orderId);
 
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+    if (!BACKEND_URL) {
+      console.error("Backend URL is not set. Check your environment configuration.");
+      navigate("/fail?code=CONFIG_ERROR&message=환경 설정 오류");
+    }
     console.log("BACKEND_URL", BACKEND_URL)
 
     async function confirm() {
@@ -28,12 +32,11 @@ export function PaymentSuccess() {
           
         console.log("response : ", response.data);
   
-        if (response.data.status === "DONE") {
+        if (response.data) {
           console.log("결제 성공:", response.data);
           setResponseData(response.data);
         } else {
           navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
-          console.log("response : " + response)
         }
       } catch (error) {
         console.error("결제 확인 중 오류 발생:", error);
