@@ -68,3 +68,17 @@
     text-decoration: underline;
     color: #0056b3;
 }
+
+.imagePreview {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+.noticeImage {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  
