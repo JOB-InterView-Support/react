@@ -13,6 +13,13 @@
     color: #004F99;
   }
   
+  .noTickets {
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+    font-size: 30px;
+  }
+
   .subTitle {
     font-size: 21px;
     font-weight: 800;
