@@ -33,24 +33,21 @@ export function PaymentSuccess() {
         },
         body: JSON.stringify(requestData),
       });
-      console.log("response.body" + response.body);
-      console.log("orderId:", searchParams.get("orderId"));
-      console.log("amount:", searchParams.get("amount"));
-      console.log("paymentKey:", searchParams.get("paymentKey"));
+      
       const json = await response.json();
       console.log("json : " + JSON.stringify(json))
 
-      if (!response.ok) {
-        // TODO: 구매 실패 비즈니스 로직 구현
-        console.log(json);
-        navigate(`/fail?code=${json.code}&message=${json.message}`);
-        return;
-    }else if(response.ok == 200)
-    
-    // TODO: 결제 성공 비즈니스 로직을 구현하세요.
-    // console.log(json);
-    alert('결제 성공 했음')
-    return json;
+      if (requestData.status == "DONE") {
+        alert('결제 성공 했음')
+        return json;
+                
+      // TODO: 결제 성공 비즈니스 로직을 구현하세요.
+      // console.log(json);
+      }else if(!requestData.status == "DONE")
+         // TODO: 구매 실패 비즈니스 로직 구현
+         console.log(json);
+         navigate(`/fail?code=${json.code}&message=${json.message}`);
+         alert('결제 실패 했음')
     }
     confirm().then((data) => {
       setResponseData(data);
