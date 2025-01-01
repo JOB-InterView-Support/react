@@ -252,6 +252,9 @@ function Login() {
           구글
         </div>
       </div>
+      <div className={styles.faceLogin}>
+        <Link to="/faceLogin"><button className={styles.faceLoginBtn}>FaceId 로그인</button></Link>
+      </div>
       <div className={styles.signupContainer}>
         <div>아직 회원이 아니신가요?</div>
         <div className={styles.signup}>

@@ -15,7 +15,7 @@
 }
 
 .title {
-  font-size: 32px;
+  font-size: 30px;
   font-weight: bold;
   text-align: left;
   color: #004F99;
@@ -164,11 +164,11 @@
 }
 
 .listButton {
-  background-color: rgb(109, 160, 255);
+  background-color: rgb(189, 189, 189);
 }
 
 .listButton:hover {
-  background-color: rgb(75, 137, 253); /* 호버 시 더 진한 파란색 */
+  background-color: rgb(145, 145, 145); /* 호버 시 더 진한 파란색 */
 }
 
 .editButton {

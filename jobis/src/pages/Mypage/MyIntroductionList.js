@@ -2,73 +2,81 @@ import React, { useEffect, useState, useContext } from "react";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./MyIntroductionList.module.css";
-import icon from "../../assets/images/icon.png"; // icon.png 파일 import
+import icon from "../../assets/images/icon.png";
 import { useNavigate } from "react-router-dom";
 
 function MyIntroductionList() {
-  const { secureApiRequest } = useContext(AuthContext); // AuthContext에서 secureApiRequest 가져오기
-  const [introductions, setIntroductions] = useState([]); // 자기소개서 리스트
+  const { secureApiRequest } = useContext(AuthContext);
+  const [introductions, setIntroductions] = useState([]);
+  const [filteredIntroductions, setFilteredIntroductions] = useState([]);
+  const [filter, setFilter] = useState("N"); // 필터 상태 ('N' 또는 'Y')
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUuid = localStorage.getItem("uuid"); // 로컬 스토리지에서 UUID 가져오기
-    if (storedUuid) {
-      console.log("로컬 스토리지에서 UUID를 가져왔습니다:", storedUuid);
+    const fetchIntroductions = async () => {
+      const storedUuid = localStorage.getItem("uuid");
+      if (!storedUuid) {
+        console.error("로컬 스토리지에 UUID가 없습니다.");
+        return;
+      }
 
-      // 데이터 가져오기
-      const fetchIntroductions = async () => {
-        const storedUuid = localStorage.getItem("uuid"); // 로컬 스토리지에서 UUID 가져오기
-        if (!storedUuid) {
-          console.error("로컬 스토리지에 UUID가 없습니다.");
-          return;
-        }
-      
-        console.log("로컬 스토리지에서 UUID를 가져왔습니다:", storedUuid);
-      
-        try {
-          console.log("자기소개서 데이터를 요청합니다. UUID:", storedUuid);
-          const response = await secureApiRequest(`/mypage/intro/${storedUuid}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-      
-          console.log("응답 상태 코드:", response.status);
-          console.log("응답 전체 데이터:", response);
-      
-          // `axios` 사용 시 response.data로 접근
-          const data = response.data; // JSON 데이터 직접 접근
-          console.log("응답 데이터 확인:", data);
-      
-          if (Array.isArray(data)) {
-            const filteredData = data.filter((intro) => intro.introIsDeleted === "N");
-            console.log("삭제되지 않은 데이터:", filteredData);
-            setIntroductions(filteredData);
-          } else {
-            console.error("응답 데이터 형식이 예상과 다릅니다:", data);
-          }
-        } catch (error) {
-          console.error("자기소개서 데이터를 가져오는 중 오류 발생:", error.message);
-        }
-      };
-      
-      
+      try {
+        const response = await secureApiRequest(`/mypage/intro/${storedUuid}?introIsEdited=${filter}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
 
-      fetchIntroductions();
-    } else {
-      console.error("로컬 스토리지에 UUID가 없습니다.");
-    }
-  }, [secureApiRequest]); // secureApiRequest 의존성 추가
+        const data = response.data;
+        if (Array.isArray(data)) {
+          const filteredData = data.filter((intro) => intro.introIsDeleted === "N");
+          setIntroductions(filteredData);
+          setFilteredIntroductions(
+            filteredData.filter((intro) => intro.introIsEdited === filter)
+          );
+        } else {
+          console.error("응답 데이터 형식이 예상과 다릅니다:", data);
+        }
+      } catch (error) {
+        console.error("자기소개서 데이터를 가져오는 중 오류 발생:", error.message);
+      }
+    };
+
+    fetchIntroductions();
+  }, [secureApiRequest, filter]);
+
+  const handleFilterChange = (filterValue) => {
+    setFilter(filterValue);
+    setFilteredIntroductions(
+      introductions.filter((intro) => intro.introIsEdited === filterValue)
+    );
+  };
 
   const handleItemClick = (id) => {
     navigate(`/myIntroductionList/${id}`);
   };
 
-  const handleNewIntroduction = () => {
-    console.log("새 자기소개서 작성 버튼이 클릭되었습니다.");
-    navigate("/MyIntroductionInsert");
-    // 추가 로직 작성 가능 (페이지 이동, 모달 등)
+  const handleNewIntroduction = async () => {
+    const storedUuid = localStorage.getItem("uuid");
+    try {
+      const response = await secureApiRequest(`/mypage/intro/check-limit/${storedUuid}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.status === 200) {
+        navigate("/MyIntroductionInsert");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        alert(error.response.data); // "최대 자기소개서 작성 가능 수 10개입니다." 출력
+      } else {
+        console.error("오류 발생:", error.message);
+      }
+    }
   };
 
   return (
@@ -76,41 +84,63 @@ function MyIntroductionList() {
       <MypageSubMenubar />
       <div className={styles.container}>
         <h1 className={styles.title}>마이페이지</h1>
-        <h1 className={styles.subtitle}>자기소개서</h1>
-        <div className={styles.listcontainer}>
-        <div className={styles.introductionGrid}>
-          {/* 새 자기소개서 작성 버튼 */}
-          <div className={styles.introductionCardNew}>
-            <button onClick={handleNewIntroduction}>
-              <div className={styles.circleicon}>
-                <img src={icon} alt="Add Icon" className={styles.icon} />
-              </div>
-              <span>새 자기소개서 작성</span>
+        <div className={styles.subtitleContainer}>
+          <h1 className={styles.subtitle}>자기소개서</h1>
+          <div className={styles.buttonGroup}>
+            <button
+              className={`${styles.filterButton} ${
+                filter === "N" ? styles.active : ""
+              }`}
+              onClick={() => handleFilterChange("N")}
+            >
+              작성본
+            </button>
+            <button
+              className={`${styles.filterButton} ${
+                filter === "Y" ? styles.active : ""
+              }`}
+              onClick={() => handleFilterChange("Y")}
+            >
+              첨삭본
             </button>
           </div>
-
-          {introductions.length > 0 ? (
-            introductions.map((intro) => (
-              <div
-                key={intro.introNo}
-                className={styles.introductionCard}
-                onClick={() => handleItemClick(intro.introNo)} // 클릭 이벤트 추가
-              >
-                <div className={styles.circleicon}>
-                <img src={icon} alt="Add Icon" className={styles.icon} />
-                </div>
-                <h3>{intro.introTitle}</h3>
-                <div className={styles.minicontents}>
-                <p>{intro.introDate.split("T")[0]}</p>
-                <p>{intro.introContents.length > 8 ? `${intro.introContents.substring(0, 8)}...` : intro.introContents}</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p>등록된 자기소개서가 없습니다.</p>
-          )}
         </div>
-      </div>
+        <div className={styles.listcontainer}>
+          <div className={styles.introductionGrid}>
+            <div className={styles.introductionCardNew}>
+              <button onClick={handleNewIntroduction}>
+                <div className={styles.circleicon}>
+                  <img src={icon} alt="Add Icon" className={styles.icon} />
+                </div>
+                <span>새 자기소개서 작성</span>
+              </button>
+            </div>
+            {filteredIntroductions.length > 0 ? (
+              filteredIntroductions.map((intro) => (
+                <div
+                  key={intro.introNo}
+                  className={styles.introductionCard}
+                  onClick={() => handleItemClick(intro.introNo)}
+                >
+                  <div className={styles.circleicon}>
+                    <img src={icon} alt="Add Icon" className={styles.icon} />
+                  </div>
+                  <h3>{intro.introTitle}</h3>
+                  <div className={styles.minicontents}>
+                    <p>{intro.introDate.split("T")[0]}</p>
+                    <p>
+                      {intro.introContents.length > 8
+                        ? `${intro.introContents.substring(0, 8)}...`
+                        : intro.introContents}
+                    </p>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <p className={styles.nullmessage}>등록된 자기소개서가 없습니다.</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

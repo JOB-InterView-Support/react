@@ -32,6 +32,8 @@ const AppRouter = () => {
       {/* 
       {reviewRouter}
        */}
+       {/* 첨부 파일 요청 예외 처리 */}
+      <Route path="/attachments/*" element={<></>} />
       <Route path="/" element={<MainPage />} />
     </Routes>
   );

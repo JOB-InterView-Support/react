@@ -27,30 +27,33 @@ const QnaList = () => {
   // QnA 목록 데이터 가져오기
   const fetchQnaList = async (page = 1) => {
     if (!isLoggedIn) {
-      return; // 로그인되지 않은 상태에서는 데이터 요청 안 함
+        return; // 로그인되지 않은 상태에서는 데이터 요청 안 함
     }
 
     setIsLoading(true); // 로딩 상태 시작
     setError(null); // 기존 에러 초기화
 
     try {
-      console.log(`QnA 목록 요청 - 페이지: ${page}`);
-      const response = await secureApiRequest(
-        `/qna?page=${page}&size=${itemsPerPage}` // 서버 컨트롤러와 URL 형식을 맞춤
-      );
+        console.log(`QnA 목록 요청 - 페이지: ${page}`);
+        const response = await secureApiRequest(
+            `/qna?page=${page}&size=${itemsPerPage}` // 서버 컨트롤러와 URL 형식을 맞춤
+        );
 
-      console.log("응답 데이터:", response.data);
+        console.log("응답 데이터:", response.data);
 
-      setQnaList(response.data.list || []); // 서버에서 받은 QnA 목록을 상태에 저장
-      setTotalItems(response.data.paging?.totalItems || 0); // 전체 항목 개수를 상태에 저장
-      setCurrentPage(page); // 현재 페이지 상태 업데이트
+        // 서버에서 받은 데이터를 그대로 사용
+        setQnaList(response.data.list || []); 
+        setTotalItems(response.data.paging?.totalItems || 0); 
+        setCurrentPage(page); 
     } catch (err) {
-      console.error("QnA 목록 가져오기 실패:", err);
-      setError("데이터를 가져오는 중 문제가 발생했습니다."); // 에러 메시지 설정
+        console.error("QnA 목록 가져오기 실패:", err);
+        setError("데이터를 가져오는 중 문제가 발생했습니다."); 
     } finally {
-      setIsLoading(false); // 로딩 상태 종료
+        setIsLoading(false); 
     }
-  };
+};
+
+
 
   // 컴포넌트 마운트 시 데이터 로드
   useEffect(() => {
@@ -71,8 +74,8 @@ const QnaList = () => {
   }
 
   return (
-    <div className={styles["qna-list-container"]}>
-      <h1>QnA 목록</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>QnA</h1>
       {isLoading ? (
         <p>데이터를 불러오는 중입니다...</p> // 로딩 중일 때 표시
       ) : (

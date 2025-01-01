@@ -138,3 +138,19 @@
     font-size: inherit; /* 버튼의 텍스트 크기 상속 */
     display: inline-block; /* 블록처럼 동작 */
 }
+
+.faceLogin{
+    margin-top: 1%;
+}
+
+.faceLoginBtn{
+    background-color: rgba(109, 160, 255, 0.8); 
+    border: none;
+    border-radius: 10px;
+    width: 200px;
+    height: 60px;
+    color: white;
+    font-weight: bold;
+    font-size: 25px;
+    cursor: pointer;
+}
