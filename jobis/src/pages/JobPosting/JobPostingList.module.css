@@ -14,9 +14,9 @@
 }
 
 .jobList {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  display: flex;
+  flex-direction: column; /* 항목들을 세로로 배치 */
+  gap: 20px; /* 항목 간 간격 */
   margin-bottom: 30px;
 }
 
@@ -28,6 +28,8 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   cursor: pointer;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  position: relative; /* 별 아이콘을 카드의 절대 위치에 배치하기 위해 상대 위치 설정 */
 }
 
 .jobCard:hover {
@@ -102,12 +104,15 @@
 }
 
 .favoriteIcon {
-  font-size: 24px;
-  color: gray; /* 기본 빈 별 색 */
+  position: absolute; /* 부모 요소에 대해 절대적으로 위치 */
+  top: 10px; /* 카드 상단에서 10px 떨어지게 */
+  right: 10px; /* 카드 오른쪽에서 10px 떨어지게 */
+  font-size: 30px; /* 별의 크기를 크게 설정 */
+  color: gray; /* 기본 상태: 빈 별 */
   cursor: pointer;
   transition: color 0.3s ease;
 }
 
-.favorited {
-  color: gold; /* 즐겨찾기된 노란 별 색 */
+.favoriteIcon.favorited {
+  color: gold; /* 즐겨찾기된 상태: 노란색 별 */
 }

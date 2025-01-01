@@ -12,9 +12,7 @@ const JobPostingDetail = () => {
   const fetchJobDetails = async () => {
     try {
       const response = await secureApiRequest(`/jobposting/search?&id=${jobId}`, { method: "GET" });
-      console.log("Full API Response:", response); // 전체 응답 확인
       const jobData = response.data.jobs.job[0];
-      console.log("Parsed Job Data:", jobData); // 파싱된 데이터 확인
       setJobDetails(jobData);
     } catch (error) {
       console.error("Error fetching job details:", error); // 에러 로그
@@ -61,17 +59,6 @@ const JobPostingDetail = () => {
   const industry = position?.industry?.name || "정보 없음";
   const jobMidCode = position?.['job-mid-code']?.name || "정보 없음";
 
-  console.log("Final Rendered Job Details:", {
-    position,
-    company,
-    salary,
-    location,
-    postingDateFormatted,
-    expirationDateFormatted,
-    active,
-    keyword,
-    url,
-  });
 
   return (
     <div>

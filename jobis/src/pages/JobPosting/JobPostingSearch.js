@@ -5,13 +5,86 @@ import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./JobPostingSearch.module.css";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
+// 필터 옵션 데이터
+const filterOptions = {
+  job_cd: [
+    { value: "", label: "직무 선택" },
+    { value: "16", label: "기획·전략" },
+    { value: "14", label: "마케팅·홍보" },
+    { value: "3", label: "회계·세무·재무" },
+    { value: "5", label: "인사·노무·HRD" },
+    { value: "4", label: "총무·법무·사무" },
+    { value: "2", label: "IT개발·데이터" },
+    { value: "15", label: "디자인" },
+    { value: "8", label: "영업·판매·무역" },
+    { value: "21", label: "고객상담·TM" },
+    { value: "18", label: "구매·자재·물류" },
+    { value: "12", label: "상품기획·MD" },
+    { value: "7", label: "운전·운송·배송" },
+    { value: "10", label: "서비스" },
+    { value: "11", label: "생산" },
+    { value: "22", label: "건설·건축" },
+    { value: "6", label: "의료" },
+    { value: "9", label: "연구·R&D" },
+    { value: "19", label: "교육" },
+    { value: "13", label: "미디어·문화·스포츠" },
+    { value: "17", label: "금융·보험" },
+    { value: "20", label: "공공·복지" },
+  ],
+  loc_mcd: [
+    { value: "", label: "지역 선택" },
+    { value: "117000", label: "전국" },
+    { value: "101000", label: "서울" },
+    { value: "102000", label: "경기" },
+    { value: "103000", label: "광주" },
+    { value: "104000", label: "대구" },
+    { value: "105000", label: "대전" },
+    { value: "106000", label: "부산" },
+    { value: "107000", label: "울산" },
+    { value: "108000", label: "인천" },
+    { value: "109000", label: "강원" },
+    { value: "110000", label: "경남" },
+    { value: "111000", label: "경북" },
+    { value: "112000", label: "전남" },
+    { value: "113000", label: "전북" },
+    { value: "114000", label: "충북" },
+    { value: "115000", label: "충남" },
+    { value: "116000", label: "제주" },
+    { value: "118000", label: "세종" },
+  ],
+  edu_lv: [
+    { value: "", label: "학력 선택" },
+    { value: "0", label: "학력무관" },
+    { value: "1", label: "고등학교졸업" },
+    { value: "2", label: "대학졸업(2,3년)" },
+    { value: "3", label: "대학교졸업(4년)" },
+    { value: "4", label: "석사졸업" },
+    { value: "5", label: "박사졸업" },
+    { value: "6", label: "고등학교졸업이상" },
+    { value: "7", label: "대학졸업(2,3년)이상" },
+    { value: "8", label: "대학교졸업(4년)이상" },
+    { value: "9", label: "석사졸업이상" },
+  ],
+  job_type: [
+    { value: "", label: "근무형태 선택" },
+    { value: "1", label: "정규직" },
+    { value: "2", label: "계약직" },
+    { value: "4", label: "인턴직" },
+    { value: "5", label: "아르바이트" },
+    { value: "10", label: "계약직 (정규직 전환가능)" },
+    { value: "11", label: "인턴직 (정규직 전환가능)" },
+    { value: "16", label: "기간제" },
+  ],
+ 
+};
+
 const JobPostingSearch = () => {
   const { secureApiRequest } = useContext(AuthContext);
   const initialFilters = {
-    ind_cd: "",
-    loc_cd: "",
-    edu_lv: "",
     job_cd: "",
+    loc_mcd: "",
+    edu_lv: "",
+    job_type: "",
   };
   const [filters, setFilters] = useState(initialFilters);
   const [loading, setLoading] = useState(false);  // 로딩 상태 추가
@@ -41,12 +114,10 @@ const JobPostingSearch = () => {
       const queryParams = new URLSearchParams();
 
       // 필터 객체에서 빈 값이 아닌 필터만 추가
-      if (filters.ind_cd) queryParams.append('ind_cd', filters.ind_cd);
-      if (filters.loc_cd) queryParams.append('loc_cd', filters.loc_cd);
-      if (filters.edu_lv) queryParams.append('edu_lv', filters.edu_lv);
       if (filters.job_cd) queryParams.append('job_cd', filters.job_cd);
-
-      console.log("Query Parameters:", queryParams.toString()); // 쿼리 문자열 확인
+      if (filters.loc_mcd) queryParams.append('loc_cd', filters.loc_mcd);
+      if (filters.edu_lv) queryParams.append('edu_lv', filters.edu_lv);
+      if (filters.job_type) queryParams.append('job_type', filters.job_type);
 
       const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
         method: "GET",
@@ -75,65 +146,21 @@ const JobPostingSearch = () => {
       <div className={styles.container}>
         <h2>채용공고 검색</h2>
         <div className={styles.filters}>
-          <select name="ind_cd" value={filters.ind_cd} onChange={handleInputChange} className={styles.select}>
-            <option value="">산업/업종 선택</option>
-            {/* 산업 옵션은 배열로 관리 */}
-            {["서비스업", "제조·화학", "IT·웹·통신", "은행·금융업", "미디어·디자인", "교육업", "의료·제약·복지", "판매·유통", "건설업", "기관·협회"]
-              .map((industry, index) => (
-                <option key={index} value={index + 1}>
-                  {industry}
+          {Object.keys(filterOptions).map((filterKey) => (
+            <select
+              key={filterKey}
+              name={filterKey}
+              value={filters[filterKey]}
+              onChange={handleInputChange}
+              className={styles.select}
+            >
+              {filterOptions[filterKey].map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
-          </select>
-          
-          <select
-            name="loc_cd"
-            value={filters.loc_cd}
-            onChange={handleInputChange}
-            className={styles.select}
-          >
-            <option value="">지역 선택</option>
-            {/* 지역 옵션 */}
-            {["전체", "서울", "경기", "광주", "대구", "대전", "부산", "울산", "인천", "강원", "경남", "경북", "전남", "전북", "충북", "충남", "제주", "세종"]
-              .map((location, index) => (
-                <option key={index} value={index + 1}>
-                  {location}
-                </option>
-              ))}
-          </select>
-
-          <select
-            name="edu_lv"
-            value={filters.edu_lv}
-            onChange={handleInputChange}
-            className={styles.select}
-          >
-            <option value="">학력 선택</option>
-            {/* 학력 선택 */}
-            {["학력무관", "고졸이상", "대졸(2,3년)이상", "대졸(4년)이상", "석사이상", "박사이상"]
-              .map((education, index) => (
-                <option key={index} value={index}>
-                  {education}
-                </option>
-              ))}
-          </select>
-
-          <select
-            name="job_cd"
-            value={filters.job_cd}
-            onChange={handleInputChange}
-            className={styles.select}
-          >
-            <option value="">직무 선택</option>
-            {/* 직무 선택 */}
-            {["기획·전략", "마케팅·홍보·조사", "회계·세무·재무", "인사·노무·HRD", "총무·법무·사무", "IT개발·데이터", "기획·전략", "영업·판매·무역"]
-              .map((job, index) => (
-                <option key={index} value={index}>
-                  {job}
-                </option>
-              ))}
-          </select>
-
+            </select>
+          ))}
           <button onClick={handleSearch} className={styles.searchButton} disabled={loading}>
             {loading ? "검색 중..." : "검색"}
           </button>

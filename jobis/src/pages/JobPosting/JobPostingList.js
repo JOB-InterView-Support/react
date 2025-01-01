@@ -1,43 +1,48 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider";
 import styles from "./JobPostingList.module.css";
-import Paging from "../../components/common/Paging";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 import FavoriteStar from "./FavoriteStar";
+import { AuthContext } from "../../AuthProvider";
 
 const JobPostingList = () => {
-  const [jobPostings, setJobPostings] = useState([]);
-  const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalItems, setTotalItems] = useState(0);
-  const itemsPerPage = 10;
+  const [jobPostings, setJobPostings] = useState([]); // 채용공고 목록 상태
+  const [favorites, setFavorites] = useState([]); // 즐겨찾기 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 상태
+  const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+  const [totalItems, setTotalItems] = useState(0); // 전체 아이템 개수
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const itemsPerPage = 10; // 한 페이지에 보여줄 항목 수
   const navigate = useNavigate();
-  const { secureApiRequest, uuid } = useContext(AuthContext);
+  const { secureApiRequest } = useContext(AuthContext);
+  const [uuid, setUuid] = useState(null); // uuid 상태
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  // localStorage에서 uuid를 가져오는 useEffect
+  useEffect(() => {
+    const storedUuid = localStorage.getItem("uuid"); // localStorage에서 uuid를 가져오기
+    if (storedUuid) {
+      setUuid(storedUuid); // uuid 상태 업데이트
+    }
+  }, []);
 
+  // 채용공고 목록 가져오기
   useEffect(() => {
     const fetchJobPostings = async () => {
       setLoading(true);
       setError(null);
       try {
         const response = await secureApiRequest(
-          `/jobposting/search?page=${currentPage - 1}&size=${itemsPerPage}`,
+          `/jobposting/search?page=${currentPage}&size=${itemsPerPage}`,
           { method: 'GET' }
         );
         if (response?.data?.jobs?.job) {
-          // 채용공고 데이터를 날짜 내림차순, 이름 오름차순으로 정렬
           const sortedJobPostings = response.data.jobs.job.sort((a, b) => {
-            // 날짜 내림차순 정렬
             const dateA = new Date(a.position?.createdDate);
             const dateB = new Date(b.position?.createdDate);
             if (dateA > dateB) return -1;
             if (dateA < dateB) return 1;
 
-            // 날짜가 동일하면 이름 오름차순 정렬
             const titleA = a.position?.title.toLowerCase() || "";
             const titleB = b.position?.title.toLowerCase() || "";
             if (titleA < titleB) return -1;
@@ -47,6 +52,7 @@ const JobPostingList = () => {
 
           setJobPostings(sortedJobPostings); // 정렬된 채용공고 리스트
           setTotalItems(response.data.jobs.total); // 전체 항목 수
+          setTotalPages(Math.ceil(response.data.jobs.total / itemsPerPage)); // 전체 페이지 수 계산
         } else {
           setError('채용공고 데이터를 찾을 수 없습니다.');
         }
@@ -70,7 +76,7 @@ const JobPostingList = () => {
 
     fetchJobPostings();
     fetchFavorites();
-  }, [currentPage, uuid, secureApiRequest]);
+  }, [currentPage, uuid]); // uuid가 변경될 때마다 다시 실행
 
   const toggleFavorite = async (jobPostingId, newFavoritedState) => {
     try {
@@ -81,7 +87,9 @@ const JobPostingList = () => {
           jobPostingId: jobPostingId,
           jobCreatedDate: new Date().toISOString(),
         };
-  
+
+        console.log("favoriteData:", favoriteData);  // 디버깅을 위한 로그
+
         const response = await secureApiRequest(`/favorites`, {
           method: "POST",
           headers: {
@@ -89,21 +97,19 @@ const JobPostingList = () => {
           },
           body: JSON.stringify(favoriteData),
         });
-  
+
         if (response?.data) {
-          setFavorites([...favorites, response.data]);
+          setFavorites(prevFavorites => [...prevFavorites, response.data]);
         }
       } else {
-        await secureApiRequest(
-          `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
-          { method: "DELETE" }
-        );
+        await secureApiRequest(`/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`, { method: "DELETE" });
         setFavorites(favorites.filter((fav) => fav.jobPostingId !== jobPostingId));
       }
     } catch (err) {
-      console.error("즐겨찾기 상태 변경 중 오류 발생:", err);
+      console.error("즐겨찾기 상태 변경 중 오류 발생:", err.response?.data || err.message);
     }
   };
+
   const handleJobClick = (id) => navigate(`/jobPosting/${id}`);
 
   const pageButtons = () => {
@@ -111,12 +117,10 @@ const JobPostingList = () => {
     let startPage = Math.max(1, currentPage - 2); // 현재 페이지 기준으로 2개 앞
     let endPage = Math.min(totalPages, currentPage + 2); // 현재 페이지 기준으로 2개 뒤
 
-    // 첫 번째 페이지와 마지막 페이지 버튼을 항상 포함
     if (currentPage > 3) {
       pageArr.push(1);
     }
 
-    // 5개의 버튼
     for (let i = startPage; i <= endPage; i++) {
       pageArr.push(i);
     }

@@ -10,21 +10,33 @@ const FavoritesList = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
-  const { secureApiRequest, uuid } = useContext(AuthContext);
+  const { secureApiRequest, isLoggedIn } = useContext(AuthContext);
+  const [uuid, setUuid] = useState(null); // uuid 상태
+
+  // 컴포넌트가 마운트될 때 uuid를 localStorage에서 가져옴
+  useEffect(() => {
+    const storedUuid = localStorage.getItem("uuid");
+    if (storedUuid) {
+      setUuid(storedUuid);
+    }
+  }, []);
 
   useEffect(() => {
     const fetchFavorites = async () => {
       setLoading(true);
       setError(null);
       try {
+        if (!isLoggedIn) {
+          setError("로그인 상태에서만 즐겨찾기를 볼 수 있습니다.");
+          return;
+        }
+
         const favoritesResponse = await secureApiRequest(
           `/favorites/search?uuid=${uuid}`,
           { method: "GET" }
         );
 
-        console.log("즐겨찾기 응답 데이터:", favoritesResponse?.data); // 응답 데이터 확인
-
-        if (!favoritesResponse?.data) {
+        if (!favoritesResponse || !favoritesResponse.data) {
           setFavorites([]);
           return;
         }
@@ -39,28 +51,22 @@ const FavoritesList = () => {
 
               const jobData = jobResponse?.data?.jobs?.job || null;
 
-              // jobData가 존재하지 않는 경우의 디버깅
-              if (!jobData) {
-                console.log(`Job data for jobPostingId ${favorite.jobPostingId} is missing.`);
-              }
-
               return {
                 ...favorite,
                 jobTitle: jobData?.position?.title || "제목 없음",
                 industry: jobData?.position?.industry?.name || "정보 없음",
                 location: jobData?.position?.location?.name || "정보 없음",
                 salary: jobData?.salary?.name || "정보 없음",
-                company: jobData?.company?.detail?.name || "정보 없음"
+                company: jobData?.company?.detail?.name || "정보 없음",
               };
             } catch (error) {
-              console.error("채용공고 상세 정보 조회 실패:", error);
               return {
                 ...favorite,
                 jobTitle: "제목 없음",
                 industry: "정보 없음",
                 location: "정보 없음",
                 salary: "정보 없음",
-                company: "정보 없음"
+                company: "정보 없음",
               };
             }
           })
@@ -68,17 +74,16 @@ const FavoritesList = () => {
 
         setFavorites(favoritesWithDetails);
       } catch (err) {
-        console.error("즐겨찾기 데이터 조회 실패:", err);
         setError("즐겨찾기 목록을 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoading(false);
       }
     };
 
-    if (uuid) {
+    if (isLoggedIn && uuid) {
       fetchFavorites();
     }
-  }, [uuid, secureApiRequest]);
+  }, [isLoggedIn, uuid, secureApiRequest]);
 
   const removeFavorite = async (jobPostingId) => {
     try {
@@ -86,12 +91,10 @@ const FavoritesList = () => {
         `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
         { method: "DELETE" }
       );
-      
-      setFavorites(prevFavorites => 
-        prevFavorites.filter(fav => fav.jobPostingId !== jobPostingId)
+      setFavorites((prevFavorites) =>
+        prevFavorites.filter((fav) => fav.jobPostingId !== jobPostingId)
       );
     } catch (err) {
-      console.error("즐겨찾기 삭제 실패:", err);
       alert("즐겨찾기 삭제 중 오류가 발생했습니다.");
     }
   };
@@ -100,13 +103,8 @@ const FavoritesList = () => {
     navigate(`/jobPosting/${id}`);
   };
 
-  if (loading) {
-    return <p>즐겨찾기 목록을 불러오는 중...</p>;
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
+  if (loading) return <p>즐겨찾기 목록을 불러오는 중...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div>
@@ -134,9 +132,8 @@ const FavoritesList = () => {
                     상세보기
                   </button>
                   <FavoriteStar
-                    initialFavorited={true}
-                    onToggle={() => removeFavorite(favorite.jobPostingId)}
-                    jobPostingId={favorite.jobPostingId}
+                    initialFavorited={true} // 기본값을 favorites 배열로 확인하여 설정
+                    onToggle={() => removeFavorite(favorite.jobPostingId)} // 즐겨찾기 제거 로직으로 대체
                   />
                 </div>
               </div>
