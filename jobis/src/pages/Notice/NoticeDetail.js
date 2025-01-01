@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./NoticeDetail.module.css"; // CSS Modules
+import downloadIcon from "../../assets/images/download_icon.png";
 
 function NoticeDetail() {
     const accessToken = localStorage.getItem("accessToken");
@@ -231,7 +232,20 @@ function NoticeDetail() {
             </div>
 
             <div className={styles.noticecontent}>{notice.noticeContent}</div>
-
+            {notice.noticePath && (
+                <div className={styles.fileContainer}>
+                    {/* 파일 아이콘 */}
+                    <span className={styles.fileIcon}>
+                        <img src={downloadIcon} alt="파일 아이콘" />
+                    </span>
+                    {/* 파일명 링크 */}
+                    <a href={notice.noticePath}
+                        download={notice.noticePath.split('/').pop().replace('N_', '')}
+                        className={styles.downloadLink}>
+                        첨부파일 미리보기
+                    </a>
+                </div>
+            )}
             {filePreview && (
                 <div className={styles.noticeImageContainer}>
                     {isImageFile(notice.noticePath) ? (
@@ -243,10 +257,9 @@ function NoticeDetail() {
                             {notice.noticePath.split('/').pop()}
                         </div>
                     )}
-                    <button onClick={handleDownload} className={styles.downloadButton}>다운로드</button>
+                    <button onClick={handleDownload} className={styles.downloadButton}>{notice.noticePath.split('/').pop().replace(/^N_/, '')}</button>
                 </div>
             )}
-
             <button onClick={handleBack} className={styles.backButton}>이전으로</button>
 
             {role === "ADMIN" && (

@@ -9,6 +9,7 @@ function NoticeUpdate() {
     const { no } = useParams();
     const navigate = useNavigate();
     const [notice, setNotice] = useState(null);
+    const [filePreview, setFilePreview] = useState(null); // 파일 미리보기 URL
 
     const handleBack = () => {
         navigate(-1);
@@ -16,13 +17,23 @@ function NoticeUpdate() {
 
     const handleNoticeDetail = async () => {
         try {
+            console.log("API 호출 시작"); // API 호출 시작 로그
             const response = await secureApiRequest(`/notice/detail/${no}`, {
                 method: "GET",
             });
+            console.log("API 응답 데이터:", response.data); // API 응답 데이터 출력
             setNotice(response.data);
-        } catch (error) {
-            console.error("공지사항 정보를 불러오지 못했습니다:", error);
-            alert("공지사항 정보를 불러오지 못했습니다.");
+
+            // 이미지 경로로 파일 미리보기 URL 생성
+            if (response.data && response.data.noticePath) {
+                const previewUrl = await fetchImage(response.data.noticePath);
+                setFilePreview(previewUrl);
+                console.log("미리보기 url 생성됨", previewUrl)
+            } else {
+                console.error("noticePath가 null이거나 정의되지 않았습니다.");
+            }
+        } catch {
+            console.error("공지사항 데이터를 불러오지 못했습니다."); // API 요청 실패 로그
         }
     };
 
@@ -55,6 +66,25 @@ function NoticeUpdate() {
             console.error("공지사항 수정 요청 실패:", error);
             alert("공지사항 수정 요청 중 오류가 발생했습니다.");
         }
+    };
+
+    const fetchImage = async (url) => {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("이미지 로드 실패");
+            const blob = await response.blob(); // Blob 데이터를 받아옴
+            return URL.createObjectURL(blob); // Blob URL 생성
+        } catch (error) {
+            console.error("이미지 로드 오류:", error);
+            return "/default-image.png"; // 대체 이미지 설정
+        }
+    };
+
+    const isImageFile = (filePath) => {
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+        const extension = filePath.split('.').pop().toLowerCase();
+        console.log("확인 중인 파일 경로:", filePath, "확장자:", extension); // 파일 경로 및 확장자 확인
+        return imageExtensions.includes(extension);
     };
 
     useEffect(() => {
@@ -106,9 +136,6 @@ function NoticeUpdate() {
                         alt={notice.noticePath.split('/').pop()}
                         className={styles.noticeImage}
                     />
-                </div>
-            )}
-
             <div>
                 <label htmlFor="fileUpload">파일 업로드:</label>
                 <input
@@ -116,7 +143,18 @@ function NoticeUpdate() {
                     id="fileUpload"
                     onChange={handleFileChange}
                 />
+                    {isImageFile(notice.noticePath) ? (
+                        <img src={filePreview}
+                            alt={notice.noticePath.split('/').pop()} className={styles.noticeImage}
+                        />
+                    ) : (
+                        <div className={styles.fileName}>
+                            {notice.noticePath.split('/').pop()}
+                        </div>
+                    )}                
             </div>
+            </div>
+            )}
 
             <div className={styles.buttonGroup}>
                 <button onClick={handleBack} className={styles.backButton}>

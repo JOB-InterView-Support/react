@@ -82,3 +82,42 @@
     padding: 5px;
   }
   
+  .downloadButton {
+    background: none;
+    color: blue; /* 링크 색상 */
+    text-decoration: underline; /* 밑줄 추가 */
+    border: none;
+    padding: 0;
+    font-size: 1rem; /* 텍스트 크기 */
+    cursor: pointer; /* 클릭 가능한 링크처럼 커서 변경 */
+}
+
+.downloadButton:hover {
+    color: darkblue; /* 호버 시 색상 변경 */
+    text-decoration: none; /* 호버 시 밑줄 제거 */
+}
+
+.fileContainer {
+    display: flex; /* 아이콘과 파일명을 가로로 정렬 */
+    align-items: center; /* 아이콘과 텍스트를 수직 가운데 정렬 */
+    margin: 20px 0;
+}
+
+.fileIcon {
+    margin-right: 8px; /* 아이콘과 파일명 간격 */
+}
+
+.fileIcon img {
+    width: 20px; /* 아이콘 크기 */
+    height: 20px;
+}
+
+.downloadLink {
+    font-size: 16px;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.downloadLink:hover {
+    text-decoration: underline;
+}
