@@ -1,56 +1,87 @@
+/* Footer.module.css */
+
+/* 푸터 스타일 */
 .footer {
     display: flex;
-    justify-content: space-between; /* 좌우로 분산 배치 */
-    align-items: center; /* 세로 가운데 정렬 */
-
-    height: 80px; /* 높이를 유지 */
-    background-color: rgba(109, 160, 255, 0.5); /* 50% 투명한 배경색 */
-}
-
-.logo {
-    width: 35px;
-    height: 32px;
-    margin-left: 10px;
-}
-
-.leftLogo {
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    background-color: rgba(109, 160, 255, 0.5); /* 투명 배경색 */
+    flex-shrink: 0; /* 푸터가 축소되지 않도록 설정 */
+    padding: 0 20px; /* 좌우 패딩 */
+    box-sizing: border-box; /* 패딩 포함 크기 계산 */
+  }
+  
+  /* 왼쪽 로고 영역 */
+  .leftLogo {
     display: flex;
     justify-content: center;
-    align-items: center; /* 세로 가운데 정렬 */
-    margin-left: 10%;
-}
-
-.center {
-    display: flex; /* Flexbox로 정렬 */
-    flex-direction: column; /* 세로 방향으로 정렬 */
-    justify-content: center; /* 세로 가운데 정렬 */
+    align-items: center;
+    margin-left: 10%; /* 좌측 여백 */
+  }
+  
+  .logo {
+    width: 35px; /* 로고 너비 */
+    height: 32px; /* 로고 높이 */
+    margin-left: 10px; /* 로고 간격 */
+  }
+  
+  /* 중앙 영역 */
+  .center {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    justify-content: center;
     align-items: center; /* 가로 가운데 정렬 */
-    text-align: center; /* 텍스트를 가운데 정렬 */
-    flex: 1; /* 중앙 영역이 가변적으로 확장 */
-}
-
-.centerTop {
+    text-align: center;
+    flex: 1; /* 중앙 영역 가변 확장 */
+  }
+  
+  .centerTop, .centerBottom {
     display: flex;
-    gap: 20px;
+    gap: 20px; /* 요소 간 간격 */
     justify-content: center; /* 수평 가운데 정렬 */
-}
-
-.centerBottom {
-    display: flex;
-    gap: 20px;
-    justify-content: center; /* 수평 가운데 정렬 */
-}
-
-.bottom {
-    color: gray;
-    display: flex;
-    justify-content: center;
-}
-
-.right {
-    display: flex; /* 요소를 Flexbox로 정렬 */
-    flex-direction: column; /* 세로로 배치 */
+  }
+  
+  .bottom {
+    color: gray; /* 텍스트 색상 */
+    font-size: 12px; /* 폰트 크기 */
+  }
+  
+  /* 오른쪽 영역 */
+  .right {
+    display: flex; /* Flexbox 정렬 */
+    flex-direction: column; /* 세로 정렬 */
     justify-content: center; /* 세로 가운데 정렬 */
-    
-    margin-right: 30px;
-}
+    align-items: flex-start; /* 왼쪽 정렬 */
+    margin-right: 30px; /* 우측 여백 */
+  }
+  
+  .right div {
+    margin-bottom: 5px; /* 아래 여백 */
+    font-size: 12px; /* 폰트 크기 */
+    color: #333; /* 텍스트 색상 */
+  }
+  
+  /* 반응형 디자인 */
+  @media (max-width: 768px) {
+    .footer {
+      flex-direction: column; /* 세로 정렬 */
+      height: auto; /* 높이 자동 조정 */
+      padding: 20px; /* 내부 패딩 */
+    }
+  
+    .leftLogo {
+      margin-left: 0; /* 좌측 여백 제거 */
+      margin-bottom: 10px; /* 아래 여백 추가 */
+    }
+  
+    .right {
+      margin-right: 0; /* 우측 여백 제거 */
+      align-items: center; /* 가운데 정렬 */
+    }
+  
+    .center {
+      margin-bottom: 10px; /* 아래 여백 추가 */
+    }
+  }
+  

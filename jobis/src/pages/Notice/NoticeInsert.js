@@ -86,7 +86,7 @@ function NoticeInsert() {
                     value={noticecontent}
                     onChange={(e) => setNoticeContent(e.target.value)}
                     className={styles.textarea}
-                ></textarea>
+                   ></textarea>
             </div>
             <div className={styles.fileInput}>
                 <input type="file" onChange={handleFileChange} />

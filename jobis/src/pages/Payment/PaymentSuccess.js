@@ -56,10 +56,8 @@ useEffect(() => {
         console.log("요청 중이므로 중복 요청 방지");
         return; // 중복 방지
       }
-        setIsRequesting(true);
+      setIsRequesting(true);
         
-      isRequesting = true;
-
         const requestData = {
             orderId: searchParams.get("orderId"),
             amount: parseInt(searchParams.get("amount"), 10),
@@ -72,6 +70,7 @@ useEffect(() => {
 
             if (response.data) {
                 setResponseData(response.data);
+                return;
             } else {
                 navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
             }
@@ -81,12 +80,13 @@ useEffect(() => {
             console.error("결제 확인 중 오류 발생:", error);
             navigate("/fail?code=ERROR&message=결제 확인 중 오류 발생");
         } finally {
+            console.log("결제 승인 성공")
             setIsRequesting(false);
         }
     };
 
     confirm();
-}, [searchParams, navigate, isRequesting]);
+}, [searchParams, navigate]);
 
 
 
