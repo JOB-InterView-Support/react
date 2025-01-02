@@ -130,7 +130,7 @@ const QnaInsert = () => {
         {file ? (
           <span className={styles.fileName}>{file.name}</span> // 파일 이름 표시
         ) : (
-          <span className={styles.fileName}>선택된 파일 없음</span> // 파일이 없으면 메시지 표시
+          <span className={styles.fileName}></span> // 파일이 없으면 메시지 표시
         )}
       </div>
       {preview && (
