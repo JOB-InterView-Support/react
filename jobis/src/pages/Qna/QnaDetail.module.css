@@ -19,7 +19,7 @@
 
   .editButton,
   .deleteButton,
-  .listButton {
+  .backButton {
     padding: 10px 25px;
     font-size: 16px;
     color: white;
@@ -28,10 +28,10 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  .listButton{
+  .backButton{
     background-color: rgb(109,160,255);
   }
-  .listButton:hover {
+  .backButton:hover {
     background-color: rgb(75, 137, 253); /* 호버 시 더 진한 파란색 */
   }
   .Container {
@@ -77,10 +77,11 @@
   .qnaTable th,
   .qnaTable td {
     padding: 10px;
+    vertical-align: top; /* 세로 정렬 */
   }
   
   .qnaTable th {
-    background-color: #f8f9fa; /* 헤더 배경색 변경 */
+    background-color: #E2ECFF; 
     text-align: left;
     font-weight: bold;
     color: #495057;
@@ -94,6 +95,7 @@
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
+    
   }
   
   .commentsTable th,
@@ -102,7 +104,7 @@
   }
   
   .commentsTable th {
-    background-color: #f8f9fa; /* 댓글 헤더 배경색 변경 */
+    background-color: #E2ECFF; 
     text-align: left;
     font-weight: bold;
     color: #495057;
@@ -163,4 +165,80 @@
     max-width: 100%;
     max-height: 300px;
     object-fit: contain;
+}
+
+
+.replyForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px; /* 요소 간 간격 */
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #E2ECFF; 
+  border: 1px solid #ddd; /* 테두리 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+}
+
+.replyForm textarea {
+  width: 96%;
+  min-height: 100px; /* 최소 높이 설정 */
+  resize: horizontal; /* 가로 크기만 조절 가능 */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc; /* 입력 필드 테두리 */
+  border-radius: 4px; /* 둥근 모서리 */
+  background-color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 안쪽 그림자 */
+  transition: border-color 0.3s, box-shadow 0.3s; /* 전환 효과 */
+}
+
+.replyForm textarea:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색 */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* 포커스 효과 */
+  outline: none; /* 기본 outline 제거 */
+}
+
+.replyForm button {
+  align-self: flex-end; /* 버튼을 오른쪽에 정렬 */
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff; /* 버튼 배경색 */
+  border: none;
+  border-radius: 4px; /* 둥근 모서리 */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* 전환 효과 */
+}
+
+.replyForm button:hover {
+  background-color: #0056b3; /* 호버 시 배경색 */
+  transform: translateY(-2px); /* 약간 위로 올라가는 효과 */
+}
+
+.replyForm button:active {
+  background-color: #004085; /* 클릭 시 배경색 */
+  transform: translateY(0); /* 클릭 시 원래 위치 */
+}
+
+.buttonGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: #ddd; /* 연한 회색 */
+  margin-top: 10px;
+}
+
+.qnaTable th,
+.qnaTable td {
+  text-align: left;    /* 텍스트 왼쪽 정렬 */
+  padding: 10px;       /* 여백 추가 */
 }

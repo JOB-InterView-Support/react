@@ -10,7 +10,9 @@ export function PaymentSuccess() {
   const [searchParams] = useSearchParams();
   const [responseData, setResponseData] = useState(null);
   const { secureApiRequest } = useContext(AuthContext);
-
+  const [isRequesting, setIsRequesting] = useState(false);
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+/*
   useEffect(() => {
     const requestData = {
       orderId: searchParams.get("orderId"),
@@ -26,26 +28,68 @@ export function PaymentSuccess() {
     }
     console.log("BACKEND_URL", BACKEND_URL)
 
-    async function confirm() {
-      try {
-        const response = await apiClient.post(`/payments/confirm`, requestData)
-          
-        console.log("response : ", response.data);
-  
-        if (response.data) {
-          console.log("결제 성공:", response.data);
-          setResponseData(response.data);
-        } else {
-          navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
+    const confirm = async () => {
+        try {
+            const response = await apiClient.post(`/payments/confirm`, requestData);
+            console.log("response : ", response.data);
+
+            if (response.data) {
+                console.log("결제 성공:", response.data);
+                setResponseData(response.data);
+            } else {
+                navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
+            }
+        } catch (error) {
+            console.error("결제 확인 중 오류 발생:", error);
+            navigate("/fail?code=ERROR&message=결제 확인 중 오류 발생");
         }
-      } catch (error) {
-        console.error("결제 확인 중 오류 발생:", error);
-        navigate("/fail?code=ERROR&message=결제 확인 중 오류 발생");
-      }
-    }
+    };
 
     confirm();
-  }, [searchParams, navigate]);
+    // 추가 실행 방지를 위해 의존성 배열 정리
+}, [searchParams, navigate]);
+*/
+
+useEffect(() => {
+    const confirm = async () => {
+      if (isRequesting) {
+        console.log("요청 중이므로 중복 요청 방지");
+        return; // 중복 방지
+      }
+        setIsRequesting(true);
+        
+      isRequesting = true;
+
+        const requestData = {
+            orderId: searchParams.get("orderId"),
+            amount: parseInt(searchParams.get("amount"), 10),
+            paymentKey: searchParams.get("paymentKey"),
+        };
+
+        try {
+            const response = await apiClient.post(`/payments/confirm`, requestData);
+            console.log("response : ", response.data);
+
+            if (response.data) {
+                setResponseData(response.data);
+            } else {
+                navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
+            }
+        } catch (error) {
+            console.log("요청 전 딜레이 추가");
+            await sleep(1000); // 1초 대기
+            console.error("결제 확인 중 오류 발생:", error);
+            navigate("/fail?code=ERROR&message=결제 확인 중 오류 발생");
+        } finally {
+            setIsRequesting(false);
+        }
+    };
+
+    confirm();
+}, [searchParams, navigate, isRequesting]);
+
+
+
   return (
     <>
       <div className={styles.paymentContainer} style={{ width: "600px" }}>
