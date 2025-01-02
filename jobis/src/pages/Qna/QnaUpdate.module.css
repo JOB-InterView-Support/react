@@ -4,3 +4,84 @@
     max-height: 300px;
     object-fit: contain;
 }
+
+.container {
+    width: 600px;
+    margin: 0 auto;
+    padding: 60px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 24px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .formGroup {
+    margin-bottom: 15px;
+  }
+  
+  .titleInput {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .textarea {
+    width: 100%;
+    height: 150px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    resize: none;
+  }
+  
+  .fileInput {
+    display: block;
+  }
+  
+  .fileName {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .backButton,
+  .submitButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .backButton {
+    background-color: #ddd;
+    color: #333;
+  }
+  
+  .submitButton {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .submitButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .backButton:hover {
+    background-color: #bbb;
+  }
