@@ -8,16 +8,19 @@ function MyTicketList() {
   const { secureApiRequest } = useContext(AuthContext);
   const navigate = useNavigate();
   const [tickets, setTickets] = useState([]);
+  const [selectedTicket, setSelectedTicket] = useState(null); // 선택된 티켓 데이터
+  const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const [totalCount, setTotalCount] = useState(null); // 추가 데이터 저장
 
   useEffect(() => {
     const fetchTickets = async () => {
       const storedUuid = localStorage.getItem("uuid");
-  
+
       if (!storedUuid) {
         console.error("로컬 스토리지에 UUID가 없습니다.");
         return;
       }
-  
+
       try {
         const response = await secureApiRequest(`/mypage/ticket/${storedUuid}`, {
           method: "GET",
@@ -25,33 +28,59 @@ function MyTicketList() {
             "Content-Type": "application/json",
           },
         });
-  
-        // Axios 응답 객체 사용
-        console.log(`응답 상태 코드: ${response.status}`);
-        console.log(`응답 상태 텍스트: ${response.statusText}`);
-  
+
         if (response.status < 200 || response.status >= 300) {
-          console.error(`API 요청 실패: 상태 코드 ${response.status}, 메시지: ${response.statusText}`);
+          console.error(`API 요청 실패: 상태 코드 ${response.status}`);
           return;
         }
-  
-        // 데이터 처리
+
         const ticketData = response.data;
-        console.log("응답 데이터:", ticketData);
-  
-        if (!ticketData || ticketData.length === 0) {
-          console.warn("티켓 데이터가 없습니다.");
-          setTickets([]);
-        } else {
-          setTickets(ticketData);
-        }
+        setTickets(ticketData);
       } catch (error) {
         console.error("API 요청 중 오류 발생:", error);
       }
     };
-  
+
     fetchTickets();
   }, [secureApiRequest]);
+
+  const fetchProductData = async (prodNumber) => {
+    try {
+      const response = await secureApiRequest(`/products/${prodNumber}`, {
+        method: "GET",
+      });
+      console.log("요청된 prodNumber:", prodNumber);
+      if (!response || response.status < 200 || response.status >= 300) {
+        console.error("API 요청 실패:", response);
+        setTotalCount(0); // 기본 값 설정
+        return;
+      }
+  
+      const data = response.data;
+      if (typeof data !== "number") {
+        console.error("응답 데이터가 숫자가 아닙니다:", data);
+        setTotalCount(0); // 기본 값 설정
+        return;
+      }
+  
+      setTotalCount(data);
+    } catch (error) {
+      console.error("API 요청 중 오류 발생:", error);
+      setTotalCount(0); // 기본 값 설정
+    }
+  };
+
+  const openModal = (ticket) => {
+    setSelectedTicket(ticket);
+    setIsModalOpen(true);
+    fetchProductData(ticket.prodNumber); // 상품 데이터 가져오기
+  };
+
+  const closeModal = () => {
+    setSelectedTicket(null); // 데이터 초기화
+    setIsModalOpen(false); // 모달 닫기
+    setTotalCount(null); // 추가 데이터 초기화
+  };
 
   return (
     <div>
@@ -74,7 +103,7 @@ function MyTicketList() {
             </thead>
             <tbody>
               {tickets.map((ticket) => (
-                <tr key={ticket.ticketKey}>
+                <tr key={ticket.ticketKey} onClick={() => openModal(ticket)}>
                   <td>{ticket.ticketName}</td>
                   <td>{ticket.ticketCount}</td>
                   <td>{ticket.ticketAmount.toLocaleString()}원</td>
@@ -84,6 +113,22 @@ function MyTicketList() {
               ))}
             </tbody>
           </table>
+        )}
+
+        {isModalOpen && selectedTicket && (
+          <div className={styles.modal}>
+            <div className={styles.modalContent}>
+              <h3>이용권 정보</h3>
+              <p>이용권 이름: {selectedTicket.ticketName}</p>
+              <p>사용 시작 날짜: {new Date(selectedTicket.ticketStartDate).toLocaleDateString()}</p>
+              <p>만료 날짜: {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}</p>
+              <p>결제 금액: {selectedTicket.ticketAmount.toLocaleString()}원</p>
+              <p>
+                사용 가능 횟수: {selectedTicket.ticketCount} / {totalCount || "불명"}
+              </p>
+              <button onClick={closeModal}>닫기</button>
+            </div>
+          </div>
         )}
       </div>
     </div>
