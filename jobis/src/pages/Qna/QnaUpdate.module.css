@@ -85,3 +85,18 @@
   .backButton:hover {
     background-color: #bbb;
   }
+  .deleteButton {
+    background-color: #dc3545;
+  }
+  .deleteButton:hover {
+    background-color: #c82333;
+  }
+  .deleteButton {
+    padding: 10px 25px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
