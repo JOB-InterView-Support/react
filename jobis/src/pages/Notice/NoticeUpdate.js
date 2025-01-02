@@ -37,10 +37,14 @@ function NoticeUpdate() {
         }
     };
 
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        setNotice((prev) => ({ ...prev, updatedFile: file }));
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const previewUrl = URL.createObjectURL(file);
+            setFilePreview(previewUrl); // 업로드된 파일의 미리보기 URL 설정
+        }
     };
+    
 
     const handleUpdate = async () => {
         try {
@@ -131,9 +135,8 @@ function NoticeUpdate() {
 
             {notice.noticePath && (
                 <div className={styles.noticeImageContainer}>
-                    <img
-                        src={`http://localhost:8080/attachments/${notice.noticePath}`}
-                        alt={notice.noticePath.split('/').pop()}
+                    <img src={`http://localhost:8080/attachments/${notice.noticePath}`}
+                        alt={notice.noticePath.split('/').pop().replace('N_', '')}
                         className={styles.noticeImage}
                     />
             <div>
