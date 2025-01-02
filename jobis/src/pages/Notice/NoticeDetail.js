@@ -58,7 +58,7 @@ function NoticeDetail() {
             if (window.confirm('정말 삭제하시겠습니까?')) {
                 console.log("삭제 요청 전송:", `/notice/detail/${no}`); // 삭제 요청 전송 로그
                 const response = await secureApiRequest(`/notice/detail/${no}`, {
-                    method: "DELETE", // DELETE 메서드 사용
+                    method: "put",
                 });
                 console.log("삭제 요청 응답:", response); // 삭제 요청 성공 로그
                 navigate("/notice");
@@ -234,18 +234,18 @@ function NoticeDetail() {
             <div className={styles.noticecontent}>{notice.noticeContent}</div>
             {notice.noticePath && (
                 <div className={styles.fileContainer}>
-                    {/* 파일 아이콘 */}
-                    <span className={styles.fileIcon}>
-                        <img src={downloadIcon} alt="파일 아이콘" />
-                    </span>
                     {/* 파일명 링크 */}
                     <a href={notice.noticePath}
                         download={notice.noticePath.split('/').pop().replace('N_', '')}
                         className={styles.downloadLink}>
                         첨부파일 미리보기
-                    </a>
+                    </a>                    
                 </div>
             )}
+                                {/* 파일 아이콘 */}
+                                <span className={styles.fileIcon}>
+                        <img src={downloadIcon} alt="파일 아이콘" />
+                    </span>
             {filePreview && (
                 <div className={styles.noticeImageContainer}>
                     {isImageFile(notice.noticePath) ? (

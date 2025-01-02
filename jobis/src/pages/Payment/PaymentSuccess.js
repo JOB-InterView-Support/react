@@ -11,7 +11,7 @@ export function PaymentSuccess() {
   const [responseData, setResponseData] = useState(null);
   const { secureApiRequest } = useContext(AuthContext);
   const [isRequesting, setIsRequesting] = useState(false);
-
+  const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 /*
   useEffect(() => {
     const requestData = {
@@ -52,8 +52,11 @@ export function PaymentSuccess() {
 
 useEffect(() => {
     const confirm = async () => {
-        if (isRequesting) return; // 중복 방지
-        setIsRequesting(true);
+      if (isRequesting) {
+        console.log("요청 중이므로 중복 요청 방지");
+        return; // 중복 방지
+      }
+      setIsRequesting(true);
         
         const requestData = {
             orderId: searchParams.get("orderId"),
@@ -67,19 +70,23 @@ useEffect(() => {
 
             if (response.data) {
                 setResponseData(response.data);
+                return;
             } else {
                 navigate(`/fail?code=${response.data.code}&message=${response.data.message}`);
             }
         } catch (error) {
+            console.log("요청 전 딜레이 추가");
+            await sleep(1000); // 1초 대기
             console.error("결제 확인 중 오류 발생:", error);
             navigate("/fail?code=ERROR&message=결제 확인 중 오류 발생");
         } finally {
+            console.log("결제 승인 성공")
             setIsRequesting(false);
         }
     };
 
     confirm();
-}, [isRequesting, searchParams, navigate]);
+}, [searchParams, navigate]);
 
 
 

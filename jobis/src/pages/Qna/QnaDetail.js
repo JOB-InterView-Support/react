@@ -239,25 +239,27 @@ function QnaDetail() {
               </tr>
             </thead>
             <tbody>
-              {replies.map((reply) => (
-                <tr key={reply.repno}>
-                  <td>{reply.repwriter || "작성자 없음"}</td>
-                  <td>{reply.repcontent || "내용 없음"}</td>
-                  <td>
-                    {new Date(reply.repdate).toLocaleString() || "날짜 없음"}
-                  </td>
-                  {(role === "ADMIN" || username === reply.repwriter) && (
+              {replies
+                .filter((reply) => reply.repisdeleted !== "Y") // 삭제되지 않은 댓글만 표시
+                .map((reply) => (
+                  <tr key={reply.repno}>
+                    <td>{reply.repwriter || "작성자 없음"}</td>
+                    <td>{reply.repcontent || "내용 없음"}</td>
                     <td>
-                      <button
-                        onClick={() => handleReplyDelete(reply.repno)}
-                        className={styles.deleteButton}
-                      >
-                        삭제
-                      </button>
+                      {new Date(reply.repdate).toLocaleString() || "날짜 없음"}
                     </td>
-                  )}
-                </tr>
-              ))}
+                    {(role === "ADMIN" || username === reply.repwriter) && (
+                      <td>
+                        <button
+                          onClick={() => handleReplyDelete(reply.repno)}
+                          className={styles.deleteButton}
+                        >
+                          삭제
+                        </button>
+                      </td>
+                    )}
+                  </tr>
+                ))}
             </tbody>
           </table>
         ) : (

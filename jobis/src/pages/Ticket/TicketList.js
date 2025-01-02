@@ -104,6 +104,7 @@ function TicketList() {
         };
 
         try {
+            
             await payment.requestPayment({
                 method: "CARD",
                 amount:  amount,  // 개별 product의 금액
