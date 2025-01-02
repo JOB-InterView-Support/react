@@ -2,15 +2,12 @@ import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../AuthProvider";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
 import styles from "./MyTicketList.module.css";
-import { useNavigate } from "react-router-dom";
 
 function MyTicketList() {
   const { secureApiRequest } = useContext(AuthContext);
-  const navigate = useNavigate();
-  const [tickets, setTickets] = useState([]);
+  const [tickets, setTickets] = useState([]); // 티켓 리스트
   const [selectedTicket, setSelectedTicket] = useState(null); // 선택된 티켓 데이터
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-  const [totalCount, setTotalCount] = useState(null); // 추가 데이터 저장
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -34,7 +31,15 @@ function MyTicketList() {
           return;
         }
 
-        const ticketData = response.data;
+        let ticketData = response.data;
+
+        // 정렬: 사용 가능 횟수가 있는 데이터를 우선으로 정렬 후, 구매 날짜 내림차순
+        ticketData = ticketData.sort((a, b) => {
+          if (a.ticketCount > 0 && b.ticketCount === 0) return -1; // 사용 가능 횟수 우선
+          if (a.ticketCount === 0 && b.ticketCount > 0) return 1; // 사용 가능 횟수 뒤로
+          return new Date(b.ticketStartDate) - new Date(a.ticketStartDate); // 구매 날짜 내림차순
+        });
+
         setTickets(ticketData);
       } catch (error) {
         console.error("API 요청 중 오류 발생:", error);
@@ -44,42 +49,19 @@ function MyTicketList() {
     fetchTickets();
   }, [secureApiRequest]);
 
-  const fetchProductData = async (prodNumber) => {
-    try {
-      const response = await secureApiRequest(`/products/${prodNumber}`, {
-        method: "GET",
-      });
-      console.log("요청된 prodNumber:", prodNumber);
-      if (!response || response.status < 200 || response.status >= 300) {
-        console.error("API 요청 실패:", response);
-        setTotalCount(0); // 기본 값 설정
-        return;
-      }
-  
-      const data = response.data;
-      if (typeof data !== "number") {
-        console.error("응답 데이터가 숫자가 아닙니다:", data);
-        setTotalCount(0); // 기본 값 설정
-        return;
-      }
-  
-      setTotalCount(data);
-    } catch (error) {
-      console.error("API 요청 중 오류 발생:", error);
-      setTotalCount(0); // 기본 값 설정
-    }
-  };
-
   const openModal = (ticket) => {
     setSelectedTicket(ticket);
     setIsModalOpen(true);
-    fetchProductData(ticket.prodNumber); // 상품 데이터 가져오기
   };
 
   const closeModal = () => {
-    setSelectedTicket(null); // 데이터 초기화
-    setIsModalOpen(false); // 모달 닫기
-    setTotalCount(null); // 추가 데이터 초기화
+    setSelectedTicket(null);
+    setIsModalOpen(false);
+  };
+
+  const handleRefund = (ticketKey) => {
+    console.log(`환불 요청: 티켓 키 ${ticketKey}`);
+    // 환불 로직 추가 필요
   };
 
   return (
@@ -105,7 +87,9 @@ function MyTicketList() {
               {tickets.map((ticket) => (
                 <tr key={ticket.ticketKey} onClick={() => openModal(ticket)}>
                   <td>{ticket.ticketName}</td>
-                  <td>{ticket.ticketCount}</td>
+                  <td>
+                    {ticket.ticketCount} / {ticket.prodNumberOfTime || "불명"}
+                  </td>
                   <td>{ticket.ticketAmount.toLocaleString()}원</td>
                   <td>{new Date(ticket.ticketStartDate).toLocaleDateString()}</td>
                   <td>{new Date(ticket.ticketEndDate).toLocaleDateString()}</td>
@@ -120,13 +104,31 @@ function MyTicketList() {
             <div className={styles.modalContent}>
               <h3>이용권 정보</h3>
               <p>이용권 이름: {selectedTicket.ticketName}</p>
-              <p>사용 시작 날짜: {new Date(selectedTicket.ticketStartDate).toLocaleDateString()}</p>
-              <p>만료 날짜: {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}</p>
+              <p>
+                사용 시작 날짜:{" "}
+                {new Date(selectedTicket.ticketStartDate).toLocaleDateString()}
+              </p>
+              <p>
+                만료 날짜:{" "}
+                {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}
+              </p>
               <p>결제 금액: {selectedTicket.ticketAmount.toLocaleString()}원</p>
               <p>
-                사용 가능 횟수: {selectedTicket.ticketCount} / {totalCount || "불명"}
+                사용 가능 횟수: {selectedTicket.ticketCount} /{" "}
+                {selectedTicket.prodNumberOfTime || "불명"}
               </p>
-              <button onClick={closeModal}>닫기</button>
+              {/* 환불 버튼 조건부 렌더링 */}
+              {selectedTicket.ticketCount === selectedTicket.prodNumberOfTime && (
+                <button
+                  className={styles.refundButton}
+                  onClick={() => handleRefund(selectedTicket.ticketKey)}
+                >
+                  환불하기
+                </button>
+              )}
+              <button onClick={closeModal} className={styles.closeButton}>
+                닫기
+              </button>
             </div>
           </div>
         )}

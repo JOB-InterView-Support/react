@@ -19,7 +19,7 @@
 
   .editButton,
   .deleteButton,
-  .listButton {
+  .backButton {
     padding: 10px 25px;
     font-size: 16px;
     color: white;
@@ -28,10 +28,10 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
-  .listButton{
+  .backButton{
     background-color: rgb(109,160,255);
   }
-  .listButton:hover {
+  .backButton:hover {
     background-color: rgb(75, 137, 253); /* 호버 시 더 진한 파란색 */
   }
   .Container {
@@ -77,6 +77,7 @@
   .qnaTable th,
   .qnaTable td {
     padding: 10px;
+    vertical-align: top; /* 세로 정렬 */
   }
   
   .qnaTable th {
@@ -236,3 +237,8 @@
   margin-top: 10px;
 }
 
+.qnaTable th,
+.qnaTable td {
+  text-align: left;    /* 텍스트 왼쪽 정렬 */
+  padding: 10px;       /* 여백 추가 */
+}
