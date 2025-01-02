@@ -23,7 +23,7 @@ const QnaList = () => {
   useEffect(() => {
     if (isAuthInitialized && !isLoggedIn) {
       console.log("로그인되지 않은 상태입니다. 로그인 페이지로 이동합니다.");
-      alert("로그인이 필요합니다."); // 알림창 표시
+      alert("로그인이 필요합니다."); // 알림창 표시wwww
       navigate("/login"); // 로그인되지 않은 경우 로그인 페이지로 이동
     }
   }, [isLoggedIn, isAuthInitialized, navigate]);

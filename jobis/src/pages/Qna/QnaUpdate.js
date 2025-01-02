@@ -15,6 +15,7 @@ const QnaUpdate = () => {
     const [file, setFile] = useState(null); // 새로 업로드할 파일
     const [preview, setPreview] = useState(null); // 새 파일 미리보기
     const [existingFile, setExistingFile] = useState(null); // 기존 첨부파일 정보
+    const [isFileDeleted, setIsFileDeleted] = useState(false); // 기존 파일 삭제 여부
 
     useEffect(() => {
         const fetchQnaDetail = async () => {
@@ -25,11 +26,10 @@ const QnaUpdate = () => {
                 setTitle(qna.qtitle); // 제목 설정
                 setContent(qna.qcontent); // 내용 설정
                 setIsSecret(qna.qisSecret === "Y"); // 비밀 여부 설정
-                setExistingFile(qna.qattachmentTitle); // 기존 첨부파일 정보 설정
 
                 if (qna.qattachmentTitle) {
-                    const previewUrl = await fetchImage(`/qna/attachments/${qna.qattachmentTitle}`);
-                    setPreview(previewUrl);
+                    const fileUrl = `/qna/attachments/${qna.qattachmentTitle}`;
+                    setExistingFile(fileUrl); // 기존 파일 URL 설정
                 }
             } catch (err) {
                 console.error("QnA 상세 조회 실패:", err);
@@ -40,31 +40,27 @@ const QnaUpdate = () => {
         fetchQnaDetail();
     }, [qno, secureApiRequest]);
 
-    const fetchImage = async (url) => {
-        try {
-            const response = await fetch(`http://localhost:8080${url}`);
-            if (!response.ok) throw new Error("이미지 로드 실패");
-            const blob = await response.blob();
-            return URL.createObjectURL(blob);
-        } catch (error) {
-            console.error("이미지 로드 오류:", error);
-            return null;
-        }
-    };
-
     const handleFileChange = (selectedFile) => {
         setFile(selectedFile); // 새 파일 상태 저장
 
         if (selectedFile && selectedFile.type.startsWith("image/")) {
             const reader = new FileReader();
-            reader.onload = () => setPreview(reader.result); // 새 파일 미리보기
+            reader.onload = () => setPreview(reader.result); // 새 파일 미리보기 설정
             reader.readAsDataURL(selectedFile);
         } else {
             setPreview(null);
         }
 
-        // 새 파일 선택 시 기존 첨부파일 정보 제거
+        // 새 파일 선택 시 기존 파일 제거
         setExistingFile(null);
+        setIsFileDeleted(false);
+    };
+
+    const handleFileDelete = () => {
+        setIsFileDeleted(true); // 기존 파일 삭제 표시
+        setExistingFile(null); // 기존 파일 제거
+        setFile(null); // 새 파일 초기화
+        setPreview(null); // 미리보기 제거
     };
 
     const handleSubmit = async () => {
@@ -77,7 +73,12 @@ const QnaUpdate = () => {
         formData.append("qTitle", title);
         formData.append("qContent", content);
         formData.append("qIsSecret", isSecret ? "Y" : "N");
-        if (file) formData.append("file", file);
+
+        if (file) {
+            formData.append("file", file); // 새 파일 업로드
+        } else if (isFileDeleted) {
+            formData.append("deleteFile", "true"); // 기존 파일 삭제 표시
+        }
 
         try {
             await axios.put(`http://localhost:8080/qna/update/${qno}`, formData, {
@@ -114,11 +115,30 @@ const QnaUpdate = () => {
                     className={styles.textarea}
                 ></textarea>
             </div>
-            {existingFile && preview && (
+
+            {/* 기존 파일 미리보기 */}
+            {existingFile && !isFileDeleted && (
                 <div className={styles.previewContainer}>
+                    <p>기존 첨부파일:</p>
+                    <img
+                        src={`http://localhost:8080${existingFile}`}
+                        alt="기존 첨부 이미지"
+                        className={styles.previewImage}
+                        style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+                    />
+                    <button onClick={handleFileDelete} className={styles.deleteButton}>
+                        첨부파일 삭제
+                    </button>
+                </div>
+            )}
+
+            {/* 새 파일 미리보기 */}
+            {preview && (
+                <div className={styles.previewContainer}>
+                    <p>새 첨부파일 미리보기:</p>
                     <img
                         src={preview}
-                        alt="기존 첨부 이미지"
+                        alt="새 첨부 이미지 미리보기"
                         className={styles.previewImage}
                         style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
                     />
@@ -129,11 +149,7 @@ const QnaUpdate = () => {
                 <label>새 첨부 파일:</label>
                 <input type="file" onChange={(e) => handleFileChange(e.target.files[0])} />
             </div>
-            {preview && (
-                <div className={styles.previewContainer}>
-                    
-                </div>
-            )}
+
             <div className={styles.formGroup}>
                 <label>
                     <input
