@@ -1,18 +1,110 @@
 .container {
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .title {
-    font-size: 2rem;
-    color: #2db400;
-  }
-  
-  .description {
-    font-size: 1.2rem;
-    color: #555;
-  }
+  padding: 20px;
+  text-align: center;
+}
 
-  .logo{
-    width: 100%;
-  }
+.title {
+  font-size: 2rem;
+  color: #2db400;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.logo {
+  width: 100%;
+}
+
+.secondContainer {
+  /* border: 1px solid red; */
+  background-color: #DFE8EC;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* 세로 가운데 정렬 */
+}
+
+.secondTop {
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  text-align: center; /* 텍스트를 좌우 가운데 정렬 */
+  line-height: 1.5; /* 줄 간격 조정 (필요에 따라 수정) */
+}
+
+.secondMiddleContainer{
+  /* border: 1px solid blue; */
+  width: 100%;
+  height: 500px;
+  display: flex; /* Flexbox 사용 */
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+  height: 100%; /* 부모 높이에 맞게 조정 */
+}
+
+.secondMiddleBar{
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center; /* 수평 가운데 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
+}
+.secondMiddleCenterBar{
+  background-color: #F1F5F7;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: space-between; /* 자식 요소 간 공간 분배 */
+  align-items: center; /* 수직 가운데 정렬 */
+  width: 100%; /* 부모 컨테이너의 너비 */
+  
+}
+.secondMiddleThree{
+  border: 1px solid green;
+  width: 300px; 
+  height: 380px; 
+  flex: 1; 
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center; 
+  border: 1px solid black; 
+  margin-left: 120px;
+  margin-right: 120px;
+}
+
+.secondImg{
+  /* border: 1px solid red; */
+  width: 80%;
+  height: 220px;
+  margin-bottom: 15px;
+}
+
+.secondImage{
+  width: 100%;
+  height: 100%;
+}
+
+.secondText{
+  /* border: 1px solid blue; */
+  width: 80%;
+  height: 100px;
+  display: flex;
+}
+
+.secondTextImg{
+  /* border: 1px solid green; */
+  width: 30%;
+  height: 100px;
+}
+
+.secondTextTitle{
+  font-weight: bold;
+  font-size: 20px;
+}
