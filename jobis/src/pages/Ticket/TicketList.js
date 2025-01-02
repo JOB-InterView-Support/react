@@ -73,24 +73,19 @@ function TicketList() {
     }
     
     useEffect(() => {
+        let isMounted = true; // 플래그 추가
         async function fetchPayment() {
+            if (!isMounted) return; // 이미 처리된 경우 실행 방지
             try {
                 const tossPayments = await loadTossPayments(clientKey);
-                
-                // 회원 결제
-                // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
-                const payment = tossPayments.payment({
-                    customerKey,
-                });
-                // 비회원 결제
-                // const payment = tossPayments.payment({ customerKey: ANONYMOUS });
-                
+                const payment = tossPayments.payment({ customerKey });
                 setPayment(payment);
             } catch (error) {
                 console.error("Error fetching payment:", error);
             }
         }
         fetchPayment();
+        return () => { isMounted = false }; // 클린업
     }, [clientKey, customerKey]);
     
     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------

@@ -6,8 +6,9 @@ import Paging from "../../components/common/Paging";
 import InsertButton from "../../components/common/button/InsertButton";
 
 const QnaList = () => {
-  const { isLoggedIn, isAuthInitialized, secureApiRequest, role } = useContext(AuthContext); // AuthContext에서 인증 상태와 API 요청 메서드 가져오기
-  const navigate = useNavigate(); // 페이지 이동을 위한 네비게이션 훅
+  const { isLoggedIn, isAuthInitialized, secureApiRequest, role } =
+    useContext(AuthContext); // AuthContext에서 인증 상태와 API 요청 메서드 가져오기
+  const navigate = useNavigate();
 
   const [qnaList, setQnaList] = useState([]); // QnA 목록 상태
   const [totalItems, setTotalItems] = useState(0); // 전체 QnA 아이템 개수 상태
@@ -16,10 +17,13 @@ const QnaList = () => {
   const [error, setError] = useState(null); // 에러 상태
   const itemsPerPage = 10; // 한 페이지당 표시할 항목 수
 
+  const userUuid = localStorage.getItem("uuid"); // localStorage에서 UUID 가져오기
+
   // 로그인 여부 확인
   useEffect(() => {
     if (isAuthInitialized && !isLoggedIn) {
       console.log("로그인되지 않은 상태입니다. 로그인 페이지로 이동합니다.");
+      alert("로그인이 필요합니다."); // 알림창 표시
       navigate("/login"); // 로그인되지 않은 경우 로그인 페이지로 이동
     }
   }, [isLoggedIn, isAuthInitialized, navigate]);
@@ -27,33 +31,32 @@ const QnaList = () => {
   // QnA 목록 데이터 가져오기
   const fetchQnaList = async (page = 1) => {
     if (!isLoggedIn) {
-        return; // 로그인되지 않은 상태에서는 데이터 요청 안 함
+      navigate("/login"); // 로그인되지 않은 상태에서 요청 시도하면 로그인 페이지로 이동
+      return;
     }
 
     setIsLoading(true); // 로딩 상태 시작
     setError(null); // 기존 에러 초기화
 
     try {
-        console.log(`QnA 목록 요청 - 페이지: ${page}`);
-        const response = await secureApiRequest(
-            `/qna?page=${page}&size=${itemsPerPage}` // 서버 컨트롤러와 URL 형식을 맞춤
-        );
+      console.log(`QnA 목록 요청 - 페이지: ${page}`);
+      const response = await secureApiRequest(
+        `/qna?page=${page}&size=${itemsPerPage}` // 서버 컨트롤러와 URL 형식을 맞춤
+      );
 
-        console.log("응답 데이터:", response.data);
+      console.log("응답 데이터:", response.data);
 
-        // 서버에서 받은 데이터를 그대로 사용
-        setQnaList(response.data.list || []); 
-        setTotalItems(response.data.paging?.totalItems || 0); 
-        setCurrentPage(page); 
+      // 서버에서 받은 데이터를 그대로 사용
+      setQnaList(response.data.list || []);
+      setTotalItems(response.data.paging?.totalItems || 0);
+      setCurrentPage(page);
     } catch (err) {
-        console.error("QnA 목록 가져오기 실패:", err);
-        setError("데이터를 가져오는 중 문제가 발생했습니다."); 
+      console.error("QnA 목록 가져오기 실패:", err);
+      setError("데이터를 가져오는 중 문제가 발생했습니다.");
     } finally {
-        setIsLoading(false); 
+      setIsLoading(false);
     }
-};
-
-
+  };
 
   // 컴포넌트 마운트 시 데이터 로드
   useEffect(() => {
@@ -91,20 +94,37 @@ const QnaList = () => {
             </thead>
             <tbody>
               {qnaList.length > 0 ? (
-                qnaList.map((qna, index) => (
-                  <tr
-                    key={`${qna.uuid}-${index}`} // 중복 키 방지: uuid와 index를 조합하여 고유 키 생성
-                    onClick={() => handleDetailClick(qna.qno)}
-                  >
-                    <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td> {/* 페이지에 따른 항목 번호 계산 */}
-                    <td>{qna.qtitle}</td> {/* 제목 표시 */}
-                    <td>{qna.qwriter}</td> {/* 작성자 표시 */}
-                    <td>{new Date(qna.qWDate).toLocaleDateString()}</td> {/* 작성일 표시 */}
-                  </tr>
-                ))
+                qnaList.map((qna, index) => {
+                  const isSecret = qna.qisSecret === "Y"; // 비밀글 여부
+                  const isAccessible =
+                    role === "ADMIN" || qna.qwriter === userUuid || qna.uuid === userUuid; // 본인, 관리자 또는 UUID 일치 여부 확인
+
+                  return (
+                    <tr
+                      key={`${qna.qno}-${index}`} // 고유 키 설정
+                      onClick={() => isAccessible && handleDetailClick(qna.qno)} // 접근 가능한 경우만 클릭 허용
+                      className={
+                        !isAccessible && isSecret ? styles.disabledRow : ""
+                      }
+                      style={{
+                        cursor:
+                          isAccessible || !isSecret ? "pointer" : "not-allowed",
+                      }}
+                    >
+                      <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                      <td>
+                        {!isAccessible && isSecret
+                          ? "비밀글입니다"
+                          : qna.qtitle}
+                      </td>
+                      <td>{!isAccessible && isSecret ? "-" : qna.qwriter}</td>
+                      <td>{new Date(qna.qWDate).toLocaleDateString()}</td>
+                    </tr>
+                  );
+                })
               ) : (
                 <tr>
-                  <td colSpan="4">데이터가 없습니다.</td> {/* 데이터가 없을 경우 메시지 표시 */}
+                  <td colSpan="4">데이터가 없습니다.</td>
                 </tr>
               )}
             </tbody>

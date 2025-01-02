@@ -26,6 +26,11 @@ const QnaUpdate = () => {
                 setContent(qna.qcontent); // 내용 설정
                 setIsSecret(qna.qisSecret === "Y"); // 비밀 여부 설정
                 setExistingFile(qna.qattachmentTitle); // 기존 첨부파일 정보 설정
+
+                if (qna.qattachmentTitle) {
+                    const previewUrl = await fetchImage(`/qna/attachments/${qna.qattachmentTitle}`);
+                    setPreview(previewUrl);
+                }
             } catch (err) {
                 console.error("QnA 상세 조회 실패:", err);
                 alert("데이터를 불러오는 데 실패했습니다.");
@@ -34,6 +39,18 @@ const QnaUpdate = () => {
 
         fetchQnaDetail();
     }, [qno, secureApiRequest]);
+
+    const fetchImage = async (url) => {
+        try {
+            const response = await fetch(`http://localhost:8080${url}`);
+            if (!response.ok) throw new Error("이미지 로드 실패");
+            const blob = await response.blob();
+            return URL.createObjectURL(blob);
+        } catch (error) {
+            console.error("이미지 로드 오류:", error);
+            return null;
+        }
+    };
 
     const handleFileChange = (selectedFile) => {
         setFile(selectedFile); // 새 파일 상태 저장
@@ -97,23 +114,14 @@ const QnaUpdate = () => {
                     className={styles.textarea}
                 ></textarea>
             </div>
-                        {existingFile && (
-                <div className={styles.existingFile}>
-                    <p>기존 첨부파일: {existingFile}</p>
-                    {existingFile.endsWith(".png") || existingFile.endsWith(".jpg") || existingFile.endsWith(".jpeg") ? (
-                        <div className={styles.previewContainer}>
-                            <img
-                                src={`/qna/attachments/${existingFile}`}
-                                alt="기존 첨부 이미지"
-                                className={styles.previewImage}
-                                style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
-                            />
-                        </div>
-                    ) : (
-                        <a href={`/qna/attachments/${existingFile}`} target="_blank" rel="noopener noreferrer">
-                            파일 다운로드
-                        </a>
-                    )}
+            {existingFile && preview && (
+                <div className={styles.previewContainer}>
+                    <img
+                        src={preview}
+                        alt="기존 첨부 이미지"
+                        className={styles.previewImage}
+                        style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+                    />
                 </div>
             )}
 
@@ -123,12 +131,7 @@ const QnaUpdate = () => {
             </div>
             {preview && (
                 <div className={styles.previewContainer}>
-                    <img
-                        src={preview}
-                        alt="미리보기"
-                        className={styles.previewImage}
-                        style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
-                    />
+                    
                 </div>
             )}
             <div className={styles.formGroup}>
