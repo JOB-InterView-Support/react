@@ -1,118 +1,87 @@
+/* JobPostingList.module.css */
+
 .container {
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-  background-color: #f9f9f9;
+  background-color: #f8f9fa;
   border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 .h2 {
-  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
   color: #333;
-  font-size: 2rem;
   margin-bottom: 20px;
 }
 
 .jobList {
   display: flex;
-  flex-direction: column; /* 항목들을 세로로 배치 */
-  gap: 20px; /* 항목 간 간격 */
+  flex-direction: column; /* 카드 한 줄씩 배치 */
+  gap: 20px;
   margin-bottom: 30px;
 }
 
 .jobCard {
-  background-color: #fff;
-  border: 1px solid #ddd;
+  background-color: white;
   border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 15px;
+  position: relative; /* 즐겨찾기 아이콘을 절대 위치로 배치하기 위해 */
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  width: 100%;
-  position: relative; /* 별 아이콘을 카드의 절대 위치에 배치하기 위해 상대 위치 설정 */
+  transition: transform 0.2s ease-in-out;
 }
 
 .jobCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 .jobCard h3 {
-  font-size: 1.5rem;
-  color: #2c3e50;
+  font-size: 18px;
+  color: #333;
   margin-bottom: 10px;
 }
 
 .jobCard p {
-  font-size: 1rem;
-  color: #7f8c8d;
+  font-size: 14px;
+  color: #555;
   margin: 5px 0;
 }
 
-.jobCard p strong {
-  color: #34495e;
-}
-
-.jobCard .salary {
-  font-weight: bold;
-  color: #e74c3c;
+.favoriteIcon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  cursor: pointer;
 }
 
 .noResults {
+  font-size: 16px;
+  color: #777;
   text-align: center;
-  color: #7f8c8d;
-  font-size: 1.2rem;
-  margin-top: 40px;
 }
 
-.loading, .error {
-  text-align: center;
-  font-size: 1.2rem;
-  color: #e74c3c;
-  margin-top: 50px;
+.pagingContainer {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-.loading {
-  font-style: italic;
-}
-
-.error {
-  font-weight: bold;
-}
-
-.backButton {
-  display: inline-block;
-  background-color: #3498db;
-  color: #fff;
-  padding: 10px 20px;
+.pagingContainer button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  font-size: 14px;
   border-radius: 5px;
-  text-align: center;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: background-color 0.3s ease;
-  margin: 0 auto;
-  display: block;
-  width: 200px;
-}
-
-.backButton:hover {
-  background-color: #2980b9;
-}
-
-.backButton:focus {
-  outline: none;
-}
-
-.favoriteIcon {
-  position: absolute; /* 부모 요소에 대해 절대적으로 위치 */
-  top: 10px; /* 카드 상단에서 10px 떨어지게 */
-  right: 10px; /* 카드 오른쪽에서 10px 떨어지게 */
-  font-size: 30px; /* 별의 크기를 크게 설정 */
-  color: gray; /* 기본 상태: 빈 별 */
   cursor: pointer;
-  transition: color 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-.favoriteIcon.favorited {
-  color: gold; /* 즐겨찾기된 상태: 노란색 별 */
+.pagingContainer button:hover {
+  background-color: #0056b3;
+}
+
+.pagingContainer .active {
+  background-color: #0056b3;
+  font-weight: bold;
 }
