@@ -6,7 +6,8 @@ import Paging from "../../components/common/Paging"; // Paging 컴포넌트 임�
 import InsertButton from "../../components/common/button/InsertButton"; // InsertButton 컴포넌트 임포트
 
 function NoticeList() {
-  const { isLoggedIn, isAuthInitialized, secureApiRequest, role } = useContext(AuthContext);
+  const { isLoggedIn, isAuthInitialized, secureApiRequest, role } =
+    useContext(AuthContext);
   const [noticeList, setNoticeList] = useState([]); // 공지사항 리스트 상태
   const [totalItems, setTotalItems] = useState(0); // 전체 아이템 수 상태
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지 상태
@@ -50,12 +51,12 @@ function NoticeList() {
   // const fetchNoticeList = async (page = 1) => {
   //   setIsLoading(true); // 로딩 시작
   //   setError(null); // 에러 초기화
-  
+
   //   try {
   //     const response = await secureApiRequest(`/notice?page=${page}&size=10`, {
   //       method: "GET",
   //     });
-  
+
   //     const filteredList = response.data.list.filter((notice) => notice.noticeIsDeleted === "N"); // isDeleted 필터링
   //     setNoticeList(filteredList); // 필터링된 공지사항 리스트 설정
   //     setTotalItems(response.data.paging?.totalItems || 0); // 전체 아이템 수 설정
@@ -67,20 +68,22 @@ function NoticeList() {
   //     setIsLoading(false); // 로딩 종료
   //   }
   // };
-  
+
   const fetchNoticeList = async (page = 1) => {
     setIsLoading(true);
     setError(null);
-  
+
     try {
       const response = await secureApiRequest(`/notice?page=${page}&size=10`, {
         method: "GET",
       });
-  
+
       // 서버 응답 데이터 확인
       console.log("API 응답 데이터:", response.data);
-  
-      const filteredList = response.data.list.filter(notice => notice.noticeIsDeleted === "N"); // 필터링
+
+      const filteredList = response.data.list.filter(
+        (notice) => notice.noticeIsDeleted === "N"
+      ); // 필터링
       setNoticeList(filteredList);
       setTotalItems(response.data.paging.totalItems);
       setCurrentPage(page);
@@ -91,7 +94,6 @@ function NoticeList() {
       setIsLoading(false);
     }
   };
-  
 
   const handleMoveInsert = () => {
     navigate(`/notice/insert`); // 공지사항 등록 페이지로 이동
@@ -127,20 +129,21 @@ function NoticeList() {
   return (
     <div className={styles.noticecontainer}>
       <h2 className={styles.noticetitle}>공지사항</h2>
-      {error && <div className={styles.errorMessage}>{error}</div>} {/* 에러 메시지 표시 */}
-      {isLoading && <div className={styles.loadingMessage}>로딩 중...</div>} {/* 로딩 상태 표시 */}
+      {error && <div className={styles.errorMessage}>{error}</div>}{" "}
+      {/* 에러 메시지 표시 */}
+      {isLoading && (
+        <div className={styles.loadingMessage}>로딩 중...</div>
+      )}{" "}
+      {/* 로딩 상태 표시 */}
       <table className={styles.noticetable}>
         <tbody>
           {noticeList.map((notice) => (
-            <tr key={notice.noticeNo}>
-              <td>
-                <button
-                  onClick={() => handleMoveDetail(notice.noticeNo)}
-                  className={styles.noticeTbutton}
-                >
-                  {notice.noticeTitle}
-                </button>
-              </td>
+            <tr
+              key={notice.noticeNo}
+              onClick={() => handleMoveDetail(notice.noticeNo)}
+              className={styles.noticerow}
+            >
+              <td>{notice.noticeTitle}</td>
               <td>{formatDate(notice.noticeWDate)}</td>
             </tr>
           ))}
