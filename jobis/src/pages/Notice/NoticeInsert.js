@@ -10,7 +10,7 @@ function NoticeInsert() {
     const [noticetitle, setNoticeTitle] = useState("");
     const [noticecontent, setNoticeContent] = useState("");
     const [noticefile, setNoticeFile] = useState(null);
-    const [noticepreview, setNoticePreview] = useState(null);
+    const [filePreview, setFilePreview] = useState(null);
     const uuid = localStorage.getItem("uuid");
     const navigate = useNavigate();
 
@@ -61,10 +61,10 @@ function NoticeInsert() {
 
         if (selectedFile && selectedFile.type.startsWith("image/")) {
             const reader = new FileReader();
-            reader.onload = () => setNoticePreview(reader.result);
+            reader.onload = () => setFilePreview(reader.result);
             reader.readAsDataURL(selectedFile);
         } else {
-            setNoticePreview(null);
+            setFilePreview(null);
         }
     };
 
@@ -90,7 +90,7 @@ function NoticeInsert() {
             </div>
             <div className={styles.fileInput}>
                 <input type="file" onChange={handleFileChange} />
-                {noticepreview && <img src={noticepreview} alt="미리보기" className={styles.previewImage} />}
+                {filePreview && <img src={filePreview} alt="미리보기" className={styles.previewImage} />}
             </div>
             <div className={styles.buttonGroup}>
                 <button onClick={handleBack} className={styles.backButton}>이전으로</button>
