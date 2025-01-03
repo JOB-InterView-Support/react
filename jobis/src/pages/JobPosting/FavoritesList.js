@@ -12,6 +12,7 @@ const FavoritesList = () => {
   const navigate = useNavigate();
   const { secureApiRequest, isLoggedIn } = useContext(AuthContext);
   const [uuid, setUuid] = useState(null); // uuid 상태
+  const [list,setList] = useState([]);
 
   // 컴포넌트가 마운트될 때 uuid를 localStorage에서 가져옴
   useEffect(() => {
@@ -48,7 +49,7 @@ const FavoritesList = () => {
                 `/jobposting/${favorite.jobPostingId}`,
                 { method: "GET" }
               );
-
+              console.log(jobResponse.data);
               const jobData = jobResponse?.data?.jobs?.job || null;
 
               return {

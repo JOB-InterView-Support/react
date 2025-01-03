@@ -8,15 +8,16 @@ import { AuthContext } from "../../AuthProvider"; // AuthProvider에서 Context 
 import { useNavigate } from "react-router-dom";
 import styles from './TicketList.module.css';
 
+// @docs https://docs.tosspayments.com/sdk/v2/js#토스페이먼츠-초기화
+const clientKey = "test_ck_BX7zk2yd8yLNpMR6DEQLrx9POLqK";
+const customerKey = "7HUxbkFLek_EdGokYd3Cb";
+
 function TicketList() {
     const { isLoggedIn, secureApiRequest, role } = useContext(AuthContext);
     const [isLoading, setIsLoading] = useState(false);  
     const navigate = useNavigate();
     const [products, setProducts] = useState([]); // Products 정보를 담을 상태
-    const [amount, setAmount] = useState(); // 결제 금액
-    const [orderName, setOrderName] = useState();
-    const [orderId, setOrderId] = useState();
-  
+    
 
     const [payment, setPayment] = useState(null);
     
@@ -63,75 +64,81 @@ function TicketList() {
         } fetchProducts();
     }, []);
     
-    async function handlePayment(product) {
-        try {
-            // 토큰 가져오기
-            const accessToken = localStorage.getItem("accessToken");
-            const refreshToken = localStorage.getItem("refreshToken");
+   
     
-            console.log("AccessToken:", localStorage.getItem("accessToken"));
-            console.log("RefreshToken:", localStorage.getItem("refreshToken"));
-            
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     
-            if (!accessToken || !refreshToken) {
-                alert("로그인이 필요합니다.");
-                navigate("/login");
-                return;
-            }
-    
-            const paymentKey = `tviva${Date.now()}${Math.random().toString(36).substr(2, 9)}`;
-    
-            // 결제 정보 API 호출
-            const response = await fetch("/api/payments/confirm", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${accessToken}`,
-                    refreshToken: `Bearer ${refreshToken}`,
-                },
-                body: JSON.stringify({
-                    paymentKey,
-                    amount: product.prodAmount,
-                    orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
-                    orderName: product.prodName,
-                }),
-            });
-    
-            const result = await response.json();
-    
-            if (result.success) {
-                // TossPayments SDK 로드
-                const tossPayments = await loadTossPayments("test_ck_BX7zk2yd8yLNpMR6DEQLrx9POLqK");
-    
-                // 결제 요청
-                tossPayments.requestPayment("카드", {
-                    paymentKey: result.paymentKey, // 서버에서 받은 paymentKey
-                    orderId: result.orderId, // 서버에서 받은 orderId
-                    amount: result.amount, // 결제 금액
-                    orderName: result.orderName, // 주문 이름
-                }).then((paymentStatus) => {
-                    if (paymentStatus.status === "DONE") {
-                        alert("결제 성공!");
-                        window.location.href = "/success";
-                    } else {
-                        alert("결제 실패: " + paymentStatus.status);
-                        window.location.href = "/fail";
-                    }
-                }).catch((error) => {
-                    console.error("결제 실패:", error);
-                    alert("결제 실패");
-                    window.location.href = "/fail";
-                });
-            } else {
-                alert("결제 정보 오류");
-                window.location.href = "/fail";
-            }
-        } catch (error) {
-            console.error("결제 처리 중 오류 발생:", error);
-            alert("결제 중 오류가 발생했습니다.");
-            window.location.href = "/fail";
-        }
+    function selectPaymentMethod(method) {
+        setSelectedPaymentMethod(method);
     }
+    
+    useEffect(() => {
+        let isMounted = true; // 플래그 추가
+        async function fetchPayment() {
+            if (!isMounted) return; // 이미 처리된 경우 실행 방지
+            try {
+                const tossPayments = await loadTossPayments(clientKey);
+                const payment = tossPayments.payment({ customerKey });
+                setPayment(payment);
+            } catch (error) {
+                console.error("Error fetching payment:", error);
+            }
+        }
+        fetchPayment();
+        return () => { isMounted = false }; // 클린업
+    }, [clientKey, customerKey]);
+    
+    // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
+    // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
+    // 결제 요청
+async function requestPayment(product) {
+    console.log("Product data for payment:", product); // product 객체 출력
+    if (!payment) {
+        console.error("Payment instance is not ready");
+        return;
+    }
+
+    // amount 객체 생성
+    const amount = {
+        currency: "KRW",
+        value: product.prodAmount, // 개별 product의 금액 설정
+    };
+
+    try {
+        // 서버로 결제 정보를 보내기
+        const response = await apiClient.post("/api/payments/request", {
+            orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
+            orderName: product.prodName,
+            amount: product.prodAmount,
+            customerEmail: "customer123@gmail.com",
+            customerName: "김토스",
+            customerMobilePhone: "01012341234",
+        });
+
+        // Toss SDK로 결제 진행
+        await payment.requestPayment({
+            method: "CARD",
+            amount: amount,
+            orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
+            orderName: product.prodName,
+            successUrl: window.location.origin + "/paymentSuccess",
+            failUrl: window.location.origin + "/payments/fail",
+            customerEmail: "customer123@gmail.com",
+            customerName: "김토스",
+            customerMobilePhone: "01012341234",
+            card: {
+                useEscrow: false,
+                flowMode: "DEFAULT",
+                useCardPoint: false,
+                useAppCardOnly: false,
+            },
+        });
+
+    } catch (error) {
+        console.error("Payment request failed:", error);
+    }
+}
+
 
     if (isLoading) {
         return <div className={styles.loading}>로딩 중...</div>; // 로딩 표시
@@ -150,7 +157,7 @@ function TicketList() {
                                     <h4>{product.prodName}</h4>
                                     <p>{product.prodDescription}</p>
                                     <h2>{product.prodAmount} 원</h2>
-                                    <button onClick={() => handlePayment(product)}>구매하기</button>
+                                    <button onClick={() => requestPayment(product)}>구매하기</button>
                                 </div>
                             ))
                         ) : (
