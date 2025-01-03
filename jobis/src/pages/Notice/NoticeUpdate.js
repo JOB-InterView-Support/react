@@ -8,55 +8,104 @@ function NoticeUpdate() {
     const { secureApiRequest } = useContext(AuthContext);
     const { no } = useParams();
     const navigate = useNavigate();
-    const [notice, setNotice] = useState(null);
-    const [filePreview, setFilePreview] = useState(null); // 파일 미리보기 URL
 
+    // State 변수
+    const [noticeTitle, setNoticeTitle] = useState("");
+    const [noticeContent, setNoticeContent] = useState("");
+    const [filePreview, setFilePreview] = useState(null); // 파일 미리보기 URL
+    const [noticeFile, setNoticeFile] = useState(null); // 새로 업로드할 파일
+    const [originalNoticePath, setOriginalNoticePath] = useState(null); // 기존 파일 경로
+    const [isFileDeleted, setIsFileDeleted] = useState(false); // 기존 파일 삭제 여부
+
+    // 뒤로가기 버튼 핸들러
     const handleBack = () => {
         navigate(-1);
     };
 
+    // 이미지 파일 여부 확인 함수
+    const isImageFile = (filePath) => {
+        const imageExtensions = ["jpg", "jpeg", "png", "gif", "bmp"];
+        const extension = filePath?.split(".").pop().toLowerCase();
+        return imageExtensions.includes(extension);
+    };
+
+    // 공지사항 상세 데이터 가져오기
     const handleNoticeDetail = async () => {
         try {
-            console.log("API 호출 시작"); // API 호출 시작 로그
             const response = await secureApiRequest(`/notice/detail/${no}`, {
                 method: "GET",
             });
-            console.log("API 응답 데이터:", response.data); // API 응답 데이터 출력
-            setNotice(response.data);
 
-            // 이미지 경로로 파일 미리보기 URL 생성
-            if (response.data && response.data.noticePath) {
-                const previewUrl = await fetchImage(response.data.noticePath);
-                setFilePreview(previewUrl);
-                console.log("미리보기 url 생성됨", previewUrl)
-            } else {
-                console.error("noticePath가 null이거나 정의되지 않았습니다.");
+            const { noticeTitle, noticeContent, noticePath } = response.data;
+            setNoticeTitle(noticeTitle || "");
+            setNoticeContent(noticeContent || "");
+
+            if (noticePath) {
+                const isAbsolutePath = noticePath.startsWith("http://") || noticePath.startsWith("https://");
+                const fullPath = isAbsolutePath
+                    ? noticePath
+                    : `http://localhost:8080/attachments/${noticePath}`;
+                setFilePreview(fullPath);
+                setOriginalNoticePath(fullPath);
             }
-        } catch {
-            console.error("공지사항 데이터를 불러오지 못했습니다."); // API 요청 실패 로그
+        } catch (error) {
+            console.error("공지사항 데이터를 불러오지 못했습니다:", error);
         }
     };
 
-    const handleFileChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const previewUrl = URL.createObjectURL(file);
-            setFilePreview(previewUrl); // 업로드된 파일의 미리보기 URL 설정
-        }
+    // 파일 삭제 핸들러
+    const handleFileDelete = () => {
+        console.log("파일 삭제 요청 실행");
+        setIsFileDeleted(true); // 기존 파일 삭제 상태로 설정
+        setFilePreview(null); // 미리보기 제거
+        setNoticeFile(null); // 업로드 파일 제거
+    };
+
+    // 파일 변경 핸들러
+    // const handleFileChange = (e) => {
+    //     const selectedFile = e.target.files[0];
+    //     setNoticeFile(selectedFile);
+
+    //     if (selectedFile && selectedFile.type.startsWith("image/")) {
+    //         const reader = new FileReader();
+    //         reader.onload = () => setFilePreview(reader.result);
+    //         reader.readAsDataURL(selectedFile);
+    //     } else {
+    //         setFilePreview(null);
+    //     }
+    // };
+
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setNoticeFile(selectedFile);
+    
+    // 파일 확장자로 이미지 여부 확인
+    const isImage = selectedFile.name.match(/\.(jpg|jpeg|png|gif|bmp)$/i);
+    if (isImage) {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            setFilePreview(event.target.result); // 이미지 미리보기 URL 설정
+        };
+        reader.readAsDataURL(selectedFile);
+    } else {
+        setFilePreview(null); // 이미지가 아닌 경우 미리보기 제거
+        alert("이미지가 아닌 파일은 미리보기를 지원하지 않습니다.");
+    }
     };
     
 
+    // 공지사항 업데이트 핸들러
     const handleUpdate = async () => {
         try {
             const formData = new FormData();
-            formData.append("noticeTitle", notice.noticeTitle); // 제목
-            formData.append("noticeContent", notice.noticeContent); // 내용
-            if (notice.updatedFile) {
-                formData.append("file", notice.updatedFile); // 파일 추가
-            }
+            formData.append("noticeTitle", noticeTitle);
+            formData.append("noticeContent", noticeContent);
 
-            // 요청 전 formData 확인 (디버깅용)
-            formData.forEach((value, key) => console.log(`${key}: ${value}`));
+            if (noticeFile) {
+                formData.append("file", noticeFile);
+            } else if (isFileDeleted) {
+                formData.append("deleteFile", "true"); // 파일 삭제 플래그 추가
+            }
 
             await axios.put(`http://localhost:8080/notice/update/${no}`, formData, {
                 headers: {
@@ -72,92 +121,56 @@ function NoticeUpdate() {
         }
     };
 
-    const fetchImage = async (url) => {
-        try {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error("이미지 로드 실패");
-            const blob = await response.blob(); // Blob 데이터를 받아옴
-            return URL.createObjectURL(blob); // Blob URL 생성
-        } catch (error) {
-            console.error("이미지 로드 오류:", error);
-            return "/default-image.png"; // 대체 이미지 설정
-        }
-    };
-
-    const isImageFile = (filePath) => {
-        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
-        const extension = filePath.split('.').pop().toLowerCase();
-        console.log("확인 중인 파일 경로:", filePath, "확장자:", extension); // 파일 경로 및 확장자 확인
-        return imageExtensions.includes(extension);
-    };
-
+    // 초기화
     useEffect(() => {
         handleNoticeDetail();
     }, []);
 
-    if (!notice) {
-        return <div className={styles.loading}>로딩 중...</div>;
-    }
-
     return (
-        <div className={styles.noticecontainer}>
-            <h2 className={styles.noticetitle}>
+        <div className={styles.noticeContainer}>
+            <h2 className={styles.noticeTitle}>
                 <input
                     type="text"
-                    value={notice.noticeTitle}
-                    onChange={(e) =>
-                        setNotice((prev) => ({ ...prev, noticeTitle: e.target.value }))
-                    }
-                    className={styles.noticenewtitle}
+                    value={noticeTitle}
+                    onChange={(e) => setNoticeTitle(e.target.value)}
+                    className={styles.noticeNewTitle}
                 />
             </h2>
 
-            <div className={styles.noticeinfo}>
-                <span>작성일: {new Date(notice.noticeWDate).toLocaleDateString()}</span>
-                {notice.noticeUDate && (
-                    <span className={styles.spacer}>
-                        수정일: {new Date(notice.noticeUDate).toLocaleDateString()}
-                    </span>
-                )}
-                <br />
-                <span>조회수: {notice.noticeVCount}</span>
+            <div className={styles.noticeInfo}>
+                <span>수정일: {new Date().toLocaleDateString()}</span>
             </div>
 
-            <div className={styles.noticecontent}>
+            <div className={styles.noticeContent}>
                 <textarea
-                    value={notice.noticeContent}
-                    onChange={(e) =>
-                        setNotice((prev) => ({ ...prev, noticeContent: e.target.value }))
-                    }
+                    value={noticeContent}
+                    onChange={(e) => setNoticeContent(e.target.value)}
                     className={styles.textarea}
                 ></textarea>
             </div>
 
-            {notice.noticePath && (
-                <div className={styles.noticeImageContainer}>
-                    <img src={`http://localhost:8080/attachments/${notice.noticePath}`}
-                        alt={notice.noticePath.split('/').pop().replace('N_', '')}
-                        className={styles.noticeImage}
-                    />
-            <div>
-                <label htmlFor="fileUpload">파일 업로드:</label>
-                <input
-                    type="file"
-                    id="fileUpload"
-                    onChange={handleFileChange}
+            {/* 파일 업로드 및 미리보기 */}
+            <div className={styles.fileInput}>
+            <input type="file" onChange={handleFileChange} />
+            {filePreview ? (
+                <img
+                    src={filePreview}
+                    alt="새 첨부파일 미리보기"
+                    className={styles.previewImage}
+                    onError={() => console.error("미리보기 이미지 로드 실패:", filePreview)} // 이미지 로드 실패 로그 추가
                 />
-                    {isImageFile(notice.noticePath) ? (
-                        <img src={filePreview}
-                            alt={notice.noticePath.split('/').pop()} className={styles.noticeImage}
-                        />
-                    ) : (
-                        <div className={styles.fileName}>
-                            {notice.noticePath.split('/').pop()}
-                        </div>
-                    )}                
-            </div>
-            </div>
+            ) : (
+                <span>첨부파일 없음</span>
             )}
+            {filePreview && (
+                <button onClick={handleFileDelete}
+                    className={styles.deleteButton}>
+                    첨부파일 삭제
+                </button>
+            )}
+        </div>
+
+
 
             <div className={styles.buttonGroup}>
                 <button onClick={handleBack} className={styles.backButton}>
