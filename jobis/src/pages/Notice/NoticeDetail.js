@@ -20,7 +20,7 @@ function NoticeDetail() {
     };
 
     const isImageFile = (filePath) => {
-        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+        const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'pdf'];
         const extension = filePath.split('.').pop().toLowerCase();
         console.log("확인 중인 파일 경로:", filePath, "확장자:", extension); // 파일 경로 및 확장자 확인
         return imageExtensions.includes(extension);
@@ -238,7 +238,7 @@ function NoticeDetail() {
                         download={notice.noticePath.split('/').pop().replace('N_', '')}
                         className={styles.downloadLink}>
                         첨부파일 미리보기
-                    </a>                    
+                    </a>                   
                 </div>
             )}
                     {/* 파일 아이콘 */}
