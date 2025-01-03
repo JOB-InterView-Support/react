@@ -148,8 +148,8 @@ function QnaDetail() {
 
   const handleReplyChange = (e) => {
     const value = e.target.value;
-    if (value.length > 30) {
-      alert("댓글은 최대 30글자까지 입력 가능합니다.");
+    if (value.length > 100) {
+      alert("댓글은 최대 100글자까지 입력 가능합니다.");
       return;
     }
     setNewReply(value);
@@ -268,7 +268,7 @@ function QnaDetail() {
         {role === "ADMIN" && (
           <div className={styles.replyForm}>
             <textarea
-              placeholder="댓글을 입력하세요 (최대 30글자)"
+              placeholder="댓글을 입력하세요 (최대 100글자)"
               value={newReply}
               onChange={handleReplyChange}
             />

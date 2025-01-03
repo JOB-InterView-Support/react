@@ -1,21 +1,21 @@
-/* review 상세 페이지 스타일 */
+/* Review 상세 페이지 스타일 */
 
 .reviewDetailContainer {
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #ffffff; /* 배경색 흰색으로 수정 */
+  background-color: #ffffff;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif; /* 기본 폰트 지정 */
+  font-family: Arial, sans-serif;
 }
 
 .reviewTitle {
-  font-size: 28px;
+  font-size: 30px;
   font-weight: bold;
   margin-bottom: 20px;
   text-align: center;
-  color: #333333; /* 텍스트 색상 수정 */
+  color: #004F99;
 }
 
 .buttonGroup {
@@ -26,41 +26,45 @@
 }
 
 .backButton {
-  display: block;
-  margin-top: 20px; /* 상단 여백 추가 */
-  color: #007bff;
-  font-size: 14px;
-  text-decoration: underline;
-  cursor: pointer;
-  background: none;
+  background-color: #6da0ff;
+  color: white;
   border: none;
-  padding: 0;
-  text-align: left; /* 왼쪽 정렬 */
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
 }
 
 .backButton:hover {
-  text-decoration: none;
+  background-color: #4b89fd;
 }
 
-
 .editButton {
-  background-color: #28a745; /* 수정 버튼 색상 수정 */
+  background-color: #28a745;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+}
+
+.editButton:hover {
+  background-color: #218838;
 }
 
 .deleteButton {
-  background-color: #dc3545; /* 삭제 버튼 색상 수정 */
+  background-color: #dc3545;
   color: white;
   border: none;
   padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
 }
 
 .reviewTable {
@@ -72,17 +76,17 @@
 .reviewTable th,
 .reviewTable td {
   padding: 10px;
+  text-align: left;
 }
 
 .reviewTable th {
-  background-color: #f8f9fa; /* 헤더 배경색 변경 */
-  text-align: left;
+  background-color: #e2ecff;
   font-weight: bold;
   color: #495057;
 }
 
 .reviewTable td {
-  color: #212529; /* 텍스트 색상 변경 */
+  color: #212529;
 }
 
 .commentsTable {
@@ -97,8 +101,7 @@
 }
 
 .commentsTable th {
-  background-color: #f8f9fa; /* 댓글 헤더 배경색 변경 */
-  text-align: left;
+  background-color: #e2ecff;
   font-weight: bold;
   color: #495057;
 }
@@ -133,20 +136,6 @@
   text-decoration: underline;
 }
 
-.bottomLeftLink {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  font-size: 14px;
-  color: #007bff;
-  text-decoration: underline;
-  cursor: pointer;
-}
-
-.bottomLeftLink:hover {
-  text-decoration: none;
-}
-
 .imagePreview {
   margin-top: 20px;
   text-align: center;
@@ -162,31 +151,31 @@
 
 .downloadButton {
   background: none;
-  color: blue; /* 링크 색상 */
-  text-decoration: underline; /* 밑줄 추가 */
+  color: #007bff;
+  text-decoration: underline;
   border: none;
   padding: 0;
-  font-size: 1rem; /* 텍스트 크기 */
-  cursor: pointer; /* 클릭 가능한 링크처럼 커서 변경 */
+  font-size: 1rem;
+  cursor: pointer;
 }
 
 .downloadButton:hover {
-  color: darkblue; /* 호버 시 색상 변경 */
-  text-decoration: none; /* 호버 시 밑줄 제거 */
+  color: #004085;
+  text-decoration: none;
 }
 
 .fileContainer {
-  display: flex; /* 아이콘과 파일명을 가로로 정렬 */
-  align-items: center; /* 아이콘과 텍스트를 수직 가운데 정렬 */
+  display: flex;
+  align-items: center;
   margin: 20px 0;
 }
 
 .fileIcon {
-  margin-right: 8px; /* 아이콘과 파일명 간격 */
+  margin-right: 8px;
 }
 
 .fileIcon img {
-  width: 20px; /* 아이콘 크기 */
+  width: 20px;
   height: 20px;
 }
 
@@ -198,4 +187,51 @@
 
 .downloadLink:hover {
   text-decoration: underline;
+}
+
+.replyForm {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #e2ecff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.replyForm textarea {
+  width: 100%;
+  min-height: 100px;
+  resize: none;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+}
+
+.replyForm textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 3px rgba(0, 123, 255, 0.5);
+}
+
+.replyForm button {
+  align-self: flex-end;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.replyForm button:hover {
+  background-color: #0056b3;
+}
+
+.replyForm button:active {
+  background-color: #004085;
 }

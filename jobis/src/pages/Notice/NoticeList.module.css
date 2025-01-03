@@ -61,3 +61,12 @@
 .noticetable td:last-child {
     text-align: right; /* 오른쪽 정렬 (날짜) */
 }
+
+
+.noticerow {
+    cursor: pointer;
+}
+
+.noticerow:hover {
+    background-color: white;
+}

@@ -18,7 +18,7 @@ function Footer() {
       <div className={styles.center}>
         <div className={styles.centerTop}>
           <div>회사소개</div>
-          <div>Q&A</div>
+          <Link to="/qna" className={styles.noLink}>Q&A</Link>
           <div>이용권 안내</div>
         </div>
         <div className={styles.centerBottom}>

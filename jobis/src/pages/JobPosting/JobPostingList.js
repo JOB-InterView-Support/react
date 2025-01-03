@@ -11,8 +11,8 @@ const JobPostingList = () => {
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
   const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-  const [totalItems, setTotalItems] = useState(0); // 전체 아이템 개수
-  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
+  const [totalItems, setTotalItems] = useState(5); // 전체 항목 개수
+  const [totalPages, setTotalPages] = useState(3); // 전체 페이지 수
   const itemsPerPage = 10; // 한 페이지에 보여줄 항목 수
   const navigate = useNavigate();
   const { secureApiRequest } = useContext(AuthContext);
@@ -20,7 +20,7 @@ const JobPostingList = () => {
 
   // localStorage에서 uuid를 가져오는 useEffect
   useEffect(() => {
-    const storedUuid = localStorage.getItem("uuid"); // localStorage에서 uuid를 가져오기
+    const storedUuid = localStorage.getItem("uuid");
     if (storedUuid) {
       setUuid(storedUuid); // uuid 상태 업데이트
     }
@@ -76,7 +76,7 @@ const JobPostingList = () => {
 
     fetchJobPostings();
     fetchFavorites();
-  }, [currentPage, uuid]); // uuid가 변경될 때마다 다시 실행
+  }, [currentPage, uuid]);
 
   const toggleFavorite = async (jobPostingId, newFavoritedState) => {
     try {
@@ -87,8 +87,6 @@ const JobPostingList = () => {
           jobPostingId: jobPostingId,
           jobCreatedDate: new Date().toISOString(),
         };
-
-        console.log("favoriteData:", favoriteData);  // 디버깅을 위한 로그
 
         const response = await secureApiRequest(`/favorites`, {
           method: "POST",
@@ -185,3 +183,4 @@ const JobPostingList = () => {
 };
 
 export default JobPostingList;
+

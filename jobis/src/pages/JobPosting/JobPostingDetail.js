@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from "../../AuthProvider";
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import styles from "./JobPostingDetail.module.css";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
@@ -8,6 +8,7 @@ const JobPostingDetail = () => {
   const { jobId } = useParams();
   const [jobDetails, setJobDetails] = useState(null);
   const { secureApiRequest } = useContext(AuthContext);
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   const fetchJobDetails = async () => {
     try {
@@ -59,12 +60,16 @@ const JobPostingDetail = () => {
   const industry = position?.industry?.name || "정보 없음";
   const jobMidCode = position?.['job-mid-code']?.name || "정보 없음";
 
+  const handleGoBack = () => {
+    navigate(-1); // 이전 페이지로 돌아가기
+  };
 
   return (
     <div>
       <JobPostingSubMenubar />
     <div className={styles.jobDetailContainer}>
       <h1>{position?.title || "채용공고 정보 없음"}</h1>
+      <button onClick={handleGoBack} className={styles.goBackButton}>이전 목록</button> {/* 뒤로 가기 버튼 */}
       <p><strong>회사:</strong> <a href={companyUrl} target="_blank" rel="noopener noreferrer">{companyName}</a></p>
       <p><strong>위치:</strong> {locationName}</p>
       <p><strong>직무:</strong> {jobType}</p>

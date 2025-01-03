@@ -79,7 +79,7 @@ function Header() {
       <nav>
         <ul className={styles.navList}>
           <li><Link to="/notice" className={styles.noLink}>공지사항</Link></li>
-          <li>AI 모의면접</li>
+          <li><Link to="/selectintro" className={styles.noLink}>AI 모의면접</Link></li>
           <li><Link to="/jobPosting" className={styles.noLink}>채용공고</Link></li>
           <li><Link to="/review"className={styles.noLink}>체험 후기</Link></li>
           <li><Link to="/qna" className={styles.noLink}>Q&A</Link></li>
