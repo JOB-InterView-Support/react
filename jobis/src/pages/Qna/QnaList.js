@@ -97,27 +97,29 @@ const QnaList = () => {
                 qnaList.map((qna, index) => {
                   const isSecret = qna.qisSecret === "Y"; // 비밀글 여부
                   const isAccessible =
-                    role === "ADMIN" || qna.qwriter === userUuid || qna.uuid === userUuid; // 본인, 관리자 또는 UUID 일치 여부 확인
+                    role === "ADMIN" ||
+                    qna.qwriter === userUuid ||
+                    qna.uuid === userUuid; // 본인, 관리자 또는 UUID 일치 여부 확인
+
+                  // 접근 가능 여부 확인
+                  const canAccess = !isSecret || isAccessible;
 
                   return (
                     <tr
                       key={`${qna.qno}-${index}`} // 고유 키 설정
-                      onClick={() => isAccessible && handleDetailClick(qna.qno)} // 접근 가능한 경우만 클릭 허용
+                      onClick={() => canAccess && handleDetailClick(qna.qno)} // 접근 가능한 경우만 클릭 허용
                       className={
-                        !isAccessible && isSecret ? styles.disabledRow : ""
+                        !canAccess && isSecret ? styles.disabledRow : ""
                       }
                       style={{
-                        cursor:
-                          isAccessible || !isSecret ? "pointer" : "not-allowed",
+                        cursor: canAccess ? "pointer" : "not-allowed",
                       }}
                     >
                       <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
                       <td>
-                        {!isAccessible && isSecret
-                          ? "비밀글입니다"
-                          : qna.qtitle}
+                        {!canAccess && isSecret ? "비밀글입니다" : qna.qtitle}
                       </td>
-                      <td>{!isAccessible && isSecret ? "-" : qna.qwriter}</td>
+                      <td>{!canAccess && isSecret ? "-" : qna.qwriter}</td>
                       <td>{new Date(qna.qWDate).toLocaleDateString()}</td>
                     </tr>
                   );
@@ -139,7 +141,8 @@ const QnaList = () => {
       )}
       {role === "USER" && (
         <div className={styles.buttonContainer}>
-          <InsertButton onClick={handleInsertClick} label="질문 등록" /> {/* 질문 등록 버튼 */}
+          <InsertButton onClick={handleInsertClick} label="질문 등록" />{" "}
+          {/* 질문 등록 버튼 */}
         </div>
       )}
     </div>

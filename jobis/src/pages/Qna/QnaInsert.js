@@ -119,14 +119,22 @@ const QnaInsert = () => {
       </div>
       <div className={styles.formGroup}>
         <textarea
-          placeholder="내용을 입력하세요"
+          placeholder="내용을 입력하세요. 최대 600 글자까지 입력 가능합니다."
           value={content}
-          onChange={(e) => setContent(e.target.value)} // 내용 상태 업데이트
+          onChange={(e) => {
+            const inputContent = e.target.value;
+            if (inputContent.length > 600) {
+              alert("내용은 최대 600글자까지 입력 가능합니다.");
+              return;
+            }
+            setContent(inputContent); // 글자 수가 600 이하면 상태 업데이트
+          }}
           className={styles.textarea}
         ></textarea>
       </div>
       <div className={styles.formGroup}>
-        <FileUploadButton onFileChange={handleFileChange} /> {/* 파일 업로드 버튼 */}
+        <FileUploadButton onFileChange={handleFileChange} />{" "}
+        {/* 파일 업로드 버튼 */}
         {file ? (
           <span className={styles.fileName}>{file.name}</span> // 파일 이름 표시
         ) : (
@@ -139,7 +147,11 @@ const QnaInsert = () => {
             src={preview}
             alt="미리보기"
             className={styles.previewImage}
-            style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
+            style={{
+              maxWidth: "100%",
+              maxHeight: "300px",
+              objectFit: "contain",
+            }}
           />
         </div>
       )}

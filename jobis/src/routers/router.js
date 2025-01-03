@@ -19,7 +19,7 @@ const AppRouter = () => {
   return (
     <Routes>
       {adminRouter}
-      {/* {aiInterviewRouter}*/}
+      {aiInterviewRouter}
       {jobPostingRouter} 
       {loginRouter}
       {signupRouter}
