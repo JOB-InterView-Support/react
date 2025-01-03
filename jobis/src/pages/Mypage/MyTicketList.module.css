@@ -70,6 +70,7 @@
   border-left: none;
   font-size: 15px;
   position: relative; /* ::after 사용을 위한 상대 위치 */
+  cursor: pointer;
 }
 .ticketTable td:not(:last-child)::after {
   content: "";
