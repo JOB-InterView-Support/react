@@ -36,10 +36,9 @@ function NoticeDetail() {
             setNotice(response.data);
 
             // 이미지 경로로 파일 미리보기 URL 생성
-            if (response.data && response.data.noticePath) {
-                const previewUrl = await fetchImage(response.data.noticePath);
-                setFilePreview(previewUrl);
-                console.log("미리보기 url 생성됨", previewUrl)
+            if (response.data.noticePath) {
+                setFilePreview(response.data.noticePath);
+                console.log("미리보기 url 생성됨")
             } else {
                 console.error("noticePath가 null이거나 정의되지 않았습니다.");
             }
@@ -242,21 +241,16 @@ function NoticeDetail() {
                     </a>                    
                 </div>
             )}
-                                {/* 파일 아이콘 */}
-                                <span className={styles.fileIcon}>
+                    {/* 파일 아이콘 */}
+                    <span className={styles.fileIcon}>
                         <img src={downloadIcon} alt="파일 아이콘" />
                     </span>
             {filePreview && (
                 <div className={styles.noticeImageContainer}>
-                    {isImageFile(notice.noticePath) ? (
+                    {isImageFile(notice.noticePath)}
                         <img src={filePreview}
                             alt={notice.noticePath.split('/').pop()} className={styles.noticeImage}
                         />
-                    ) : (
-                        <div className={styles.fileName}>
-                            {notice.noticePath.split('/').pop()}
-                        </div>
-                    )}
                     <button onClick={handleDownload} className={styles.downloadButton}>{notice.noticePath.split('/').pop().replace(/^N_/, '')}</button>
                 </div>
             )}
