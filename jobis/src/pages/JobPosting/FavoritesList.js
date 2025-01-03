@@ -31,6 +31,7 @@ const FavoritesList = () => {
           return;
         }
 
+        // 즐겨찾기 목록 가져오기
         const favoritesResponse = await secureApiRequest(
           `/favorites/search?uuid=${uuid}`,
           { method: "GET" }
@@ -41,11 +42,12 @@ const FavoritesList = () => {
           return;
         }
 
+        // 즐겨찾기 목록에 포함된 각 채용공고의 상세 정보를 가져오기
         const favoritesWithDetails = await Promise.all(
           favoritesResponse.data.map(async (favorite) => {
             try {
               const jobResponse = await secureApiRequest(
-                `/jobposting/${favorite.jobPostingId}`,
+                `/${favorite.jobPostingId}`,
                 { method: "GET" }
               );
 
@@ -85,12 +87,15 @@ const FavoritesList = () => {
     }
   }, [isLoggedIn, uuid, secureApiRequest]);
 
+  // 즐겨찾기 삭제 함수
   const removeFavorite = async (jobPostingId) => {
     try {
+      // 즐겨찾기에서 공고 제거
       await secureApiRequest(
         `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
         { method: "DELETE" }
       );
+      // 로컬 상태에서 해당 즐겨찾기 제거
       setFavorites((prevFavorites) =>
         prevFavorites.filter((fav) => fav.jobPostingId !== jobPostingId)
       );
@@ -99,6 +104,7 @@ const FavoritesList = () => {
     }
   };
 
+  // 채용공고 상세보기 페이지로 이동
   const handleJobClick = (id) => {
     navigate(`/jobPosting/${id}`);
   };
