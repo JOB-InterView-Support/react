@@ -1,46 +1,45 @@
 .noticecontainer {
-    max-width: 1000px;
+    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+    background-color: #ffffff; /* 배경 흰색 */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
 }
 
 .noticetitle {
+    font-size: 28px; /* 제목 글자 크기 */
     font-weight: bold;
-    color: #0056b3;
-    font-size: 24px;
+    color: #333333;
     text-align: left;
     margin-bottom: 20px;
+    border-bottom: 2px solid #ddd; /* 아래 선 추가 */
     padding-bottom: 10px;
-    border-bottom: 2px solid #ddd; /* 제목 아래 선 추가 */
+}
+
+.formGroup {
+    margin-bottom: 20px;
+}
+
+.noticenewtitle,
+.textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd; /* 테두리 회색 */
+    border-radius: 5px;
+    box-sizing: border-box;
 }
 
 .noticenewtitle {
-    font-weight: bold;
-    color: #000000;
-    font-size: 24px;
-    text-align: left;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-}
-
-.noticecontent {
     font-size: 18px;
-    margin-bottom: 20px;
+    font-weight: bold;
 }
 
 .textarea {
-    width: 100%; /* 입력창 너비를 컨테이너에 맞춤 */
     height: 150px;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     resize: none;
-    box-sizing: border-box; /* 패딩 포함 계산 */
 }
 
 .fileInput {
@@ -56,8 +55,9 @@
     max-width: 100%;
     max-height: 200px;
     margin-top: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 5px;
+    padding: 5px;
 }
 
 .buttonGroup {
@@ -88,4 +88,18 @@
 .backButton:hover {
     text-decoration: underline;
     color: #0056b3;
+}
+
+.insertButton {
+    background-color: #28a745;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.insertButton:hover {
+    background-color: #218838;
 }

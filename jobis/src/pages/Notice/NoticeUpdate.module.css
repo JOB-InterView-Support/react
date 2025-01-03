@@ -1,26 +1,40 @@
 .noticecontainer {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f9f9f9;
+    max-width: 800px; /* 고정된 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+    padding: 20px; /* 내부 여백 */
+    background-color: #ffffff; /* 배경 흰색 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+    font-family: Arial, sans-serif; /* 폰트 */
 }
 
-.noticetitle {
+.noticeupdate {
+    font-size: 28px; /* 제목 글자 크기 */
     font-weight: bold;
-    color: rgb(0, 0, 0);
-    font-size: 24px;
+    color: #333333;
     text-align: left;
     margin-bottom: 20px;
-    border-bottom: 2px solid #ddd;
+    border-bottom: 2px solid #ddd; /* 아래 선 추가 */
     padding-bottom: 10px;
 }
 
-.noticenewtitle {
+.formGroup {
+    margin-bottom: 20px; /* 아래 여백 */
+}
+
+.noticetitle,
+.textarea {
     width: 100%;
-    font-size: 20px;
-    border: 1px solid #ddd;
     padding: 10px;
-    border-radius: 4px;
+    font-size: 16px;
+    border: 1px solid #ddd; /* 테두리 회색 */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.noticetitle {
+    font-size: 18px;
+    font-weight: bold;
 }
 
 .noticeinfo {
@@ -29,75 +43,88 @@
     margin-bottom: 20px;
     border-bottom: 2px solid #ddd;
     padding-bottom: 10px;    
-}
-
-.noticecontent {
-    margin-bottom: 20px;
+    color: #666666;
+    border-bottom: 1px solid #ddd; /* 회색 선 */
+    padding-bottom: 10px;
 }
 
 .textarea {
-    width: 100%;
-    height: 200px;
-    font-size: 16px;
-    border: 1px solid #ddd;
-    padding: 10px;
-    border-radius: 4px;
-}
-
-.noticeImageContainer {
-    margin: 20px 0;
-}
-
-.noticeImage {
-    max-width: 100%;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    height: 150px; /* 텍스트 영역 높이 */
+    resize: none; /* 크기 조정 비활성화 */
 }
 
 .fileInput {
-    margin-bottom: 20px;
+    margin-top: 20px; /* 위쪽 여백 */
+}
+
+.fileInput input {
+    display: block; /* 블록 요소 */
+    margin-bottom: 10px; /* 아래 여백 */
+}
+
+.previewImage {
+    max-width: 100%; /* 이미지 최대 너비 */
+    max-height: 200px; /* 이미지 최대 높이 */
+    margin-top: 10px; /* 위쪽 여백 */
+    border: 1px solid #ddd; /* 테두리 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    padding: 5px; /* 내부 여백 */
 }
 
 .buttonGroup {
-    display: flex;
-    justify-content: flex-start;
-    gap: 10px;
+    display: flex; /* 플렉스박스 */
+    justify-content: space-between; /* 버튼 간격 */
+    margin-top: 20px; /* 위쪽 여백 */
 }
 
 .backButton {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: transparent;
-    color: #000;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    cursor: pointer;
-    text-decoration: none;
+    display: inline-flex; /* 인라인 플렉스 */
+    align-items: center; /* 수직 가운데 정렬 */
+    justify-content: center; /* 수평 가운데 정렬 */
+    background-color: transparent; /* 배경 투명 */
+    color: #000; /* 텍스트 색상 */
+    font-size: 16px; /* 글자 크기 */
+    font-weight: bold; /* 볼드 처리 */
+    border: none; /* 테두리 없음 */
+    cursor: pointer; /* 클릭 가능 */
+    text-decoration: none; /* 밑줄 없음 */
 }
 
 .backButton::before {
-    content: "←";
-    margin-right: 8px;
-    font-size: 16px;
+    content: "←"; /* 화살표 */
+    margin-right: 8px; /* 오른쪽 여백 */
+    font-size: 16px; /* 화살표 크기 */
 }
 
 .backButton:hover {
-    text-decoration: underline;
-    color: #0056b3;
+    text-decoration: underline; /* 호버 시 밑줄 */
+    color: #0056b3; /* 호버 시 색상 */
 }
 
-.updateButton {
-    background-color: #007bff;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
+.saveButton {
+    background-color: #28a745; /* 저장 버튼 색상 */
+    color: #ffffff; /* 텍스트 색상 */
+    border: none; /* 테두리 없음 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    padding: 10px 20px; /* 내부 여백 */
+    cursor: pointer; /* 클릭 가능 */
+    font-size: 16px; /* 글자 크기 */
 }
 
-.updateButton:hover {
-    background-color: #0056b3;
+.saveButton:hover {
+    background-color: #218838; /* 호버 시 색상 */
+}
+
+.deleteButton {
+    background-color: #dc3545; /* 삭제 버튼 색상 */
+    color: #ffffff; /* 텍스트 색상 */
+    border: none; /* 테두리 없음 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    padding: 5px 10px; /* 내부 여백 */
+    font-size: 14px; /* 글자 크기 */
+    cursor: pointer; /* 클릭 가능 */
+}
+
+.deleteButton:hover {
+    background-color: #c82333; /* 호버 시 색상 */
 }

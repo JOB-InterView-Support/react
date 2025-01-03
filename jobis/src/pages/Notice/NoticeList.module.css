@@ -1,72 +1,68 @@
 .noticecontainer {
-    max-width: 1000px;
+    max-width: 800px;
     margin: 0 auto;
-    padding: 20px;
-    padding-bottom: 0;
-    background-color: #f9f9f9;
+    padding: 0;
 }
-/* .noticecontainer {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 20px;
-    padding-bottom: 0; /* 네모박스 하단 여백 제거 */
-    /* background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-} */ 
-
 
 .noticetitle {
+    font-size: 30px;
     font-weight: bold;
-    color: #0056b3;
-    font-size: 24px;
     text-align: left;
+    color: #004F99;
     margin-bottom: 20px;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 10px;
 }
 
 .noticetable {
     width: 100%;
     border-collapse: collapse;
-    text-align: left;
     margin-bottom: 20px;
 }
 
-.noticetable tbody tr {
-    border-bottom: 1px solid #ddd; /* 행 아래 구분선 */
-}
-
-.noticetable tbody tr:last-child {
-    border-bottom: none; /* 마지막 행의 구분선 제거 */
-}
-
-.noticeTbutton {
-    all: unset; /* 버튼 기본 스타일 제거 */
-    cursor: pointer; /* 클릭 가능한 영역처럼 보이도록 */
-    font-size: inherit; /* 부모 폰트 크기 상속 */
-}
-
-.noticeTbutton:hover {
-    color: #0056b3;
-}
-
+.noticetable th,
 .noticetable td {
-    padding: 10px; /* 셀 내부 여백 */
-    font-size: 16px; /* 글자 크기 */
-    vertical-align: middle; /* 텍스트 중앙 정렬 */
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    height: 19px;
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
 }
 
-.noticetable td:last-child {
-    text-align: right; /* 오른쪽 정렬 (날짜) */
+.noticetable th {
+    background-color: rgba(109, 160, 255, 0.2);
+    font-weight: bold;
+    color: #333;
 }
 
+.noticetable tbody tr:nth-child(even) {
+    background-color: rgba(109, 160, 255, 0.06);
+}
 
-.noticerow {
+.noticetable tbody tr:hover {
+    background-color: rgba(109, 160, 255, 0.3);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #333;
     cursor: pointer;
+    border-radius: 4px;
 }
 
-.noticerow:hover {
-    background-color: white;
+.pagination button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination button:hover {
+    background-color: #f2f2f2;
 }
