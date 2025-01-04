@@ -34,11 +34,13 @@ function TicketList() {
         async function fetchProducts() {
             setIsLoading(true);
             try {
+                
                 const accessToken = localStorage.getItem("accessToken");
                 const refreshToken = localStorage.getItem("refreshToken");
                 
                 const response = await apiClient.get("/products",  {
                     headers: {
+                        "Content-Type": "application/json",
                         Authorization: `Bearer ${accessToken}`, // 인증 헤더에 AccessToken 추가
                         refreshToken: `Bearer ${refreshToken}`, // 인증 헤더에 RefreshToken 추가
                     },
