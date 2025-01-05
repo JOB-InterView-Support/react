@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./SelectIntro.module.css";
 
@@ -7,7 +6,6 @@ function SelectIntro() {
   const { secureApiRequest } = useContext(AuthContext);
   const [introductions, setIntroductions] = useState([]);
   const [selectedIntro, setSelectedIntro] = useState(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchIntroductions = async () => {
@@ -49,7 +47,9 @@ function SelectIntro() {
   }, [secureApiRequest]);
 
   const handleCheckboxChange = (introNo) => {
-    setSelectedIntro((prevSelected) => (prevSelected === introNo ? null : introNo));
+    setSelectedIntro((prevSelected) =>
+      prevSelected === introNo ? null : introNo
+    );
   };
 
   const handleStartClick = async () => {
@@ -59,35 +59,20 @@ function SelectIntro() {
     }
 
     try {
-      const response = await secureApiRequest(`/mypage/intro/${selectedIntro}`);
-      const introContents = response.data.introContents;
-      const introTitle = response.data.introTitle;
+      // Full URL을 사용하여 secureApiRequest 호출
+      const response = await secureApiRequest(
+        `http://127.0.0.1:8000/interview/addQuestions`,
+        {
+          method: "POST",
+          body: JSON.stringify({ intro_no: selectedIntro }),
+          headers: { "Content-Type": "application/json" },
+        }
+      );
 
-      const apiResponse = await fetch("/api/improveintro", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          userId: localStorage.getItem("uuid"),
-          selfIntroduction: introContents,
-          introTitle: introTitle,
-        }),
-      });
-
-      if (!apiResponse.ok) {
-        throw new Error("첨삭 요청 실패");
-      }
-
-      const result = await apiResponse.json();
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      console.log("첨삭된 자기소개서:", result.correctedIntro);
-      navigate(`/mypage/intro/${result.introNo}`, {
-        state: { correctedIntro: result.correctedIntro },
-      });
+      alert("예상 질문 및 답변이 성공적으로 저장되었습니다.");
     } catch (error) {
       console.error("오류 발생:", error.message);
+      alert("예상 질문 저장 중 오류가 발생했습니다.");
     }
   };
 
