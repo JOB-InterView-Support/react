@@ -5,14 +5,20 @@ import styles from "./JobPostingDetail.module.css";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
 const JobPostingDetail = () => {
-  const { jobId } = useParams();
+  const { id } = useParams();
   const [jobDetails, setJobDetails] = useState(null);
   const { secureApiRequest } = useContext(AuthContext);
   const navigate = useNavigate(); // useNavigate 훅 사용
 
   const fetchJobDetails = async () => {
     try {
-      const response = await secureApiRequest(`/jobposting/search?&id=${jobId}`, { method: "GET" });
+      // 환경 변수에서 API 키 가져오기
+      const apiKey = process.env.REACT_APP_SARAMIN_API_KEY;
+
+      const response = await secureApiRequest(
+        `/jobposting/search?id=${id}&access-key=${apiKey}`, 
+        { method: "GET" }
+      );
       const jobData = response.data.jobs.job[0];
       setJobDetails(jobData);
     } catch (error) {
@@ -22,7 +28,7 @@ const JobPostingDetail = () => {
 
   useEffect(() => {
     fetchJobDetails();
-  }, [jobId]);
+  }, [id]);
 
   if (!jobDetails) {
     return <div>Loading...</div>;

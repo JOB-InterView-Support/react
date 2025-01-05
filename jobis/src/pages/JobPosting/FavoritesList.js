@@ -54,6 +54,10 @@ const FavoritesList = () => {
               console.log(jobResponse.data);
               const jobData = jobResponse?.data?.jobs?.job || null;
 
+              if (!jobData) {
+                // 로그 추가: jobData가 없으면 해당 항목 처리
+                console.error('Job data is missing for job posting ID:', favorite.jobPostingId);
+              }
               return {
                 ...favorite,
                 jobTitle: jobData?.position?.title || "제목 없음",
@@ -123,13 +127,13 @@ const FavoritesList = () => {
             favorites.map((favorite) => (
               <div key={favorite.jobPostingId} className={styles.favoriteCard}>
                 <div className={styles.cardHeader}>
-                  <h3>{favorite.jobTitle}</h3>
+                  <h3>{favorite?.position?.Title}</h3>
                   <span className={styles.company}>{favorite.company}</span>
                 </div>
                 <div className={styles.cardContent}>
-                  <p>업종: {favorite.industry}</p>
-                  <p>위치: {favorite.location}</p>
-                  <p>연봉: {favorite.salary}</p>
+                  <p>업종: {favorite?.position?.industry}</p>
+                  <p>위치: {favorite?.position?.location}</p>
+                  <p>연봉: {favorite?.salary}</p>
                 </div>
                 <div className={styles.cardActions}>
                   <button

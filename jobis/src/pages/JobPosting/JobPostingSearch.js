@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./JobPostingSearch.module.css";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
 // 필터 옵션 데이터
 const filterOptions = {
-  job_cd: [
+  job_mid_cd: [
     { value: "", label: "직무 선택" },
     { value: "16", label: "기획·전략" },
     { value: "14", label: "마케팅·홍보" },
@@ -75,13 +74,12 @@ const filterOptions = {
     { value: "11", label: "인턴직 (정규직 전환가능)" },
     { value: "16", label: "기간제" },
   ],
- 
 };
 
 const JobPostingSearch = () => {
   const { secureApiRequest } = useContext(AuthContext);
   const initialFilters = {
-    job_cd: "",
+    job_mid_cd: "",
     loc_mcd: "",
     edu_lv: "",
     job_type: "",
@@ -108,31 +106,41 @@ const JobPostingSearch = () => {
   }, [navigate]);
 
   const handleSearch = async () => {
-    setLoading(true);  // 검색 시작 시 로딩 상태 활성화
-    setError(null); // 에러 초기화
-    try {
-      const queryParams = new URLSearchParams();
+    setLoading(true);
+    setError(null);
 
-      // 필터 객체에서 빈 값이 아닌 필터만 추가
-      if (filters.job_cd) queryParams.append('job_cd', filters.job_cd);
-      if (filters.loc_mcd) queryParams.append('loc_cd', filters.loc_mcd);
-      if (filters.edu_lv) queryParams.append('edu_lv', filters.edu_lv);
-      if (filters.job_type) queryParams.append('job_type', filters.job_type);
+    try {
+      // 필터를 기준으로 검색 쿼리 생성
+      const queryParams = Object.entries(filters)
+        .filter(([_, value]) => value)  // 값이 있을 때만 필터링
+        .map(([key, value]) => {
+          if (key === "job_mid_cd") {
+            return `position.job_mid_cd=${value}`;  // 직무
+          } else if (key === "loc_mcd") {
+            return `position.loc_mcd=${value}`;  // 지역
+          } else if (key === "edu_lv") {
+            return `edu_lv=${value}`;  // 학력
+          } else if (key === "job_type") {
+            return `job_type=${value}`;  // 근무형태
+          }
+          return `${key}=${value}`;
+        })
+        .join("&");
 
       const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
         method: "GET",
       });
 
-      if (response.data) {
+      if (response?.data) {
         navigate("/jobPosting/search", {
           state: { jobPosting: response.data.jobPostings, filters },
         });
       }
     } catch (error) {
-      console.error("채용공고 검색 중 오류가 발생했습니다:", error);
-      setError("채용공고 검색 중 오류가 발생했습니다.");
+      console.error("검색 중 오류:", error);
+      setError("검색 중 문제가 발생했습니다. 다시 시도해주세요.");
     } finally {
-      setLoading(false);  // 검색 완료 후 로딩 상태 해제
+      setLoading(false);
     }
   };
 
