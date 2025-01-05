@@ -46,7 +46,9 @@ function TicketList() {
                     },
                 });
                 
-                
+                console.log("request Authorization : ", accessToken);
+                console.log("request refreshToken : ", refreshToken);
+
                 if (Array.isArray(response.data)) {
                     const validatedProducts = response.data.map((product) => ({
                         ...product,

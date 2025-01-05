@@ -41,13 +41,29 @@ export function PaymentSuccess() {
               Authorization: `Bearer ${accessToken}`, // AccessToken 추가
               RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
             },
-            
           }
-          
         )
         .then((response) => {
           console.log("Payment confirmed:", response.data);
           setResponseData(response.data); // 응답 데이터 저장
+
+          // 응답 데이터를 백엔드로 전송
+          return apiClient.post(
+            "/api/payments/save",
+            {
+              ...response.data,
+            },
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`, // AccessToken 추가
+                RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
+              },
+            }
+          );
+        })
+        .then((saveResponse) => {
+          console.log("Payment data saved successfully:", saveResponse.data);
         })
         .catch((error) => {
           console.log("AccessToken:", localStorage.getItem("AccessToken"));
