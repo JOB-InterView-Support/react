@@ -6,6 +6,7 @@ import styles from "./AdminInsertCommonQuestions.module.css";
 function AdminInsertCommonQuestions() {
   const [questionTitle, setQuestionTitle] = useState(""); // 입력값 상태
   const { secureApiRequest } = React.useContext(AuthContext); // 인증된 API 요청
+  const navigate = useNavigate();
 
   const handleInsert = async () => {
     if (!questionTitle.trim()) {
@@ -24,7 +25,7 @@ function AdminInsertCommonQuestions() {
 
       if (response.status === 200) {
         alert("질문이 성공적으로 추가되었습니다.");
-        setQuestionTitle(""); // 입력 필드 초기화
+        navigate("/adminCommonQuestions"); // 성공 시 네비게이션
       } else {
         alert("질문 추가에 실패했습니다.");
       }

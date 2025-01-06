@@ -1,0 +1,67 @@
+.container{
+    margin-top: 6%;
+    margin-bottom: 15%;
+}
+.content {
+  margin-top: 3%;
+  display: flex;
+  justify-content: center;
+  
+}
+
+.table {
+  width: 80%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center; /* 좌우 가운데 정렬 */
+  vertical-align: middle; /* 상하 가운데 정렬 */
+}
+
+.table th {
+  background-color: rgba(109, 160, 255, 0.5);
+}
+
+.inputField{
+    width: 99%;
+    height: 30px;
+}
+
+.selectField{
+ width: 50%;
+ height: 30px;
+}
+
+.btnClass{
+    display: flex;
+    justify-content: right;
+    margin-right: 10%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    gap: 20px;
+}
+
+.deleteBtn{
+    background-color: rgb(255, 0, 0, 0.7);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    width: 120px;
+    height: 40px;
+}
+.updateBtn{
+    background-color: rgb(255, 166, 0, 0.7);
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    width: 120px;
+    height: 40px;
+}

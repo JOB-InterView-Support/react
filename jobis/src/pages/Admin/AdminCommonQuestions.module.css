@@ -1,5 +1,3 @@
-.container {
-}
 
 .content {
   margin-top: 20px;
@@ -16,6 +14,8 @@
 .table td {
   border: 1px solid #ddd;
   padding: 8px;
+  text-align: center; /* 좌우 가운데 정렬 */
+  vertical-align: middle; /* 상하 가운데 정렬 */
 }
 
 .table th {
