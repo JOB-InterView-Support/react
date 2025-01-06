@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { useNavigate } from "react-router-dom"; // React Router의 useNavigate import
+import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./SelectIntro.module.css";
 
@@ -7,9 +7,9 @@ function SelectIntro() {
   const { secureApiRequest } = useContext(AuthContext);
   const [introductions, setIntroductions] = useState([]);
   const [selectedIntro, setSelectedIntro] = useState(null);
-  const [loading, setLoading] = useState(false); // 로딩 상태 관리
-  const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지 관리
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const [loading, setLoading] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchIntroductions = async () => {
@@ -62,7 +62,7 @@ function SelectIntro() {
       return;
     }
 
-    setLoading(true); // 버튼 비활성화 및 로딩 상태 시작
+    setLoading(true);
     setStatusMessage("로딩 중...");
 
     try {
@@ -74,7 +74,7 @@ function SelectIntro() {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            intro_no: selectedIntro, // 선택된 자기소개서 번호 전달
+            intro_no: selectedIntro,
           }),
         }
       );
@@ -86,11 +86,15 @@ function SelectIntro() {
       const result = await response.json();
       console.log("응답 데이터:", result);
 
-      // 상태 확인 주기적 호출 시작
+      const { RoundId, INT_ID } = result;
+      if (!RoundId || !INT_ID) {
+        throw new Error("백엔드 응답에 RoundId 또는 INT_ID가 포함되지 않았습니다.");
+      }
+
       const statusInterval = setInterval(async () => {
         try {
           const statusResponse = await fetch(
-            "http://127.0.0.1:8000/interview/status", // 상태 확인 API 엔드포인트
+            "http://127.0.0.1:8000/interview/status",
             {
               method: "GET",
               headers: {
@@ -112,24 +116,28 @@ function SelectIntro() {
 
           if (statusResult.status === "complete") {
             console.log("모든 작업이 완료되었습니다.");
-            setStatusMessage("이제 곧 시작합니다"); // 버튼 문구 변경
-            clearInterval(statusInterval); // 완료 시 interval 중지
+            setStatusMessage("이제 곧 시작합니다");
+            clearInterval(statusInterval); // 주기적 호출 중지
 
-            // 2초 뒤에 네비게이트
+            console.log("선택한 자기소개서 번호:", selectedIntro);
+            console.log("INTERVIEW_ROUND:", RoundId);
+            console.log("저장된 INTERVIEW 테이블의 INT_ID:", INT_ID);
+
+            // RoundId를 navigate로 전달
             setTimeout(() => {
-              navigate("/interview"); // /interview 페이지로 이동
+              navigate(`/interview/${selectedIntro}/${RoundId}`);
             }, 2000);
           }
         } catch (error) {
           console.error("상태 확인 중 오류 발생:", error.message);
-          clearInterval(statusInterval); // 오류 발생 시 interval 중지
-          setLoading(false); // 로딩 상태 종료
+          clearInterval(statusInterval); // 오류 발생 시 주기적 호출 중지
+          setLoading(false);
         }
-      }, 1000); // 1초마다 상태 확인
+      }, 1000);
     } catch (error) {
       console.error("오류 발생:", error.message);
       alert("예상 질문 저장 중 오류가 발생했습니다.");
-      setLoading(false); // 로딩 상태 종료
+      setLoading(false);
     }
   };
 
@@ -156,7 +164,7 @@ function SelectIntro() {
                       type="checkbox"
                       checked={selectedIntro === intro.introNo}
                       onChange={() => handleCheckboxChange(intro.introNo)}
-                      disabled={loading} // 로딩 중일 때 체크박스 비활성화
+                      disabled={loading}
                     />
                   </td>
                   <td>{intro.introTitle}</td>
@@ -173,9 +181,9 @@ function SelectIntro() {
           <button
             className={styles.startButton}
             onClick={handleStartClick}
-            disabled={loading} // 로딩 중일 때 버튼 비활성화
+            disabled={loading}
           >
-            {loading ? statusMessage : "시작하기"} {/* 버튼 텍스트 변경 */}
+            {loading ? statusMessage : "시작하기"}
           </button>
         </>
       ) : (
