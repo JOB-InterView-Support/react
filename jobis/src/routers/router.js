@@ -14,12 +14,14 @@ import payRouter from './payRouter';
 import qnaRouter from './qnaRouter';
 import reviewRouter from './reviewRouter';
 import ticketRouter from './ticketRouter';
+import interviewtestRouter from './interviewtestRouter';
 
 const AppRouter = () => {
   return (
     <Routes>
       {adminRouter}
       {aiInterviewRouter}
+      {interviewtestRouter}
       {jobPostingRouter} 
       {loginRouter}
       {signupRouter}
@@ -29,6 +31,7 @@ const AppRouter = () => {
       {ticketRouter}
       {noticeRouter}
       {payRouter}
+
       {/* 
       {reviewRouter}
        */}
