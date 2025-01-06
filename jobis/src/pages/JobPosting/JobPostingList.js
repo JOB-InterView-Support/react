@@ -5,6 +5,7 @@ import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingS
 import FavoriteStar from "./FavoriteStar";
 import { AuthContext } from "../../AuthProvider";
 import Paging from "../../components/common/Paging";
+import apiClient from "../../utils/axios";
 
 const JobPostingList = () => {
   const [jobPostings, setJobPostings] = useState([]);
@@ -30,31 +31,29 @@ const JobPostingList = () => {
   }, []);
 
   useEffect(() => {
-    if (filteredJobPostings) {
+    if (filteredJobPostings && filteredJobPostings.length > 0) {
       // 필터링된 채용공고가 있으면 이를 사용
       setJobPostings(filteredJobPostings);
       setLoading(false);
     } else {
+      // 필터링된 채용공고가 없으면 API 요청
       fetchJobPostings(currentPage);
     }
   }, [filteredJobPostings, currentPage]);
-
+  
   const fetchJobPostings = async (page) => {
     setLoading(true);
     setError(null);
     try {
       const start = (page - 1) * itemsPerPage + 1;
       const response = await secureApiRequest(
-        `/jobposting/search?start=${start}&count=${itemsPerPage}`,
+        `/jobposting/search?start=${start}&count=${itemsPerPage}&industry=${filters?.industry}&location=${filters?.location}&salary=${filters?.salary}&title=${filters?.title}`,
         { method: "GET" }
       );
-
-      console.log("Job Posting API Response:", response?.data);
-
       if (response?.data) {
         const { jobs } = response.data;
         setJobPostings(jobs.job || []);
-        setTotalPages(Math.ceil(jobs.count / itemsPerPage));  // 전체 페이지 수 설정
+        setTotalPages(Math.ceil(jobs.count / itemsPerPage));
       } else {
         setError("채용공고를 찾을 수 없습니다.");
       }
@@ -63,25 +62,6 @@ const JobPostingList = () => {
       console.error("Error fetching job postings:", err);
     } finally {
       setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchFavorites();
-  }, [uuid]);
-
-  const fetchFavorites = async () => {
-    if (uuid) {
-      try {
-        const response = await secureApiRequest(
-          `/favorites/search?uuid=${uuid}`,
-          { method: "GET" }
-        );
-        setFavorites(response?.data || []);
-        console.log("Favorites Data:", response?.data);
-      } catch (err) {
-        console.error("즐겨찾기 데이터를 가져오는 중 오류 발생:", err);
-      }
     }
   };
 
@@ -95,13 +75,13 @@ const JobPostingList = () => {
           jobCreatedDate: new Date().toISOString(),
         };
 
-        const response = await secureApiRequest(`/favorites`, {
-          method: "POST",
+        const response = await apiClient('/favorites', {
+          method: "POST",  // POST 메소드 사용
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json'
           },
-          body: JSON.stringify(favoriteData),
-        });
+          data: JSON.stringify(favoriteData),  // body 대신 data로 전송
+        });  
 
         console.log("Favorite Added:", response?.data);
 
@@ -109,10 +89,10 @@ const JobPostingList = () => {
           setFavorites((prevFavorites) => [...prevFavorites, response.data]);
         }
       } else {
-        await secureApiRequest(
-          `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
-          { method: "DELETE" }
-        );
+        await apiClient(
+          `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,{ 
+            method: "DELETE",
+        });
         setFavorites(favorites.filter((fav) => fav.jobPostingId !== jobPostingId));
       }
     } catch (err) {
