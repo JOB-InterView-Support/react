@@ -59,21 +59,31 @@ function SelectIntro() {
     }
 
     try {
-      // Full URL을 사용하여 secureApiRequest 호출
-      const response = await secureApiRequest(
-        `http://127.0.0.1:8000/interview/addQuestions`,
+      const response = await fetch(
+        "http://127.0.0.1:8000/interview/addQuestions",
         {
           method: "POST",
-          body: JSON.stringify({ intro_no: selectedIntro }),
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            intro_no: selectedIntro, // 선택된 자기소개서 번호 전달
+          }),
         }
       );
 
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
       alert("예상 질문 및 답변이 성공적으로 저장되었습니다.");
+      console.log("응답 데이터:", result);
     } catch (error) {
       console.error("오류 발생:", error.message);
       alert("예상 질문 저장 중 오류가 발생했습니다.");
     }
+    
   };
 
   return (
