@@ -197,8 +197,8 @@ function NoticeDetail() {
 
             {role === "ADMIN" && (
                 <div className={styles.buttonContainer}>
-                    <button onClick={handleMoveUpdate}>수 정</button>
-                    <button onClick={handleNoticeDelete}>삭 제</button>
+                    <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
+                    <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
                 </div>
             )}
         </div>
