@@ -7,7 +7,8 @@ import AdminSubMenubar from "../../components/common/subMenubar/AdminSubMenubar"
 function AdminCommonQuestions() {
   const [questions, setQuestions] = useState([]); // 초기값: 빈 배열
   const { secureApiRequest } = useContext(AuthContext);
-
+  const navigate = useNavigate();
+  
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -36,6 +37,11 @@ function AdminCommonQuestions() {
     fetchQuestions();
   }, [secureApiRequest]);
 
+  // 클릭 이벤트 핸들러
+  const handleRowClick = (queId) => {
+    navigate(`/adminCommonQuestionsDetail/${queId}`); // queId를 URL 파라미터로 전달
+  };
+
   return (
     <div className={styles.container}>
       <AdminSubMenubar />
@@ -54,7 +60,11 @@ function AdminCommonQuestions() {
             </thead>
             <tbody>
               {questions.map((question) => (
-                <tr key={question.queId}>
+                <tr
+                  key={question.queId}
+                  onClick={() => handleRowClick(question.queId)} // 클릭 이벤트 추가
+                  style={{ cursor: "pointer" }} // 클릭 가능하도록 커서 스타일 추가
+                >
                   <td>{question.queId}</td>
                   <td>{question.queTitle}</td>
                   <td>{question.queUseStatus}</td>
@@ -67,17 +77,16 @@ function AdminCommonQuestions() {
                 </tr>
               ))}
             </tbody>
-           
           </table>
-          
         ) : (
           <p>데이터가 없습니다.</p> // 데이터가 없는 경우
         )}
-         
       </div>
       <div className={styles.btnClass}>
-           <Link to="/adminInsertCommonQuestions"><button className={styles.addBtn}>추가하기</button></Link>
-         </div>
+        <Link to="/adminInsertCommonQuestions">
+          <button className={styles.addBtn}>추가하기</button>
+        </Link>
+      </div>
     </div>
   );
 }
