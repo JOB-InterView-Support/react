@@ -80,43 +80,73 @@ export function PaymentSuccess() {
   }, [searchParams]);
   return (
     <>
-      <div className={styles.paymentContainer} style={{ width: "600px" }}>
-        <img width="100px" src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png" />
-        <h2>결제를 완료했어요</h2>
-        <div className={styles.paymentBox} style={{ marginTop: "50px" }}>
-          <div className={styles.paymentBox}>
-            <b>결제금액</b>
-          </div>
-          <div className={styles.paymentBox} id="amount">
-            {`${Number(searchParams.get("amount")).toLocaleString()}원`}
-          </div>
+      <div className={styles.paymentContainer}>
+        <img
+          width="100px"
+          src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png"
+          alt="결제 완료"
+        />
+        <h1 className={styles.paymentTitle}>결제 완료 내역</h1>
+        <div className={styles.paymentBox}>
+          <table className={styles.paymentTable}>
+            <tbody>
+              <tr>
+                <th>선택한 이용권</th>
+                <td>{responseData?.orderName || "-"}</td>
+              </tr>
+              <tr>
+                <th>상품 내용</th>
+                <td>자기소개서 분석 + AI 모의면접 + AI 면접 채점&풀이 제공</td>
+              </tr>
+              <tr>
+                <th>결제 방식</th>
+                <td>
+                  {responseData?.method} / {responseData?.easyPay?.provider || "-"}
+                </td>
+              </tr>
+              <tr>
+                <th>결제자</th>
+                <td>홍길동</td>
+              </tr>
+              <tr>
+                <th>결제 금액</th>
+                <td>
+                  {responseData?.totalAmount
+                    ? `${Number(responseData.totalAmount).toLocaleString()}원`
+                    : "-"}
+                </td>
+              </tr>
+              <tr>
+                <th>결제 번호</th>
+                <td>{responseData?.paymentKey || "-"}</td>
+              </tr>
+              <tr>
+                <th>결제일자</th>
+                <td>{responseData?.approvedAt || "-"}</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div className={styles.paymentBox} >
-          <div className={styles.paymentBox}>
-            <b>주문번호</b>
-          </div>
-          <div className={styles.paymentBox} id="orderId">
-            {`${searchParams.get("orderId")}`}
-          </div>
+
+        <div className={styles.buttonGroup}>
+          <button className={styles.cancelButton}>환불 진행</button>
+          <button
+            className={styles.backButton}
+            onClick={() => (window.location.href = "http://localhost:8080")} // 메인 페이지로 이동
+          >
+            돌아가기
+          </button>
         </div>
-        <div className={styles.paymentBox} >
-          <div className={styles.paymentBox}>
-            <b>결제 번호</b>
-          </div>
-          <div className={styles.paymentBox} id="paymentKey" >
-            {`${searchParams.get("paymentKey")}`}
-          </div>
-        </div>
-            {isRequesting && <p>결제를 확인 중입니다...</p>}
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        </div>
-      <div className={styles.paymentBox} style={{ width: "600px", textAlign: "left" }}>
-        <b>Response Data :</b>
-        <div id="response">
-          {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
-        </div>
+
+        {isRequesting && <p>결제를 확인 중입니다...</p>}
+        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </div>
     </>
-  );
+    );
+    {/*<div className={styles.paymentBox} style={{ width: "600px", textAlign: "left" }}>
+      <b>Response Data :</b>
+      <div id="response">
+        {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
+    </div>*/}
 }  
 export default PaymentSuccess;
