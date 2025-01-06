@@ -143,7 +143,8 @@ function SelectIntro() {
 
   return (
     <div className={styles.container}>
-      <h1>AI 모의면접</h1>
+      <h1 className={styles.title}>AI 모의면접</h1>
+      <h2 className={styles.subTitle}>자기소개서 선택</h2>
 
       {introductions.length > 0 ? (
         <>
