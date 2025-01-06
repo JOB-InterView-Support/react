@@ -1,0 +1,47 @@
+.container {
+}
+
+.content {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.table {
+  width: 80%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.table th {
+  background-color: rgba(109, 160, 255, 0.5);
+  
+}
+
+.table tr:hover {
+  background-color: #f9f9f9;
+}
+
+.btnClass {
+  margin-top: 3%;
+  margin-right: 10%;
+  margin-bottom: 2%;
+  display: flex;
+  justify-content: right;
+}
+
+.addBtn {
+  background-color: rgba(109, 160, 255, 0.5);
+  border: none;
+  border-radius: 10px;
+  color: white;
+  font-weight: bold;
+  font-size: 20px;
+  width: 120px;
+  height: 40px;
+}
