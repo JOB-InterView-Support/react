@@ -24,6 +24,12 @@ function AdminSubMenubar() {
           판매내역
         </div>
       </Link>
+
+      <Link to="/adminCommonQuestions" className={styles.menuItem}>
+        <div className={`${styles.menuItem} ${location.pathname === "/adminCommonQuestions" ? styles.active : ""}`}>
+          공통질문
+        </div>
+      </Link>
     </div>
   );
 }
