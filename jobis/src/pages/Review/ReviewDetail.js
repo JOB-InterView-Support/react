@@ -141,18 +141,14 @@ function ReviewDetail() {
             {/* 첨부 파일 처리 */}
             {review.reviewPath && (
                 <div className={styles.fileContainer}>
-                    <span className={styles.fileIcon}>
-                        <img src={downloadIcon} alt="파일 아이콘" />
-                    </span>
+                    
                     {/* 미리보기 및 다운로드 */}
-                    <a
-                        href={`http://localhost:8080/review/attachments/${review.reviewPath}`}
+                    <a href={`http://localhost:8080/review/attachments/${review.reviewPath}`}
                         target="_blank" // 새 탭에서 열기
                         rel="noopener noreferrer"
                         className={styles.previewLink}
-                    >
-                        첨부파일 미리보기
-                    </a>
+                    >첨부파일 미리보기</a>
+                    
                 </div>
             )}
 
@@ -163,10 +159,16 @@ function ReviewDetail() {
                         alt="미리보기"
                         className={styles.reviewImage}
                     />
+                    
                     <button
                         onClick={handleDownload}
                         className={styles.downloadButton}
                     >
+                        <img
+                    src={downloadIcon}
+                    alt="Download Icon"
+                    className={styles.downloadIcon}
+                />
                         첨부파일 다운로드
                     </button>
                 </div>

@@ -9,85 +9,81 @@ const ReviewUpdate = () => {
     const { secureApiRequest } = useContext(AuthContext); // 인증 정보
     const navigate = useNavigate();
 
-    const [title, setTitle] = useState(""); // 제목
-    const [content, setContent] = useState(""); // 내용
+    // 상태 변수
+    const [reviewTitle, setReviewTitle] = useState(""); // 제목
+    const [reviewContent, setReviewContent] = useState(""); // 내용
     const [file, setFile] = useState(null); // 새로 업로드할 파일
-    const [preview, setPreview] = useState(null); // 새 파일 미리보기
-    const [existingFile, setExistingFile] = useState(null); // 기존 첨부파일 정보
+    const [existingFile, setExistingFile] = useState(null); // 기존 첨부파일 경로
     const [isFileDeleted, setIsFileDeleted] = useState(false); // 기존 파일 삭제 여부
-    
 
-    useEffect(() => {
-        const fetchReviewDetail = async () => {
-            try {
-                const response = await secureApiRequest(`/review/detail/${rno}`, { method: "GET" });
-                const review = response.data;
+    // 리뷰 상세 데이터 가져오기
+    const fetchReviewDetail = async () => {
+        try {
+            const response = await secureApiRequest(`/review/detail/${rno}`, { method: "GET" });
+            const review = response.data;
 
-                setTitle(review.rTitle); // 제목 설정
-                setContent(review.rContent); // 내용 설정
-                setExistingFile(review.rAttachmentTitle); // 기존 첨부파일 정보 설정
-                if (review.rAttachmentTitle) {
-                    const fileUrl = `/review/attachments/${review.rAttachmentTitle}`;
-                    setExistingFile(fileUrl); 
-                }
-            } catch (err) {
-                console.error("Review 상세 조회 실패:", err);
-                alert("데이터를 불러오는 데 실패했습니다.");
+            // 상태 업데이트
+            setReviewTitle(review.rtitle || ""); // 제목
+            setReviewContent(review.rcontent || ""); // 내용
+            if (review.reviewPath) {
+                setExistingFile(`http://localhost:8080/${review.reviewPath}`); // 기존 첨부파일 경로
             }
-        };
-
-        fetchReviewDetail();
-    }, [rno, secureApiRequest]);
-
-    const handleFileChange = (selectedFile) => {
-        setFile(selectedFile); // 새 파일 상태 저장
-
-        if (selectedFile && selectedFile.type.startsWith("image/")) {
-            const reader = new FileReader();
-            reader.onload = () => setPreview(reader.result); // 새 파일 미리보기
-            reader.readAsDataURL(selectedFile);
-        } else {
-            setPreview(null);
+        } catch (err) {
+            console.error("리뷰 상세 조회 실패:", err);
+            alert("데이터를 불러오는 데 실패했습니다.");
         }
-
-        setExistingFile(null);
-        setIsFileDeleted(false);
     };
 
+    // 컴포넌트 초기화
+    useEffect(() => {
+        fetchReviewDetail();
+    }, []);
+
+    // 첨부파일 변경 핸들러
+    const handleFileChange = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile); // 새 파일 상태 저장
+        setExistingFile(null); // 기존 파일 제거
+        setIsFileDeleted(false); // 기존 파일 삭제 여부 초기화
+    };
+
+    // 첨부파일 삭제 핸들러
     const handleFileDelete = () => {
-        setIsFileDeleted(true); // 기존 파일 삭제 표시
+        setIsFileDeleted(true); // 기존 파일 삭제 상태 설정
         setExistingFile(null); // 기존 파일 제거
         setFile(null); // 새 파일 초기화
-        setPreview(null); // 미리보기 제거
     };
+
+    // 수정 요청 핸들러
     const handleSubmit = async () => {
-        if (!title || !content) {
+        if (!reviewTitle || !reviewContent) {
             alert("제목과 내용을 입력해주세요.");
             return;
         }
-    
+
         const formData = new FormData();
-        formData.append("rTitle", title);
-        formData.append("rContent", content);
-    
+        formData.append("rTitle", reviewTitle); // 제목
+        formData.append("rContent", reviewContent); // 내용
+
         if (file) {
-            formData.append("file", file);
+            formData.append("file", file); // 새 파일 추가
         } else if (isFileDeleted) {
-            formData.append("deletedFile", "true");
+            formData.append("deleteFile", "true"); // 기존 파일 삭제 플래그 추가
         }
-    
+
         try {
             const response = await axios.put(
                 `http://localhost:8080/review/update/${rno}`,
                 formData,
                 {
                     headers: {
+                        "Content-Type": "multipart/form-data",
                         Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
                         refreshToken: `Bearer ${localStorage.getItem("refreshToken")}`,
                     },
                 }
             );
-    
+
             if (response.status === 200) {
                 alert("리뷰가 성공적으로 수정되었습니다.");
                 navigate(`/review/detail/${rno}`);
@@ -96,76 +92,53 @@ const ReviewUpdate = () => {
                 alert("수정에 실패했습니다. 다시 시도해주세요.");
             }
         } catch (err) {
-            console.error("Review 수정 실패:", err);
+            console.error("리뷰 수정 요청 실패:", err);
             alert("수정에 실패했습니다. 다시 시도해주세요.");
         }
     };
-    
 
     return (
         <div className={styles.container}>
-            <h1>Review 수정</h1>
+            <h2 className={styles.title}>Review 수정</h2>
             <div className={styles.formGroup}>
+                <label>제목:</label>
                 <input
                     type="text"
-                    placeholder="제목을 입력하세요"
-                    value={title}
-                    onChange={(e) => setTitle(e.target.value)}
+                    value={reviewTitle}
+                    onChange={(e) => setReviewTitle(e.target.value)}
                     className={styles.titleInput}
                 />
             </div>
+
             <div className={styles.formGroup}>
+                <label>내용:</label>
                 <textarea
-                    placeholder="내용을 입력하세요"
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    value={reviewContent}
+                    onChange={(e) => setReviewContent(e.target.value)}
                     className={styles.textarea}
                 ></textarea>
             </div>
 
-
             {existingFile && !isFileDeleted && (
-                <div className={styles.previewContainer}>
-                    <p>기존 첨부파일: {existingFile}</p>
-                    {existingFile.endsWith(".png") || existingFile.endsWith(".jpg") || existingFile.endsWith(".jpeg") ? (
-                        <div className={styles.previewContainer}>
-                            <img
-                                src={`http://localhost:8080${existingFile}`}
-                                alt="기존 첨부 이미지"
-                                className={styles.previewImage}
-                                style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
-                            />
-                            <button onClick={handleFileDelete} className={styles.deleteButton}>
-                                첨부파일 삭제
-                            </button>
-                        </div>
-                    ) : (
-                        <a href={`/review/attachments/${existingFile}`} target="_blank" rel="noopener noreferrer">
-                            파일 다운로드
-                        </a>
-                    )}
+                <div className={styles.fileContainer}>
+                    <p>기존 첨부파일:</p>
+                    <a href={existingFile} download>
+                        {existingFile}
+                    </a>
+                    <button onClick={handleFileDelete} className={styles.deleteButton}>
+                        첨부파일 삭제
+                    </button>
                 </div>
             )}
+
             <div className={styles.formGroup}>
-                <label>새 첨부 파일:</label>
-                <input type="file" onChange={(e) => handleFileChange(e.target.files[0])} />
+                <label>새 첨부파일:</label>
+                <input type="file" onChange={handleFileChange} />
             </div>
-            {preview && (
-                <div className={styles.previewContainer}>
-                    <img
-                        src={preview}
-                        alt="미리보기"
-                        className={styles.previewImage}
-                        style={{ maxWidth: "100%", maxHeight: "300px", objectFit: "contain" }}
-                    />
-                </div>
-            )}
-            <div className={styles.formGroup}>
-                
-            </div>
+
             <div className={styles.buttonGroup}>
                 <button onClick={() => navigate(-1)} className={styles.backButton}>
-                    이전으로
+                    취소
                 </button>
                 <button onClick={handleSubmit} className={styles.submitButton}>
                     수정 완료

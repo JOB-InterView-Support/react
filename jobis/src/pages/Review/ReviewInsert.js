@@ -17,7 +17,7 @@ const ReviewInsert = () => {
   const [content, setContent] = useState(""); // 리뷰 내용
   const [file, setFile] = useState(null); // 첨부 파일
   const [preview, setPreview] = useState(null); // 이미지 미리보기 URL
-  const [isSecret, setIsSecret] = useState(false); // 비밀글 여부
+
   const navigate = useNavigate(); // 페이지 이동 함수
 
   // 파일 선택 시 호출되는 함수
@@ -50,7 +50,7 @@ const ReviewInsert = () => {
     const formData = new FormData();
     formData.append("rTitle", title); // 리뷰 제목
     formData.append("rContent", content); // 리뷰 내용
-    formData.append("rIsSecret", isSecret ? "Y" : "N"); // 비밀글 여부
+
     formData.append("rWriter", username || "anonymous"); // 작성자 이름
     formData.append("uuid", uuid); // 로컬스토리지에서 가져온 UUID
 
@@ -94,10 +94,7 @@ const ReviewInsert = () => {
     }
   };
 
-  // 비밀글 여부 토글 함수
-  const handleSecretToggle = () => {
-    setIsSecret((prev) => !prev); // 이전 상태를 반전
-  };
+  
 
   // 이전 버튼 클릭 시 페이지 이동
   const handleBack = () => {
@@ -144,14 +141,7 @@ const ReviewInsert = () => {
         </div>
       )}
       <div className={styles.formGroup}>
-        <label>
-          <input
-            type="checkbox"
-            checked={isSecret}
-            onChange={handleSecretToggle} // 비밀글 여부 토글
-          />
-          비밀글로 설정
-        </label>
+        
       </div>
       <div className={styles.buttonGroup}>
         <button onClick={handleBack} className={styles.backButton}>
