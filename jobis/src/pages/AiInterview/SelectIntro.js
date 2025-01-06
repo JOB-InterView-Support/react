@@ -126,7 +126,7 @@ function SelectIntro() {
             // RoundId를 navigate로 전달
             setTimeout(() => {
               // navigate(`/interview/${selectedIntro}/${RoundId}`);
-              navigate(`/aiInterview/${selectedIntro}/${RoundId}`);
+              navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
             }, 2000);
           }
         } catch (error) {

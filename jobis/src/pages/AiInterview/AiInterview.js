@@ -1,31 +1,39 @@
 import React, { useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 
 const AiInterview = () => {
-  // URL에서 intro_no와 round 값을 가져옵니다.
-  const { intro_no: selectedIntro, round: RoundId } = useParams();
+  // URL에서 intro_no, round, intId 값을 가져옵니다.
+  const { intro_no: selectedIntro, round: RoundId, int_id: intId } = useParams();
 
   useEffect(() => {
     const callPythonAPI = async () => {
       const uuid = localStorage.getItem("uuid"); // 로컬 스토리지에서 uuid 가져오기
 
       try {
-        const response = await fetch("http://127.0.0.1:8000/aiInterview/setting", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            intro_no: selectedIntro,
-            round: RoundId,
-            uuid: uuid, // 로컬 스토리지에서 가져온 uuid 추가
-          }),
-        });
+        const response = await fetch(
+          "http://127.0.0.1:8000/aiInterview/setting",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              intro_no: selectedIntro,
+              round: RoundId,
+              intId: intId, // URL에서 가져온 intId 추가
+              uuid: uuid, // 로컬 스토리지에서 가져온 uuid 추가
+            }),
+          }
+        );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
+        console.log("Selected Intro:", selectedIntro);
+        console.log("Round ID:", RoundId);
+        console.log("Interview ID:", intId);
         const data = await response.json();
         console.log("Python API Response:", data);
       } catch (error) {
@@ -34,13 +42,14 @@ const AiInterview = () => {
     };
 
     callPythonAPI();
-  }, []); // 빈 배열을 전달하여 한 번만 실행되도록 설정
+  }, [selectedIntro, RoundId, intId]); // 의존성 배열에 추가된 값 포함
 
   return (
     <div>
       <h1>AI Interview Page</h1>
       <p>Selected Intro: {selectedIntro}</p>
       <p>Round ID: {RoundId}</p>
+      <p>Interview ID: {intId}</p> {/* intId 표시 */}
       <div>
         <h2>Camera Feed</h2>
         {/* Python에서 제공하는 카메라 스트리밍 표시 */}
