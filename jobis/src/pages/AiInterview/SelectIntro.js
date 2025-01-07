@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./SelectIntro.module.css";
+import AiInterviewSubmenubar from "../../components/common/subMenubar/AiInterviewSubMenubar";
 
 function SelectIntro() {
   const { secureApiRequest } = useContext(AuthContext);
@@ -151,65 +152,68 @@ function SelectIntro() {
   };
 
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>AI 모의면접</h1>
-      <h2 className={styles.subTitle}>자기소개서 선택</h2>
+    <div>
+      <AiInterviewSubmenubar />
+      <div className={styles.container}>
+        <h1 className={styles.title}>AI 모의면접</h1>
+        <h2 className={styles.subTitle}>자기소개서 선택</h2>
 
-      {introductions.length > 0 ? (
-        <>
-          <table className={styles.table}>
-            <thead>
-              <tr>
-                <th>선택</th>
-                <th>제목</th>
-                <th>날짜</th>
-                <th>내용</th>
-              </tr>
-            </thead>
-            <tbody>
-              {introductions.map((intro) => (
-                <tr key={intro.introNo}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      checked={selectedIntro === intro.introNo}
-                      onChange={() => handleCheckboxChange(intro.introNo)}
-                      disabled={loading}
-                    />
-                  </td>
-                  <td>{intro.introTitle}</td>
-                  <td>{intro.introDate.split("T")[0]}</td>
-                  <td>
-                    {intro.introContents.length > 20
-                      ? `${intro.introContents.substring(0, 20)}...`
-                      : intro.introContents}
-                  </td>
+        {introductions.length > 0 ? (
+          <>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>선택</th>
+                  <th>제목</th>
+                  <th>날짜</th>
+                  <th>내용</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-          <div className={styles.startButtonContainer}>
-            <button
-              className={styles.startButton}
-              onClick={handleStartClick}
-              disabled={loading}
-            >
-              <span className={styles.statusMessage}>
-                {loading ? statusMessage : "시작하기"}
-              </span>
-              {loading && (
-                <span className={styles.statusSubMessage}>
-                  {statusSubMessage}
+              </thead>
+              <tbody>
+                {introductions.map((intro) => (
+                  <tr key={intro.introNo}>
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedIntro === intro.introNo}
+                        onChange={() => handleCheckboxChange(intro.introNo)}
+                        disabled={loading}
+                      />
+                    </td>
+                    <td>{intro.introTitle}</td>
+                    <td>{intro.introDate.split("T")[0]}</td>
+                    <td>
+                      {intro.introContents.length > 20
+                        ? `${intro.introContents.substring(0, 20)}...`
+                        : intro.introContents}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <div className={styles.startButtonContainer}>
+              <button
+                className={styles.startButton}
+                onClick={handleStartClick}
+                disabled={loading}
+              >
+                <span className={styles.statusMessage}>
+                  {loading ? statusMessage : "시작하기"}
                 </span>
-              )}
-            </button>
+                {loading && (
+                  <span className={styles.statusSubMessage}>
+                    {statusSubMessage}
+                  </span>
+                )}
+              </button>
+            </div>
+          </>
+        ) : (
+          <div className={styles.nullMessageContainer}>
+            <p className={styles.nullMessage}>등록된 자기소개서가 없습니다.</p>
           </div>
-        </>
-      ) : (
-        <div className={styles.nullMessageContainer}>
-        <p className={styles.nullMessage}>등록된 자기소개서가 없습니다.</p>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
