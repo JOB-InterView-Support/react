@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import styles from "./AiInterview.module.css"; // CSS 파일 가져오기
 
 const AiInterview = () => {
-  const { intro_no: selectedIntro, round: RoundId } = useParams();
+  const { intro_no: selectedIntro, round: RoundId, int_id: INT_ID } = useParams();
   const [audioDevices, setAudioDevices] = useState([]); // 마이크 디바이스 목록
   const [selectedMicrophone, setSelectedMicrophone] = useState(null); // 선택된 마이크
   const [isConfirmed, setIsConfirmed] = useState(false); // "확인하기" 버튼 클릭 여부
@@ -13,6 +13,8 @@ const AiInterview = () => {
   const [cycleCount, setCycleCount] = useState(0); // 반복 횟수 카운트
   const [recordingWebSocket, setRecordingWebSocket] = useState(null); // WebSocket 객체
   const canvasRef = useRef(null);
+
+  const uuid = localStorage.getItem("uuid");
 
   useEffect(() => {
     const getAudioDevices = async () => {
@@ -148,19 +150,23 @@ const AiInterview = () => {
 
   const startRecording = async () => {
     try {
-      const response = await fetch("http://127.0.0.1:8000/interviewSave/start-recording", {
+      const response = await fetch("http://127.0.0.1:8000/interviewSave/record/start", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          intro_no: "12345",
-          interview_round: 1,
-          duration: 20,
+          uuid: uuid,  // uuid가 올바르게 전달되고 있는지 확인
+          intro_no: selectedIntro,  // intro_no가 올바르게 전달되고 있는지 확인
+          round_id: RoundId,  // round_id가 올바르게 전달되고 있는지 확인
+          int_id: INT_ID,  // int_id가 올바르게 전달되고 있는지 확인
         }),
       });
+  
       if (!response.ok) {
-        throw new Error(`Error: ${response.status}`);
+        const errorData = await response.json();
+        console.error("Error starting recording:", errorData.detail);
+        throw new Error(`Error: ${response.status} - ${errorData.detail}`);
       }
   
       const data = await response.json();
@@ -169,6 +175,8 @@ const AiInterview = () => {
       console.error("Error starting recording:", error);
     }
   };
+  
+  
   
   
 
