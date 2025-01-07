@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
 import styles from "./SelectIntro.module.css";
 import AiInterviewSubmenubar from "../../components/common/subMenubar/AiInterviewSubMenubar";
+import interviewguide from "../../assets/images/interviewguide.png";
 
 function SelectIntro() {
   const { secureApiRequest } = useContext(AuthContext);
@@ -11,6 +12,7 @@ function SelectIntro() {
   const [loading, setLoading] = useState(false);
   const [statusMessage, setStatusMessage] = useState("");
   const [statusSubMessage, setStatusSubMessage] = useState("");
+  const [isGuideModalOpen, setGuideModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -57,6 +59,9 @@ function SelectIntro() {
       prevSelected === introNo ? null : introNo
     );
   };
+
+  const handleGuideModalOpen = () => setGuideModalOpen(true);
+  const handleGuideModalClose = () => setGuideModalOpen(false);
 
   const handleStartClick = async () => {
     if (!selectedIntro) {
@@ -156,7 +161,41 @@ function SelectIntro() {
       <AiInterviewSubmenubar />
       <div className={styles.container}>
         <h1 className={styles.title}>AI 모의면접</h1>
-        <h2 className={styles.subTitle}>자기소개서 선택</h2>
+        <div className={styles.headerRow}>
+          <h2 className={styles.subTitle}>자기소개서 선택</h2>
+          <button className={styles.guideLink} onClick={handleGuideModalOpen}>
+            이용 가이드
+          </button>
+        </div>
+
+        {isGuideModalOpen && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <button
+                className={styles.modalCloseButton}
+                onClick={handleGuideModalClose}
+              >
+                닫기
+              </button>
+              <h2>이용 가이드</h2>
+              <p><br /></p>
+              <ul>
+                <li>1. 자기소개서를 선택하세요.</li>
+                <li>2. 시작 버튼을 누른 후 3~5분 뒤 모의면접이 시작됩니다.</li>
+                <li className={styles.warning}>
+                  ※ 모의면접이 시작되면 이용권 횟수가 차감되며 차감된 이용권은
+                  복구가 불가능 합니다.
+                </li>
+                <li className={styles.referenceText}>▶참고 화면</li>
+                <img
+                  src={interviewguide}
+                  alt="interviewguide"
+                  className={styles.interviewguide}
+                />
+              </ul>
+            </div>
+          </div>
+        )}
 
         {introductions.length > 0 ? (
           <>
