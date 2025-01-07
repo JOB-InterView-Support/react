@@ -168,12 +168,12 @@ async function requestPayment(product) {
                             <p>상품이 없습니다.</p>
                         )
                     )}
+                {role == "ADMIN" &&(
+                       <button onClick={() => '#' }>이용권 등록</button>
+                )}
                 </div>
         </div>
     );
-            {/* {role === Admin &&(
-                <button onClick={() => InsertProducts }>이용권 등록</button>
-            )} */}
     
 }
 
