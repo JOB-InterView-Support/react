@@ -18,8 +18,22 @@
     text-decoration: none; 
     color: black
   }
+  .longMenuItem{
+    width: 160px;
+    height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none; 
+    color: black
+  }
   
   .menuItem:hover {
+    background-color: #f0f0f0; /* 마우스 호버 시 배경색 */
+  }
+
+  .longMenuItem:hover {
     background-color: #f0f0f0; /* 마우스 호버 시 배경색 */
   }
   
