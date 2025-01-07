@@ -1,0 +1,240 @@
+/* 전체 컨테이너 스타일 */
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    gap: 20px;
+  }
+  
+  /* 마이크 테스트 가이드 스타일 */
+  .guide {
+    flex: 1;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .guide h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  .guide p {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 10px;
+    color: #666;
+  }
+  
+  .guide ul {
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+  
+  .guide li {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #666;
+  }
+  
+  /* 카메라와 그래프 섹션 */
+  .cameraSection {
+    flex: 1.5;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .cameraSection img {
+    width: 100%;
+    max-width: 400px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    margin-bottom: 10px;
+  }
+  
+  /* 마이크 볼륨 그래프 */
+  .graph {
+    width: 100%;
+    max-width: 400px;
+    height: 100px;
+    margin: 0 auto 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    position: relative;
+  }
+  
+  .graph .bar {
+    height: 100%;
+    width: 0%;
+    background-color: #007bff;
+    transition: width 0.2s ease;
+    border-radius: 4px;
+  }
+  
+  /* 마이크 선택 및 상태 */
+  .microphoneSelect {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .microphoneSelect select {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: 60%;
+  }
+  
+  .microphoneSelect .status {
+    font-size: 14px;
+    color: green;
+    font-weight: bold;
+  }
+  
+  /* 버튼 스타일 */
+  .buttons {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .cancelButton {
+    background-color: #f5f5f5;
+    color: #333;
+    border: 1px solid #ccc;
+  }
+  
+  .cancelButton:hover {
+    background-color: #e0e0e0;
+  }
+  
+  .confirmButton {
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .confirmButton:hover {
+    background-color: #0056b3;
+  }
+  
+  /* 큰 캠 화면 컨테이너 */
+.fullscreenContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+  }
+  
+  .introHeader {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .largeCameraContainer {
+    width: 80%;
+    max-width: 800px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 20px;
+  }
+  
+  .largeCamera {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .largeButtons {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .backButton,
+  .startButton {
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .backButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .startButton:hover {
+    background-color: #0056b3;
+  }
+  
+ /* 타이머 스타일 */
+.timer {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+    font-weight: bold;
+  }
+  
+  .completeMessage {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: green;
+  }
+  
+  .startButton {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 10px 20px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .startButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .graphContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .canvas {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+  }
+  

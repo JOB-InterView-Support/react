@@ -1,0 +1,101 @@
+.container {
+    width: 50%; /* 전체 폭 */
+    margin: 0 auto; /* 중앙 정렬 */
+    margin-bottom: 5%;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left; /* 왼쪽 정렬 */
+    color: #004F99;
+}
+
+.field {
+    margin-bottom: 20px; /* 필드 간 간격 */
+}
+
+.label {
+    font-weight: bold;
+    display: block; /* 블록 레벨로 표시 */
+    margin-bottom: 5px;
+    color: #006DD2;
+}
+
+.value {
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+}
+
+.loadingMessage, .errorMessage {
+    font-size: 18px;
+    color: red;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.listContainer {
+    border: 2px solid #A1C9FF; /* 연한 파란색 테두리 */
+    background-color: #F5F9FF; /* 연한 파란색 배경 */
+    border-radius: 15px;
+    padding: 20px;
+    height: auto; /* 높이를 컨텐츠에 맞게 설정 */
+}
+
+.scrollable {
+    max-height: 400px; /* 스크롤 영역 최대 높이 */
+    overflow-y: auto; /* 세로 스크롤 */
+    overflow-x: hidden; /* 가로 스크롤 제거 */
+}
+
+.scrollable::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 너비 */
+    background-color: transparent; /* 배경 투명 */
+}
+
+.scrollable::-webkit-scrollbar-thumb {
+    background-color: #85affd; /* 스크롤바 기본 색상 */
+    border-radius: 16px; /* 둥근 스크롤바 */
+}
+
+.scrollable::-webkit-scrollbar-thumb:hover {
+    background-color: #5c95fe; /* 호버 시 색상 */
+}
+
+.scrollable::-webkit-scrollbar-track {
+    border-radius: 10px; /* 트랙 둥근 모양 */
+    background-color: transparent; /* 트랙 배경 투명 */
+}
+
+.scrollable::-webkit-scrollbar-button {
+    display: none; /* 버튼 제거 */
+}
+
+.nullMessage {
+    color: #004F99;
+    font-weight: bold;
+    font-size: 20px;
+    text-align: center;
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 90%; /* 모바일 화면에서는 폭을 90%로 */
+    }
+
+    .title {
+        font-size: 24px; /* 제목 크기 축소 */
+    }
+
+    .label {
+        font-size: 14px;
+    }
+
+    .value {
+        font-size: 14px;
+    }
+}
