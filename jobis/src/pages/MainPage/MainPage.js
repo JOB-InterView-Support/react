@@ -17,9 +17,10 @@ import img5 from "../../assets/images/slied5.webp";
 import img6 from "../../assets/images/slied6.jpg";
 import img7 from "../../assets/images/slied7.jpg";
 import img8 from "../../assets/images/slied8.jpg";
+import img9 from "../../assets/images/wellcometohell.webp";
 
 function MainPage() {
-  const images = [img1, img2, img3, img4, img5, img6, img7, img8];
+  const images = [img9, img1, img2, img3, img4, img5, img6, img7, img8];
   const sliderRef = useRef(null);
 
   useEffect(() => {
