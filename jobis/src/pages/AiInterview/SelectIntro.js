@@ -137,6 +137,8 @@ function SelectIntro() {
 
             setTimeout(() => {
               navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
+              // IntNo(자소서 번호) / 회차 / IntRo(인터뷰 번호)
+              // navigate(`/aiMockInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
             }, 2000);
           }
         } catch (error) {
