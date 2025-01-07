@@ -34,8 +34,9 @@
 .review-table th,
 .review-table td {
   border: 1px solid #ddd;
-  padding: 12px;
+  padding: 10px;
   text-align: center;
+  height: 19px;
   border-right: none; /* 기존 border-right 제거 */
   border-left: none;
 }
