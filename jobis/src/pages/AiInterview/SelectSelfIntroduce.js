@@ -56,85 +56,104 @@ function SelectSelfIntroduce() {
 
   // 상태 확인 및 업데이트 API 호출
   const checkStatusAndUpdate = async () => {
-    const interval = setInterval(async () => {
-      try {
-        const statusResponse = await fetch(
-          "http://127.0.0.1:8000/addSelfIntroduce/status",
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            credentials: "include", // CORS 에러 방지
+    let interval;
+    try {
+      interval = setInterval(async () => {
+        try {
+          const statusResponse = await fetch(
+            "http://127.0.0.1:8000/addSelfIntroduce/status",
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              credentials: "include", // CORS 에러 방지
+            }
+          );
+  
+          if (!statusResponse.ok) {
+            throw new Error(`HTTP error! status: ${statusResponse.status}`);
           }
-        );
-
-        if (!statusResponse.ok) {
-          throw new Error(`HTTP error! status: ${statusResponse.status}`);
-        }
-
-        const statusResult = await statusResponse.json();
-        console.log("현재 상태 객체:", statusResult);
-
-        if (statusResult.status === "complete") {
-          setStatusMessage("작업이 완료되었습니다!");
+  
+          const statusResult = await statusResponse.json();
+          console.log("현재 상태 객체:", statusResult);
+  
+          if (statusResult.status === "complete") {
+            setStatusMessage("작업이 완료되었습니다!");
+            clearInterval(interval);
+            console.log("페이지 이동: /addSelfIntroduce", selectedIntro);
+  
+            navigate(`/addSelfIntroduce/${selectedIntro}`); // AddSelfIntroduce 페이지로 이동
+          } else if (statusResult.status === "processing") {
+            setStatusMessage("AI가 작업 중입니다. 잠시만 기다려주세요...");
+          } else if (statusResult.status === "idle") {
+            setStatusMessage("작업이 시작되지 않았습니다. 다시 시도해주세요.");
+            clearInterval(interval);
+          } else {
+            setStatusMessage("알 수 없는 상태입니다.");
+            clearInterval(interval);
+          }
+        } catch (error) {
+          console.error("상태 확인 중 오류 발생:", error.message);
+          setStatusMessage("상태 확인 중 오류가 발생했습니다.");
           clearInterval(interval);
-
-          navigate(`/addSelfIntroduce/${selectedIntro}`); // 페이지 이동
-        } else if (statusResult.status === "in_progress") {
-          setStatusMessage("AI가 작업 중입니다. 잠시만 기다려주세요...");
-        } else {
-          setStatusMessage("작업이 시작되지 않았습니다. 다시 시도해주세요.");
-          clearInterval(interval);
         }
-      } catch (error) {
-        console.error("상태 확인 중 오류 발생:", error.message);
-        setStatusMessage("상태 확인 중 오류가 발생했습니다.");
-        clearInterval(interval);
-      }
-    }, 5000);
+      }, 5000);
+    } catch (error) {
+      console.error("checkStatusAndUpdate 실행 중 오류:", error.message);
+      if (interval) clearInterval(interval);
+    }
   };
+  
 
   const handleProceed = async () => {
     if (!selectedIntro) {
-      alert("자기소개서를 선택해주세요.");
-      return;
+        alert("자기소개서를 선택해주세요.");
+        return;
     }
+
+    const storedUuid = localStorage.getItem("uuid");
+    if (!storedUuid) {
+        alert("로컬 스토리지에 UUID가 없습니다. 다시 로그인해주세요.");
+        return;
+    }
+
     console.log("선택된 introNo:", selectedIntro);
+    console.log("로컬 스토리지에서 가져온 UUID:", storedUuid);
 
     try {
-      // 작업 시작 요청
-      const startResponse = await fetch(
-        "http://127.0.0.1:8000/addSelfIntroduce/insert_self_introduction",
-        {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ intro_no: selectedIntro }),
+        const startResponse = await fetch(
+            "http://127.0.0.1:8000/addSelfIntroduce/insert_self_introduce",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    intro_no: selectedIntro,
+                    uuid: storedUuid,
+                }),
+            }
+        );
+
+        console.log("API 응답 상태:", startResponse.status);
+        if (!startResponse.ok) {
+            const errorData = await startResponse.text();
+            console.error("API 오류 응답:", errorData);
+            throw new Error(`작업 시작 요청 실패: ${startResponse.status}`);
         }
-    );
-    
-      console.log("API 호출 경로:", "http://127.0.0.1:8000/addSelfIntroduce/update_self_introduce");
-        console.log("요청 데이터:", { intro_no: selectedIntro });
 
-      
-
-      if (!startResponse.ok) {
-        const errorData = await startResponse.text(); // 오류 응답 내용을 출력
-        console.error("작업 시작 요청 실패:", startResponse.status, errorData);
-        throw new Error(`작업 시작 요청 실패: ${startResponse.status}`);
-      }
-      
-
-      console.log("작업 시작 성공");
-      setStatusMessage("작업이 시작되었습니다. 상태를 확인합니다...");
-      checkStatusAndUpdate(); // 상태 확인 호출
+        console.log("작업 시작 성공");
+        setStatusMessage("작업이 시작되었습니다. 상태를 확인합니다...");
+        checkStatusAndUpdate();
     } catch (error) {
-      console.error("작업 시작 중 오류:", error.message);
-      setStatusMessage("작업 시작 중 오류가 발생했습니다.");
+        console.error("작업 시작 중 오류:", error.message);
+        setStatusMessage("작업 시작 중 오류가 발생했습니다.");
     }
-  };
+};
+
+
+
 
   const handleSelectIntro = (introNo) => {
     setSelectedIntro((prev) => (prev === introNo ? null : introNo)); // 선택 상태 토글
