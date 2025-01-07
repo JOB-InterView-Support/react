@@ -1,53 +1,117 @@
+/* 기본 컨테이너 스타일 */
 .container {
-    padding: 20px;
-  }
-  
-  .favoriteList {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .favoriteCard {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  
-  .favoriteCard h3 {
-    margin: 0;
-    font-size: 18px;
-    font-weight: bold;
-  }
-  
-  .favoriteCard p {
-    margin: 5px 0;
-  }
-  
-  .viewButton,
-  .removeButton {
-    margin-top: 10px;
-    padding: 5px 10px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .removeButton {
-    background-color: #dc3545;
-  }
-  
-  .viewButton:hover,
-  .removeButton:hover {
-    opacity: 0.8;
-  }
-  
-  .removeButton {
-    margin-left: 10px;
-  }
-  
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px; /* 좌우 여백 20px, 상하 여백 20px */
+  max-width: 1200px; /* 최대 너비 1200px */
+  width: 80%; /* 전체 너비의 80% */
+  margin: 100px auto; /* 위 아래 여백 100px */
+}
+/* 즐겨찾기 목록 스타일 */
+.favoriteList {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* 카드 간의 간격 증가 */
+  margin-bottom: 30px; /* 목록 끝에 여백 추가 */
+}
+
+/* 즐겨찾기 카드 스타일 */
+.favoriteCard {
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px; /* 카드 둥근 모서리 */
+  background-color: #fff; /* 카드 배경 흰색 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* 카드에 그림자 추가 */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  transition: transform 0.2s ease-in-out; /* 카드 hover 효과 추가 */
+}
+
+/* 카드 hover 효과 */
+.favoriteCard:hover {
+  transform: translateY(-5px); /* 카드가 위로 이동 */
+}
+
+/* 카드 제목 스타일 */
+.favoriteCard h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: bold;
+  color: #333; /* 제목 색상 어두운 색으로 변경 */
+}
+
+/* 카드 내용 스타일 */
+.favoriteCard p {
+  margin: 5px 0;
+  color: #555; /* 내용 색상 좀 더 부드럽게 */
+  font-size: 14px;
+}
+
+/* 버튼 스타일 */
+.viewButton,
+.removeButton {
+  margin-top: 15px; /* 버튼 위에 여백 추가 */
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px; /* 둥근 버튼 */
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease; /* 배경색 변화 추가 */
+}
+
+/* 보기 버튼 */
+.viewButton {
+  background-color: #007bff;
+  color: white;
+}
+
+.viewButton:hover {
+  background-color: #0056b3; /* 호버 시 배경색 어두운 파란색 */
+}
+
+/* 삭제 버튼 */
+.removeButton {
+  background-color: #dc3545;
+  color: white;
+  margin-left: 10px; /* 보기 버튼과 간격 추가 */
+}
+
+.removeButton:hover {
+  background-color: #c82333; /* 호버 시 배경색 어두운 빨간색 */
+}
+
+/* 테이블 스타일 */
+.table {
+  margin: 10%;
+  padding: 0%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 테이블 헤더 스타일 */
+.table th, .table td {
+  padding: 12px;
+  text-align: left;
+  border: 1px solid #ddd;
+}
+
+.table th {
+  background-color: #f8f8f8;
+  font-weight: bold;
+}
+
+.table tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tbody tr:hover {
+  background-color: #e6f0ff; /* 마우스 오버 시 밝은 파란색 배경 */
+}
+
+.table td {
+  color: #555;
+}

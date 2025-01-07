@@ -6,13 +6,12 @@ import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingS
 import FavoriteStar from "./FavoriteStar";
 
 const FavoritesList = () => {
-  const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [favorites, setFavorites] = useState([]); // 즐겨찾기 목록 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 오류 상태
   const navigate = useNavigate();
   const { secureApiRequest, isLoggedIn } = useContext(AuthContext);
   const [uuid, setUuid] = useState(null); // uuid 상태
-  const [list,setList] = useState([]);
 
   // 컴포넌트가 마운트될 때 uuid를 localStorage에서 가져옴
   useEffect(() => {
@@ -48,14 +47,13 @@ const FavoritesList = () => {
           favoritesResponse.data.map(async (favorite) => {
             try {
               const jobResponse = await secureApiRequest(
-                `/${favorite.jobPostingId}`,
+                `/jobposting/${favorite.jobPostingId}`, // 채용공고 상세 요청
                 { method: "GET" }
               );
               console.log(jobResponse.data);
               const jobData = jobResponse?.data?.jobs?.job || null;
 
               if (!jobData) {
-                // 로그 추가: jobData가 없으면 해당 항목 처리
                 console.error('Job data is missing for job posting ID:', favorite.jobPostingId);
               }
               return {
@@ -95,7 +93,6 @@ const FavoritesList = () => {
   // 즐겨찾기 삭제 함수
   const removeFavorite = async (jobPostingId) => {
     try {
-      // 즐겨찾기에서 공고 제거
       await secureApiRequest(
         `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
         { method: "DELETE" }
@@ -111,7 +108,7 @@ const FavoritesList = () => {
 
   // 채용공고 상세보기 페이지로 이동
   const handleJobClick = (id) => {
-    navigate(`/jobPosting/${id}`);
+    navigate(`/jobposting/${id}`);
   };
 
   if (loading) return <p>즐겨찾기 목록을 불러오는 중...</p>;
@@ -127,13 +124,13 @@ const FavoritesList = () => {
             favorites.map((favorite) => (
               <div key={favorite.jobPostingId} className={styles.favoriteCard}>
                 <div className={styles.cardHeader}>
-                  <h3>{favorite?.position?.Title}</h3>
+                  <h3>{favorite.jobTitle}</h3>
                   <span className={styles.company}>{favorite.company}</span>
                 </div>
                 <div className={styles.cardContent}>
-                  <p>업종: {favorite?.position?.industry}</p>
-                  <p>위치: {favorite?.position?.location}</p>
-                  <p>연봉: {favorite?.salary}</p>
+                  <p>업종: {favorite.industry}</p>
+                  <p>위치: {favorite.location}</p>
+                  <p>연봉: {favorite.salary}</p>
                 </div>
                 <div className={styles.cardActions}>
                   <button

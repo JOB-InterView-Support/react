@@ -32,7 +32,16 @@ function NoticeDetail() {
             setNotice(response.data);
 
             if (response.data.noticePath) {
-                setFilePreview(response.data.noticePath);
+                if (isImageFile(response.data.noticePath)) {
+                    // 이미지 파일의 경우 바로 설정
+                    setFilePreview(response.data.noticePath);
+                } else {
+                    // 이미지가 아닌 경우 fetch를 통해 미리보기 생성
+                    const previewUrl = await fetchImage(response.data.noticePath);
+                    if (previewUrl) {
+                        setFilePreview(previewUrl);
+                    }
+                }
             }
         } catch {
             console.error("공지사항 데이터를 불러오지 못했습니다.");
@@ -59,7 +68,7 @@ function NoticeDetail() {
     const fetchImage = async (url) => {
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error("이미지 로드 실패");
+            if (!response.ok) throw new Error("파일 로드 실패");
             const blob = await response.blob();
             return URL.createObjectURL(blob);
         } catch (error) {
@@ -128,70 +137,52 @@ function NoticeDetail() {
             <div className={styles.noticecontent}>{notice.noticeContent}</div>
 
             {notice.noticePath && (
-    <div className={styles.noticeImageContainer}>
-        {isSupportedFile(notice.noticePath) ? (
-            isImageFile(notice.noticePath) ? (
-                // 이미지 파일 자동 미리보기
-                <img
-                    src={filePreview}
-                    alt={notice.noticePath.split('/').pop()}
-                    className={styles.noticeImage}
-                />
-            ) : (
-                <>
-                    <button
-                        onClick={async () => {
-                            try {
-                                const previewUrl = await fetchImage(notice.noticePath);
-                                if (previewUrl) {
-                                    setFilePreview(previewUrl);
-                                } else {
-                                    alert("브라우저에서 지원하지 않는 파일 형식입니다.");
-                                }
-                            } catch (error) {
-                                console.error("미리보기 실패:", error);
-                                alert("파일 미리보기에 실패했습니다.");
-                            }
-                        }}
-                        className={styles.previewButton}
-                    >
-                        미리보기
-                    </button>
-                    {filePreview && (
-                        <embed
-                            src={filePreview}
-                            type="application/pdf"
-                            width="100%"
-                            height="500px"
-                            className={styles.embedPreview}
-                            onError={() => {
-                                console.warn("브라우저에서 지원하지 않는 파일입니다.");
-                                setFilePreview(null);
-                            }}
-                        />
+                <div className={styles.noticeImageContainer}>
+                    {isSupportedFile(notice.noticePath) ? (
+                        isImageFile(notice.noticePath) ? (
+                            // 이미지 파일 자동 미리보기
+                            <img
+                                src={filePreview}
+                                alt={notice.noticePath.split('/').pop()}
+                                className={styles.noticeImage}
+                            />
+                        ) : (
+                            filePreview ? (
+                                <embed
+                                    src={filePreview}
+                                    type="application/pdf"
+                                    width="100%"
+                                    height="500px"
+                                    className={styles.embedPreview}
+                                    onError={() => {
+                                        console.warn("브라우저에서 지원하지 않는 파일입니다.");
+                                        setFilePreview(null);
+                                    }}
+                                />
+                            ) : (
+                                <p className={styles.unsupportedMessage}>
+                                    미리보기를 지원하지 않는 파일 형식입니다.
+                                </p>
+                            )
+                        )
+                    ) : (
+                        <p className={styles.unsupportedMessage}>
+                            미리보기를 지원하지 않는 파일 형식입니다.
+                        </p>
                     )}
-                </>
-            )
-        ) : (
-            <p className={styles.unsupportedMessage}>
-                미리보기를 지원하지 않는 파일 형식입니다.
-            </p>
-        )}
-            <button
-                onClick={handleDownload}
-                className={styles.downloadButton}
-            >
-                <img
-                    src={downloadIcon}
-                    alt="Download Icon"
-                    className={styles.downloadIcon}
-                />
-                {notice.noticePath.split('/').pop().replace("N_", "")}
-            </button>
-
-    </div>
-)}
-
+                    <button
+                        onClick={handleDownload}
+                        className={styles.downloadButton}
+                    >
+                        <img
+                            src={downloadIcon}
+                            alt="Download Icon"
+                            className={styles.downloadIcon}
+                        />
+                        {notice.noticePath.split('/').pop().replace("N_", "")}
+                    </button>
+                </div>
+            )}
 
             <button onClick={handleBack} className={styles.backButton}>이전으로</button>
 

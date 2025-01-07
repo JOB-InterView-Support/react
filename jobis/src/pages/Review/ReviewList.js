@@ -84,8 +84,8 @@ const ReviewList = () => {
 
   // 7. Review 목록 렌더링
   return (
-    <div className={styles["review-list-container"]}>
-      <h1>Review 목록</h1>
+    <div className={styles.container}>
+      <h1 className={styles.title}>체험 후기</h1>
       {isLoading ? (
         // 로딩 중일 때 메시지 표시
         <p>데이터를 불러오는 중입니다...</p>

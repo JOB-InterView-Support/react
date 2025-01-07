@@ -114,19 +114,21 @@ const JobPostingSearch = () => {
       const queryParams = Object.entries(filters)
         .filter(([_, value]) => value)  // 값이 있을 때만 필터링
         .map(([key, value]) => {
-          if (key === "job_mid_cd") {
-            return `position.job_mid_cd=${value}`;  // 직무
-          } else if (key === "loc_mcd") {
-            return `position.loc_mcd=${value}`;  // 지역
-          } else if (key === "edu_lv") {
-            return `edu_lv=${value}`;  // 학력
-          } else if (key === "job_type") {
-            return `job_type=${value}`;  // 근무형태
+          switch (key) {
+            case "job_mid_cd":
+              return `jobType=${value}`;  // 직무
+            case "loc_mcd":
+              return `locMcd=${value}`;  // 지역
+            case "edu_lv":
+              return `eduLv=${value}`;  // 학력
+            case "job_type":
+              return `jobType=${value}`;  // 근무형태
+            default:
+              return `${key}=${value}`;
           }
-          return `${key}=${value}`;
         })
         .join("&");
-
+        
       const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
         method: "GET",
       });
