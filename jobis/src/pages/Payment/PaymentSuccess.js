@@ -19,15 +19,22 @@ export function PaymentSuccess() {
     const amount = searchParams.get("amount");
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
-    
+
     console.log("paymentKey:", paymentKey);
     console.log("orderId:", orderId);
     console.log("amount:", amount);
 
+    const handleBeforeUnload = (event) => {
+      event.preventDefault();
+      event.returnValue = "결제가 진행 중입니다. 새로고침을 하지 말아주세요.";
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
     if (paymentKey && orderId && amount) {
       setIsRequesting(true); // 요청 중 상태 활성화
       setErrorMessage(null); // 에러 메시지 초기화
-      
+
       apiClient
         .post(  "/api/payments/confirm",
           {
@@ -75,9 +82,15 @@ export function PaymentSuccess() {
         })
         .finally(() => {
           setIsRequesting(false); // 요청 완료 상태로 변경
+          window.removeEventListener("beforeunload", handleBeforeUnload);
         });
     }
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
   }, [searchParams]);
+
   return (
     <>
       <div className={styles.paymentContainer}>
@@ -132,7 +145,7 @@ export function PaymentSuccess() {
           <button className={styles.cancelButton}>환불 진행</button>
           <button
             className={styles.backButton}
-            onClick={() => (window.location.href = "http://localhost:8080")} // 메인 페이지로 이동
+            onClick={() => (window.location.href = "http://localhost:8080")}
           >
             돌아가기
           </button>
@@ -142,11 +155,13 @@ export function PaymentSuccess() {
         {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
       </div>
     </>
-    );
+  );
+}
+
+export default PaymentSuccess;
+
     {/*<div className={styles.paymentBox} style={{ width: "600px", textAlign: "left" }}>
       <b>Response Data :</b>
       <div id="response">
         {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
     </div>*/}
-}  
-export default PaymentSuccess;
