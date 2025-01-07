@@ -1,0 +1,70 @@
+.container{
+    height: 70vh;
+}
+
+.content {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* height: 80vh; */
+}
+.table {
+  width: 70%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.tableHead {
+  background-color: rgba(109, 160, 255, 0.5);
+  padding: 8px;
+}
+.filterContainer {
+  display: flex;
+  justify-content: space-between; /* 좌우 배치 */
+  align-items: center; /* 수직 가운데 정렬 */
+  margin-bottom: 20px;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+.arrayGroup {
+  display: flex;
+  gap: 10px;
+}
+
+.searchGroup {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.selectOpt {
+  padding: 5px 10px;
+  font-size: 14px;
+}
+
+.searchText {
+  padding: 5px;
+  font-size: 14px;
+  width: 200px;
+}
+.searchButton {
+  background-image: url("../../assets/images/searchicon.png");
+  background-repeat: no-repeat; /* 이미지를 반복하지 않음 */
+  background-position: center; /* 이미지를 중앙에 배치 */
+  background-size: contain; /* 이미지 크기를 버튼 크기에 맞춤 */
+  width: 32px; /* 버튼 너비 */
+  height: 32px; /* 버튼 높이 */
+  border: none; /* 버튼 테두리 제거 */
+  background-color: transparent; /* 배경색을 투명으로 설정 */
+  cursor: pointer; /* 커서를 포인터 모양으로 변경 */
+  padding: 0; /* 기본 패딩 제거 */
+  margin: 0; /* 기본 마진 제거 */
+}

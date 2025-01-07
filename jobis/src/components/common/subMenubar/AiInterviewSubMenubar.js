@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import styles from "./AdminSubMenubar.module.css";
+import styles from "./AiInterviewSubmenubar.module.css";
 
 function AiInterviewSubmenubar() {
   const location = useLocation();
@@ -13,8 +13,8 @@ function AiInterviewSubmenubar() {
         </div>
       </Link>
 
-      <Link to="/selectSelfIntroduce" className={styles.menuItem}>
-        <div className={`${styles.menuItem} ${
+      <Link to="/selectSelfIntroduce" className={styles.longMenuItem}>
+        <div className={`${styles.longMenuItem} ${
             location.pathname === "/selectSelfIntroduce" ||
             location.pathname.startsWith("/addSelfIntroduce/")
              ? styles.active : ""}`}>
