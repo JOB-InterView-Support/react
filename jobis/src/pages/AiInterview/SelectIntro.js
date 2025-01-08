@@ -6,24 +6,7 @@ import AiInterviewSubmenubar from "../../components/common/subMenubar/AiIntervie
 import interviewguide from "../../assets/images/interviewguide.png";
 
 function SelectIntro({ resultData, setResultData }) {
-  const [permissionStatus, setPermissionStatus] = useState("Checking...");
-  useEffect(() => {
-    async function checkPermissions() {
-      try {
-        // 카메라와 마이크 접근 권한 요청
-        await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-        setPermissionStatus("허용 되었습니다.");
-      } catch (error) {
-        // 권한 거부 혹은 다른 오류 처리
-        if (error.name === "NotAllowedError") {
-          setPermissionStatus("허용되지 않았습니다.");
-        }
-      }
-    }
-
-    checkPermissions();
-  }, []);
-
+ 
   // props 추가
   const { secureApiRequest } = useContext(AuthContext);
 
@@ -121,6 +104,13 @@ function SelectIntro({ resultData, setResultData }) {
   const handleGuideModalClose = () => setGuideModalOpen(false);
 
   const handleStartClick = async () => {
+    console.log("Start Button Clicked"); // 클릭 확인 로그
+    if (resultData) {
+      alert("모의 면접 결과 분석중입니다. 분석 완료 후 다시 시도해주세요.");
+      return;
+    }
+    console.log("Result Data is null or undefined"); // 이 부분이 실행되면 resultData가 없는 상태
+    
     if (!selectedIntro) {
       alert("자기소개서를 선택해주세요.");
       return;
