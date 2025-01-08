@@ -1,101 +1,209 @@
 .container {
-    width: 50%; /* 전체 폭 */
-    margin: 0 auto; /* 중앙 정렬 */
-    margin-bottom: 5%;
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 7%;
+    min-height: 400px;
     font-family: Arial, sans-serif;
     color: #333;
+    text-align: center; /* 추가: 버튼 가운데 정렬 */
 }
 
 .title {
     font-size: 30px;
-    font-weight: bold;
+    font-weight: 900;
     margin-bottom: 20px;
-    text-align: left; /* 왼쪽 정렬 */
+    text-align: left;
     color: #004F99;
 }
 
-.field {
-    margin-bottom: 20px; /* 필드 간 간격 */
-}
-
-.label {
-    font-weight: bold;
-    display: block; /* 블록 레벨로 표시 */
-    margin-bottom: 5px;
+.subTitle {
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-align: left;
     color: #006DD2;
 }
 
-.value {
-    font-size: 16px;
-    color: #333;
-    line-height: 1.6;
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
 }
 
-.loadingMessage, .errorMessage {
-    font-size: 18px;
-    color: red;
-    margin-top: 20px;
+.table th,
+.table td {
+    border: 1px solid #ddd;
+    padding: 8px;
     text-align: center;
+    font-size: 15px;
 }
 
-.listContainer {
-    border: 2px solid #A1C9FF; /* 연한 파란색 테두리 */
-    background-color: #F5F9FF; /* 연한 파란색 배경 */
-    border-radius: 15px;
-    padding: 20px;
-    height: auto; /* 높이를 컨텐츠에 맞게 설정 */
+.table th {
+    background-color: rgba(109, 160, 255, 0.15);
+    font-weight: bold;
+    border-top: 2px solid #6DA0FF;
+    border-bottom: 1px solid #6DA0FF;
 }
 
-.scrollable {
-    max-height: 400px; /* 스크롤 영역 최대 높이 */
-    overflow-y: auto; /* 세로 스크롤 */
-    overflow-x: hidden; /* 가로 스크롤 제거 */
-}
-
-.scrollable::-webkit-scrollbar {
-    width: 6px; /* 스크롤바 너비 */
-    background-color: transparent; /* 배경 투명 */
-}
-
-.scrollable::-webkit-scrollbar-thumb {
-    background-color: #85affd; /* 스크롤바 기본 색상 */
-    border-radius: 16px; /* 둥근 스크롤바 */
-}
-
-.scrollable::-webkit-scrollbar-thumb:hover {
-    background-color: #5c95fe; /* 호버 시 색상 */
-}
-
-.scrollable::-webkit-scrollbar-track {
-    border-radius: 10px; /* 트랙 둥근 모양 */
-    background-color: transparent; /* 트랙 배경 투명 */
-}
-
-.scrollable::-webkit-scrollbar-button {
-    display: none; /* 버튼 제거 */
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
 
 .nullMessage {
-    color: #004F99;
-    font-weight: bold;
-    font-size: 20px;
     text-align: center;
+    color: #888;
+    margin-top: 5px;
+    font-size: 30px;
+    font-weight: bold;
 }
 
-@media (max-width: 768px) {
-    .container {
-        width: 90%; /* 모바일 화면에서는 폭을 90%로 */
-    }
+.nullMessageContainer {
+    display: flex; /* 플렉스 컨테이너로 설정 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    height: 300px;
+}
 
-    .title {
-        font-size: 24px; /* 제목 크기 축소 */
-    }
+.startButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #004f99;
+    color: white;
+    border: none;
+    padding: 1em 2em;
+    font-size: 1.125em;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+}
 
-    .label {
-        font-size: 14px;
-    }
+.startButton:hover {
+    background-color: #003F7A;
+}
 
-    .value {
-        font-size: 14px;
-    }
+.startButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.statusSubMessage {
+    font-size: 12px;
+    color: white;
+    margin-top: 5px;
+}
+
+.startButtonContainer {
+    display: flex; /* 플렉스 컨테이너로 설정 */
+    justify-content: center; /* 가로 중앙 정렬 */
+}
+
+.headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.guideLink {
+    font-size: 14px;
+    font-family: "Arial Black", sans-serif; /* Arial Black으로 굵게 설정 */
+    font-weight: 900;
+    color: #9b9b9b;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.guideLink:hover {
+    font-size: 15px;
+    color: rgb(0, 0, 0); /* hover 시 색상 변경 */
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%; /* 이미지 크기를 고려해 더 넓게 설정 */
+    max-width: 800px; /* 최대 크기를 제한 */
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden; /* 이미지가 모달 밖으로 나가지 않도록 설정 */
+}
+
+.modalContent img {
+    max-width: 100%; /* 모달 크기에 맞춰 이미지 크기를 제한 */
+    height: auto; /* 가로/세로 비율 유지 */
+}
+
+.modalCloseButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #6d6d6d;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.modalCloseButton:hover {
+    color: #000;
+}
+
+.interviewguide {
+    width: 800px;
+    height: 369px;
+    border: 1px solid rgba(109, 160, 255, 0.5);
+    border-radius: 10px;
+}
+
+.modalContent ul {
+    list-style: none; /* li 태그의 기본 스타일 제거 */
+    padding: 0; /* 리스트 왼쪽 여백 제거 */
+    margin: 0; /* 리스트 위아래 여백 제거 */
+}
+
+.modalContent li {
+    margin-bottom: 10px; /* 각 항목 간 간격 추가 */
+    font-size: 16px; /* 리스트 항목 글씨 크기 설정 */
+    color: #333; /* 텍스트 색상 설정 */
+}
+
+.modalContent h2 {
+    margin-bottom: 10px; /* 각 항목 간 간격 추가 */
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.warning {
+    color: red !important; /* 덮어쓰기를 방지하기 위해 !important 사용 */
+    font-weight: bold; /* 추가 스타일 */
+}
+
+.referenceText {
+    font-size: 12px !important; /* 텍스트 크기 작게 */
+    color: #666 !important; /* 텍스트 색상 회색 */
+    text-align: left; /* 텍스트 우측 정렬 */
+    font-weight: bold;
+    margin-top: 20px; /* 위쪽 여백 추가 */
 }

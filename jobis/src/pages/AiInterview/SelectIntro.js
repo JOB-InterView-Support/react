@@ -6,6 +6,24 @@ import AiInterviewSubmenubar from "../../components/common/subMenubar/AiIntervie
 import interviewguide from "../../assets/images/interviewguide.png";
 
 function SelectIntro({ resultData, setResultData }) {
+  const [permissionStatus, setPermissionStatus] = useState("Checking...");
+  useEffect(() => {
+    async function checkPermissions() {
+      try {
+        // 카메라와 마이크 접근 권한 요청
+        await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+        setPermissionStatus("허용 되었습니다.");
+      } catch (error) {
+        // 권한 거부 혹은 다른 오류 처리
+        if (error.name === "NotAllowedError") {
+          setPermissionStatus("허용되지 않았습니다.");
+        }
+      }
+    }
+
+    checkPermissions();
+  }, []);
+
   // props 추가
   const { secureApiRequest } = useContext(AuthContext);
 
@@ -15,8 +33,11 @@ function SelectIntro({ resultData, setResultData }) {
   const [statusMessage, setStatusMessage] = useState("");
   const [statusSubMessage, setStatusSubMessage] = useState("");
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
-  const navigate = useNavigate();
 
+  const [isPermissionGuideModalOpen, setPermissionGuideModalOpen] =
+    useState(false);
+
+  const navigate = useNavigate();
   useEffect(() => {
     console.log("Result Data in SelectIntro:", resultData); // resultData 값 확인
   }, [resultData]);
@@ -165,6 +186,11 @@ function SelectIntro({ resultData, setResultData }) {
     }
   };
 
+  const handlePermissionGuideModalOpen = () =>
+    setPermissionGuideModalOpen(true);
+  const handlePermissionGuideModalClose = () =>
+    setPermissionGuideModalOpen(false);
+
   return (
     <div>
       <AiInterviewSubmenubar />
@@ -172,6 +198,8 @@ function SelectIntro({ resultData, setResultData }) {
         <h1 className={styles.title}>AI 모의면접</h1>
         <div className={styles.headerRow}>
           <h2 className={styles.subTitle}>자기소개서 선택</h2>
+          <button onClick={handlePermissionGuideModalOpen} className={styles.authorityGuide}>권한 가이드</button>
+
           <button className={styles.guideLink} onClick={handleGuideModalOpen}>
             이용 가이드
           </button>
@@ -241,6 +269,7 @@ function SelectIntro({ resultData, setResultData }) {
                 ))}
               </tbody>
             </table>
+
             <div className={styles.startButtonContainer}>
               <button
                 className={styles.startButton}
@@ -257,6 +286,32 @@ function SelectIntro({ resultData, setResultData }) {
                 )}
               </button>
             </div>
+            {isPermissionGuideModalOpen && (
+              <div className={styles.modalOverlay}>
+                <div className={styles.modalContent}>
+                  <button
+                    className={styles.modalCloseButton}
+                    onClick={handlePermissionGuideModalClose}
+                  >
+                    닫기
+                  </button>
+                  <h2>카메라 및 마이크 권한 가이드</h2>
+                  <div className={styles.permissionGuide}>
+                    <div>카메라 및 마이크 권한을 허용하고 시작해주세요.</div>
+                    <div>팝업에서 허용하거나 아래 지침을 따라주세요.</div>
+                    <br/>
+                    <div>
+                      1. 우측 상단의 점 3개 클릭 <br />
+                      2. 설정 클릭 <br />
+                      3. 개인 정보 보호 및 보안 클릭 <br />
+                      4. 사이트 설정 클릭 <br />
+                      5. 최근 활동에서 JOBIS 클릭 <br />
+                      6. 카메라와 마이크 허용하기.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </>
         ) : (
           <div className={styles.nullMessageContainer}>
