@@ -10,7 +10,7 @@ function SelectSelfIntroduce() {
   const [selectedIntro, setSelectedIntro] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [statusMessage, setStatusMessage] = useState("");
+  const [statusMessage, setStatusMessage] = useState("선택 완료");
   const [statusSubMessage, setStatusSubMessage] = useState("");
   const navigate = useNavigate();
 
@@ -97,7 +97,7 @@ function SelectSelfIntroduce() {
       setStatusMessage("작업 완료!");
       setStatusSubMessage("");
 
-      navigate(`/myIntroductionList/${newIntroNo}`);
+      setTimeout(() => navigate(`/myIntroductionList/${newIntroNo}`), 2000);
     } catch (error) {
       console.error("작업 시작 중 오류:", error.message);
       setStatusMessage("작업 중 오류가 발생했습니다.");
@@ -118,9 +118,7 @@ function SelectSelfIntroduce() {
         <h1 className={styles.title}> 첨삭 자기소개서 선택</h1>
         <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
 
-        {loading ? (
-          <p className={styles.loadingMessage}>작업을!!!!!!!!!!!!시작~~~~~~~~~~~~~하겠습니다!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
-        ) : error ? (
+        {error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : introductions.length > 0 ? (
           <div>
@@ -138,7 +136,7 @@ function SelectSelfIntroduce() {
                   <tr key={intro.introNo}>
                     <td>
                       <input
-                        type="checkbox" // 체크박스 스타일 유지
+                        type="checkbox"
                         checked={selectedIntro === intro.introNo}
                         onChange={() => handleSelectIntro(intro.introNo)}
                       />
@@ -154,24 +152,20 @@ function SelectSelfIntroduce() {
                 ))}
               </tbody>
             </table>
-            <button
-              className={styles.startButton} // 정확한 클래스 사용
-              onClick={handleProceed}
-              disabled={loading}
-            >
-              {loading ? (
-                <>
-                  <span>{statusMessage}</span>
-                  {statusSubMessage && (
-                    <div className={styles.statusSubMessage}>
-                      {statusSubMessage}
-                    </div>
-                  )}
-                </>
-              ) : (
-                "선택 완료"
-              )}
-            </button>
+            <div className={styles.startButtonContainer}>
+              <button
+                className={styles.startButton}
+                onClick={handleProceed}
+                disabled={loading || !selectedIntro} // 로딩 중이거나 선택된 자기소개서가 없으면 비활성화
+              >
+                <span>{statusMessage}</span>
+                {loading && statusSubMessage && (
+                  <span className={styles.statusSubMessage}>
+                    {statusSubMessage}
+                  </span>
+                )}
+              </button>
+            </div>
           </div>
         ) : (
           <p className={styles.nullMessage}>등록된 자기소개서가 없습니다.</p>

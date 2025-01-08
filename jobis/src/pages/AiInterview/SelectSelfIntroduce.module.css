@@ -207,3 +207,46 @@
   font-weight: bold;
   margin-top: 20px; /* 위쪽 여백 추가 */
 }
+
+.startButtonContainer {
+  display: flex; /* 플렉스 컨테이너로 설정 */
+  justify-content: center; /* 가로 중앙 정렬 */
+  align-items: center; /* 세로 중앙 정렬 */
+  margin-top: 20px; /* 위쪽 여백 추가 */
+}
+
+.startButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #004f99;
+  color: white;
+  border: none;
+  padding: 1em 2em;
+  font-size: 1.125em;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.startButton:hover {
+  background-color: #003F7A;
+}
+
+.statusSubMessage {
+  font-size: 12px;
+  color: white;
+  margin-top: 5px;
+}
+
+.loadingMessage {
+  font-size: 24px; 
+  font-weight: bold; 
+  color: black; 
+  margin-top: 20px;
+  text-align: center;
+}
+
+
+
