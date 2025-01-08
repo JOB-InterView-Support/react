@@ -60,6 +60,35 @@ function SelectIntro() {
     );
   };
 
+  const requestTicketUsage = async (formattedDate) => {
+    try {
+      const backendResponse = await secureApiRequest(`/ticket/start`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ date: formattedDate }),
+      });
+  
+      // Axios 응답 구조에서 data를 추출
+      const backendResult = backendResponse.data;
+  
+      console.log("이용권 차감 응답 데이터:", backendResult);
+  
+      // 응답 상태 확인
+      if (backendResult.status !== "SUCCESS") {
+        console.error("이용권 차감 실패:", backendResult);
+        throw new Error(backendResult.message || "이용권 차감 중 문제가 발생했습니다.");
+      }
+  
+      return backendResult;
+    } catch (error) {
+      console.error("이용권 차감 요청 중 오류 발생:", error.message);
+      throw error;
+    }
+  };
+  
+
   const handleGuideModalOpen = () => setGuideModalOpen(true);
   const handleGuideModalClose = () => setGuideModalOpen(false);
 
@@ -68,95 +97,71 @@ function SelectIntro() {
       alert("자기소개서를 선택해주세요.");
       return;
     }
-
+  
+    const confirmUsage = window.confirm("정말 이용권을 차감하시겠습니까?");
+    if (!confirmUsage) {
+      return;
+    }
+  
     setLoading(true);
     setStatusMessage("서버와 연결 중입니다...");
     setStatusSubMessage("3~5분 정도 소요될 수 있습니다.");
-
+  
     try {
+      const selectedDate = new Date().toISOString();
+      const formattedDate = selectedDate.replace("T", " ").split(".")[0];
+  
+      // 이용권 차감 요청
+      const backendResult = await requestTicketUsage(formattedDate);
+      console.log("이용권 차감 결과:", backendResult);
+  
+      // 모의 면접 질문 저장 요청
+      setStatusMessage("AI가 질문을 생성하고 있습니다...");
+      setStatusSubMessage("잠시만 기다려주세요.");
+  
       const response = await fetch(
         "http://127.0.0.1:8000/interview/addQuestions",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            intro_no: selectedIntro,
-          }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ intro_no: selectedIntro }),
         }
       );
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const result = await response.json();
-      console.log("응답 데이터:", result);
-
       const { RoundId, INT_ID } = result;
+  
       if (!RoundId || !INT_ID) {
-        throw new Error(
-          "백엔드 응답에 RoundId 또는 INT_ID가 포함되지 않았습니다."
-        );
+        throw new Error("백엔드 응답에 필요한 데이터가 누락되었습니다.");
       }
-
-      setStatusMessage("AI가 질문을 생성하고 있습니다...");
-      setStatusSubMessage("잠시만 기다려주세요.");
-
-      const statusInterval = setInterval(async () => {
-        try {
-          const statusResponse = await fetch(
-            "http://127.0.0.1:8000/interview/status",
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-
-          if (!statusResponse.ok) {
-            throw new Error(`HTTP error! status: ${statusResponse.status}`);
-          }
-
-          const statusResult = await statusResponse.json();
-          console.log("현재 상태:", statusResult);
-
-          if (statusResult.status === "ing") {
-            setStatusMessage("AI가 질문을 생성하고 있습니다...");
-            setStatusSubMessage("잠시만 기다려주세요.");
-          }
-
-          if (statusResult.status === "complete") {
-            console.log("모든 작업이 완료되었습니다.");
-            setStatusMessage("작업이 완료되었습니다. 인터뷰를 시작합니다!");
-            setStatusSubMessage("");
-
-            clearInterval(statusInterval);
-
-            setTimeout(() => {
-              navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
-              // IntNo(자소서 번호) / 회차 / IntRo(인터뷰 번호)
-              // navigate(`/aiMockInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
-            }, 2000);
-          }
-        } catch (error) {
-          console.error("상태 확인 중 오류 발생:", error.message);
-          clearInterval(statusInterval);
-          setLoading(false);
-          setStatusMessage("작업 중 오류가 발생했습니다. 다시 시도해주세요.");
-          setStatusSubMessage("");
-        }
-      }, 1000);
+  
+      // "곧 모의 면접이 시작됩니다."로 상태 업데이트
+      setTimeout(() => {
+        setStatusMessage("곧 모의 면접이 시작됩니다.");
+        setStatusSubMessage("");
+      }, 2000);
+  
+      // 2초 뒤 화면 이동
+      setTimeout(() => {
+        navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
+      }, 4000);
     } catch (error) {
       console.error("오류 발생:", error.message);
-      alert("예상 질문 저장 중 오류가 발생했습니다.");
-      setLoading(false);
-      setStatusMessage("작업 중 오류가 발생했습니다. 다시 시도해주세요.");
+      alert("작업 중 오류가 발생했습니다. 다시 시도해주세요.");
+      setStatusMessage("작업 중 오류가 발생했습니다.");
       setStatusSubMessage("");
+    } finally {
+      // `loading` 상태 초기화를 navigate 후로 지연
+      setTimeout(() => setLoading(false), 4000);
     }
   };
+  
+  
+  
 
   return (
     <div>

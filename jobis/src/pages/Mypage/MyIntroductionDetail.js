@@ -126,6 +126,12 @@ function MyIntroductionDetail() {
             <strong>내용:</strong>
             <div className={styles.bigcontent}>{detail.introContents}</div>
           </div>
+          {detail.introIsEdited === 'Y' && (
+            <div className={styles.contentWrapper}>
+              <strong>피드백:</strong>
+              <div className={styles.bigcontent}>{detail.introFeedback}</div>
+            </div>
+          )}
         </div>
       </div>
       {isModalOpen && (

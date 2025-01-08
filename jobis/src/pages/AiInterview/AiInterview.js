@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./AiInterview.module.css"; // CSS 파일 가져오기
 
-const AiInterview = () => {
+const AiInterview = ({ setResultData }) => {
   const {
     intro_no: selectedIntro,
     round: RoundId,
@@ -167,19 +167,31 @@ const AiInterview = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        console.error("Error fetching interview state:", errorData.detail);
+        console.error("Error fetching interview state:", errorData);
         throw new Error(`Error: ${response.status} - ${errorData.detail}`);
       }
 
       const data = await response.json();
-      console.log("Interview State:", data);
+      console.group("Interview State Check");
+      console.log("Interview State:", data.interviewState);
+      console.log("Filename:", data.filename);
+      console.log("Intro No:", data.intro_no);
+      console.log("Round ID:", data.round_id);
+      console.log("Int ID:", data.int_id);
+      console.groupEnd();
 
       if (data.interviewState) {
-        // 인터뷰 완료 상태일 경우
-        clearInterval(intervalId); // 주기적 호출 멈춤
-        setIntervalId(null); // interval ID 초기화
-        setIsInterviewCompleted(true); // 인터뷰 완료 상태 설정
-        setFilename(data.filename); // 반환된 파일명 저장
+        clearInterval(intervalId); // Stop periodic calls
+        setIntervalId(null); // Reset interval ID
+        setIsInterviewCompleted(true); // Mark interview as completed
+
+        // Pass data to ResultFooter
+        setResultData({
+          filename: data.filename,
+          intro_no: data.intro_no,
+          round_id: data.round_id,
+          int_id: data.int_id,
+        });
       }
     } catch (error) {
       console.error("Error fetching interview state:", error);
@@ -261,7 +273,7 @@ const AiInterview = () => {
       <div className={styles.cameraSection}>
         <h2>카메라 스트리밍</h2>
         <img
-          src="http://127.0.0.1:8000/aiInterview/video_feed"
+          src="http://127.0.0.1:8000/interviewSave/video_feed"
           alt="Camera Stream"
           className={styles.cameraFeed}
         />
