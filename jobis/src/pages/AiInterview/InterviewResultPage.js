@@ -20,6 +20,8 @@ function InterviewResultPage() {
                 );
                 if (Array.isArray(response.data)) {
                     setIntroduces(response.data);
+                } else if (response.data.message) {
+                    setError(response.data.message);
                 } else {
                     setError("유효하지 않은 데이터 형식입니다.");
                 }
@@ -49,18 +51,23 @@ function InterviewResultPage() {
                 {introduces.map((introduce) => (
                     <div
                         className={`${styles.card} ${
-                            introduce.exists_in_interview === "N" ? styles.disabled : ""
+                            introduce.status === "N" || introduce.status === "NOT_IN_INTERVIEW"
+                                ? styles.disabled
+                                : ""
                         }`}
                         key={introduce.intro_no}
                         onClick={() =>
-                            handleBoxClick(introduce.intro_no, introduce.exists_in_interview === "Y")
+                            handleBoxClick(introduce.intro_no, introduce.status === "Y")
                         }
                         style={{
-                            cursor: introduce.exists_in_interview === "Y" ? "pointer" : "not-allowed",
+                            cursor: introduce.status === "Y" ? "pointer" : "not-allowed",
                         }}
                     >
                         <h2>{introduce.intro_title}</h2>
-                        {introduce.exists_in_interview === "N" && (
+                        {introduce.status === "NOT_IN_INTERVIEW" && (
+                            <p className={styles.status}>기록 없음</p>
+                        )}
+                        {introduce.status === "N" && (
                             <p className={styles.status}>면접 종료되지 않음</p>
                         )}
                     </div>
