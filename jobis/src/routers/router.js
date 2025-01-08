@@ -1,29 +1,25 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import MainPage from "../pages/MainPage/MainPage";
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import MainPage from '../pages/MainPage/MainPage';
 
-import adminRouter from "./adminRouter";
-import aiInterviewRouter from "./aiInterviewRouter";
-import jobPostingRouter from "./jobPostingRouter";
-import loginRouter from "./loginRouter";
-import signupRouter from "./signupRouter";
-import mypageRouter from "./mypageRouter";
-import noticeRouter from "./noticeRouter";
-import payRouter from "./payRouter";
-import qnaRouter from "./qnaRouter";
-import reviewRouter from "./reviewRouter";
-import ticketRouter from "./ticketRouter";
-import interviewtestRouter from "./interviewtestRouter";
+import adminRouter from './adminRouter';
+import aiInterviewRouter from './aiInterviewRouter';
+import jobPostingRouter from './jobPostingRouter';
+import loginRouter from './loginRouter';
+import signupRouter from './signupRouter';
+import mypageRouter from './mypageRouter';
+import noticeRouter from './noticeRouter';
+import payRouter from './payRouter';
+import qnaRouter from './qnaRouter';
+import reviewRouter from './reviewRouter';
+import ticketRouter from './ticketRouter';
+import interviewtestRouter from './interviewtestRouter';
 
-const AppRouter = ({ setResultData }) => {
+const router = ({ setResultData, resultData }) => {
   return (
     <Routes>
       {adminRouter}
-      {aiInterviewRouter.map((route) =>
-        React.cloneElement(route, {
-          element: React.cloneElement(route.props.element, { setResultData }),
-        })
-      )}
+      {aiInterviewRouter({ setResultData, resultData })}
       {interviewtestRouter}
       {jobPostingRouter}
       {loginRouter}
@@ -34,9 +30,11 @@ const AppRouter = ({ setResultData }) => {
       {ticketRouter}
       {noticeRouter}
       {payRouter}
+
+      <Route path="/attachments/*" element={<></>} />
       <Route path="/" element={<MainPage />} />
     </Routes>
   );
 };
 
-export default AppRouter;
+export default router;
