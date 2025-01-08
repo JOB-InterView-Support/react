@@ -3,12 +3,14 @@ import { AuthContext } from "../../AuthProvider";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
 import apiClient from "../../utils/axios";
 import styles from "./MyTicketList.module.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function MyTicketList() {
   const { secureApiRequest } = useContext(AuthContext);
   const [tickets, setTickets] = useState([]); // 티켓 리스트
   const [selectedTicket, setSelectedTicket] = useState(null); // 선택된 티켓 데이터
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -63,8 +65,7 @@ function MyTicketList() {
 
 
 
-   // 환불 로직
-   const handleRefund = async (ticketKey) => {
+  const handleRefund = async (paymentKey) => {
     const userConfirmed = window.confirm("이 티켓을 환불하시겠습니까?");
     if (!userConfirmed) {
       return; // 사용자가 취소한 경우
@@ -75,8 +76,8 @@ function MyTicketList() {
       const refreshToken = localStorage.getItem("refreshToken");
   
       const response = await apiClient.put(
-        `/api/payments/refund/${ticketKey}`,
-        null, // PUT 요청에 Body는 필요 없음
+        `/api/payments/refund/${paymentKey}`, // 백엔드 API 호출
+        null, // Body는 필요 없음
         {
           headers: {
             "Content-Type": "application/json",
@@ -87,14 +88,19 @@ function MyTicketList() {
       );
   
       if (response.status === 200) {
-        window.alert("환불이 성공적으로 처리되었습니다."); // 성공 메시지
-        window.location.reload(); // 페이지 새로고침
+        window.alert("환불이 성공적으로 처리되었습니다.");
+        console.log("완료 alert 클릭")
+        setSelectedTicket(null); // 선택된 티켓 초기화
+        console.log("isModalOpen : ", isModalOpen);
+        setIsModalOpen(false); // 모달 닫기
+        console.log("isModalOpen : ", isModalOpen);
+        navigate("/MyTicketList");
       } else {
         throw new Error(response.data.message || "환불 실패");
       }
     } catch (error) {
       console.error("환불 요청 실패:", error);
-      window.alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요."); // 실패 메시지
+      window.alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -119,7 +125,7 @@ function MyTicketList() {
             </thead>
             <tbody>
               {tickets.map((ticket) => (
-                <tr key={ticket.ticketKey} onClick={() => openModal(ticket)}>
+                <tr className={styles.ticketContent} key={ticket.ticketKey} onClick={() => openModal(ticket)}>
                   <td>{ticket.ticketName}</td>
                   <td>
                     {ticket.ticketCount} / {ticket.prodNumberOfTime || "불명"}
@@ -155,8 +161,8 @@ function MyTicketList() {
                   </div>
                   <div className={styles.buttonGroup}>
                       <button
-                          className={styles.cancelButton}
-                          onClick={() => handleRefund(selectedTicket.ticketKey)}
+                        className={styles.refundButton}
+                        onClick={() => handleRefund(selectedTicket.paymentKey)} // paymentKey 전달
                       >
                           환불하기
                       </button>

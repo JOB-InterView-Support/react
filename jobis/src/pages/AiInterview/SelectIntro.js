@@ -35,7 +35,7 @@ function SelectIntro({ resultData, setResultData }) {
 
       try {
         const response = await secureApiRequest(
-          `/mypage/intro/${storedUuid}?introIsEdited=N`,
+          `/mypage/intro/all/${storedUuid}`,
           {
             method: "GET",
             headers: {
@@ -119,8 +119,9 @@ function SelectIntro({ resultData, setResultData }) {
       const ticketData = ticketResponse.data;
 
       // ticketCounts 배열 확인
-      if (!ticketData.ticketCounts || ticketData.ticketCounts.length === 0) {
+      if (!ticketData.ticketCount || ticketData.ticketCount === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
+        navigate("/ticketList");
         return;
       }
 
