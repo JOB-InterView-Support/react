@@ -11,7 +11,7 @@
   .title {
     font-size: 30px;
     font-weight: 900;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     text-align: left;
     color: #004F99;
   }
@@ -19,7 +19,7 @@
   .subTitle {
     font-size: 21px;
     font-weight: 800;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
     text-align: left;
     color: #006DD2;
   }
@@ -235,5 +235,9 @@
   .permissionGuide {
     text-align: left; /* 텍스트 좌측 정렬 */
     max-width: 600px; /* 적절한 최대 너비 설정 */
+  }
+
+  .buttons{
+    margin-top: 20px;
   }
   

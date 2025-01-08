@@ -88,6 +88,12 @@
     border-right: none; /* 마지막 열의 border-right 제거 */
 }
 
+.ticketTable tbody tr:hover {
+  background-color: #f0f8ff; /* 밝은 파란색 배경 */
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
 /* .ticketTable tr:nth-child(even) {
     background-color: #f9f9f9;
 } */
@@ -108,12 +114,30 @@
 }
 
 .modalContent {
-  background: white;
+  width: 80%;
+  max-width: 800px;
+  background: #fff;
   padding: 20px;
-  border-radius: 8px;
-  max-width: 500px;
-  width: 90%;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.modalTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2f4f9e;
   text-align: center;
+  margin-bottom: 20px;
+}
+
+.modalBody {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.hidden {
+  display: none; /* 모달 숨기기 */
 }
 
 .button {
@@ -128,6 +152,39 @@
   cursor: pointer;
   border-radius: 5px;
   margin-top: 10px;
+}
+
+.buttonGroup {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.cancelButton,
+.closeButton {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cancelButton {
+  background-color: #2f4f9e;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.cancelButton:hover {
+  background-color: #1d3c77;
+}
+
+.closeButton {
+  background-color: #ccc;
+  color: #333;
+}
+
+.closeButton:hover {
+  background-color: #bbb;
 }
 
 .refundButton:hover {

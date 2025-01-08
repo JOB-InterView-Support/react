@@ -1,13 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { AuthContext } from "../../AuthProvider";
 import MypageSubMenubar from "../../components/common/subMenubar/MypageSubMenubar";
+import apiClient from "../../utils/axios";
 import styles from "./MyTicketList.module.css";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function MyTicketList() {
   const { secureApiRequest } = useContext(AuthContext);
   const [tickets, setTickets] = useState([]); // 티켓 리스트
   const [selectedTicket, setSelectedTicket] = useState(null); // 선택된 티켓 데이터
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -59,9 +62,46 @@ function MyTicketList() {
     setIsModalOpen(false);
   };
 
-  const handleRefund = (ticketKey) => {
-    console.log(`환불 요청: 티켓 키 ${ticketKey}`);
-    // 환불 로직 추가 필요
+
+
+
+  const handleRefund = async (paymentKey) => {
+    const userConfirmed = window.confirm("이 티켓을 환불하시겠습니까?");
+    if (!userConfirmed) {
+      return; // 사용자가 취소한 경우
+    }
+  
+    try {
+      const accessToken = localStorage.getItem("accessToken");
+      const refreshToken = localStorage.getItem("refreshToken");
+  
+      const response = await apiClient.put(
+        `/api/payments/refund/${paymentKey}`, // 백엔드 API 호출
+        null, // Body는 필요 없음
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+            RefreshToken: `Bearer ${refreshToken}`,
+          },
+        }
+      );
+  
+      if (response.status === 200) {
+        window.alert("환불이 성공적으로 처리되었습니다.");
+        console.log("완료 alert 클릭")
+        setSelectedTicket(null); // 선택된 티켓 초기화
+        console.log("isModalOpen : ", isModalOpen);
+        setIsModalOpen(false); // 모달 닫기
+        console.log("isModalOpen : ", isModalOpen);
+        navigate("/MyTicketList");
+      } else {
+        throw new Error(response.data.message || "환불 실패");
+      }
+    } catch (error) {
+      console.error("환불 요청 실패:", error);
+      window.alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (
@@ -85,7 +125,7 @@ function MyTicketList() {
             </thead>
             <tbody>
               {tickets.map((ticket) => (
-                <tr key={ticket.ticketKey} onClick={() => openModal(ticket)}>
+                <tr className={styles.ticketContent} key={ticket.ticketKey} onClick={() => openModal(ticket)}>
                   <td>{ticket.ticketName}</td>
                   <td>
                     {ticket.ticketCount} / {ticket.prodNumberOfTime || "불명"}
@@ -99,38 +139,40 @@ function MyTicketList() {
           </table>
         )}
 
-        {isModalOpen && selectedTicket && (
+      {isModalOpen && selectedTicket && (
           <div className={styles.modal}>
-            <div className={styles.modalContent}>
-              <h3>이용권 정보</h3>
-              <p>이용권 이름: {selectedTicket.ticketName}</p>
-              <p>
-                사용 시작 날짜:{" "}
-                {new Date(selectedTicket.ticketStartDate).toLocaleDateString()}
-              </p>
-              <p>
-                만료 날짜:{" "}
-                {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}
-              </p>
-              <p>결제 금액: {selectedTicket.ticketAmount.toLocaleString()}원</p>
-              <p>
-                사용 가능 횟수: {selectedTicket.ticketCount} /{" "}
-                {selectedTicket.prodNumberOfTime || "불명"}
-              </p>
-              {/* 환불 버튼 조건부 렌더링 */}
-              {selectedTicket.ticketCount === selectedTicket.prodNumberOfTime && (
-                <button
-                  className={styles.refundButton}
-                  onClick={() => handleRefund(selectedTicket.ticketKey)}
-                >
-                  환불하기
-                </button>
-              )}
-              <button onClick={closeModal} className={styles.closeButton}>
-                닫기
-              </button>
-            </div>
+              <div className={styles.modalContent}>
+                  <h3 className={styles.modalTitle}>이용권 정보</h3>
+                  <div className={styles.modalBody}>
+                      <p>이용권 이름: {selectedTicket.ticketName}</p>
+                      <p>
+                          사용 시작 날짜:{" "}
+                          {new Date(selectedTicket.ticketStartDate).toLocaleDateString()}
+                      </p>
+                      <p>
+                          만료 날짜:{" "}
+                          {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}
+                      </p>
+                      <p>결제 금액: {selectedTicket.ticketAmount.toLocaleString()}원</p>
+                      <p>
+                          사용 가능 횟수: {selectedTicket.ticketCount} /{" "}
+                          {selectedTicket.prodNumberOfTime || "불명"}
+                      </p>
+                  </div>
+                  <div className={styles.buttonGroup}>
+                      <button
+                        className={styles.refundButton}
+                        onClick={() => handleRefund(selectedTicket.paymentKey)} // paymentKey 전달
+                      >
+                          환불하기
+                      </button>
+                      <button onClick={closeModal} className={styles.closeButton}>
+                          닫기
+                      </button>
+                  </div>
+              </div>
           </div>
+
         )}
       </div>
     </div>
