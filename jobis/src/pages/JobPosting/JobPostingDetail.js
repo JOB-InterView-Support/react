@@ -1,120 +1,78 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider";
-import { useParams, useNavigate } from 'react-router-dom';
 import styles from "./JobPostingDetail.module.css";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
 const JobPostingDetail = () => {
-  const { id } = useParams();
+  const { id } = useParams(); // 공고 ID
+  const navigate = useNavigate();
+  const { secureApiRequest, uuid } = useContext(AuthContext);
   const [jobDetails, setJobDetails] = useState(null);
-  const [favorites, setFavorites] = useState([]); // 즐겨찾기 상태 추가
-  const { uuid, secureApiRequest } = useContext(AuthContext); // uuid와 secureApiRequest 가져오기
-  const navigate = useNavigate(); // useNavigate 훅 사용
-
-  const fetchJobDetails = async () => {
-    try {
-      // 환경 변수에서 API 키 가져오기
-      const apiKey = process.env.REACT_APP_SARAMIN_API_KEY;
-
-      const response = await secureApiRequest(
-        `/jobposting/search?id=${id}&access-key=${apiKey}`, 
-        { method: "GET" }
-      );
-      const jobData = response.data.jobs.job[0];
-      setJobDetails(jobData);
-    } catch (error) {
-      console.error("Error fetching job details:", error);
-    }
-  };
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchJobDetails();
-  }, [id]);
-
-  if (!jobDetails) {
-    return <div>Loading...</div>;
-  }
-
-  // 데이터 구조에서 필요한 정보 추출
-  const {
-    position,
-    company,
-    salary,
-    location,
-    'posting-timestamp': postingTimestamp,
-    'expiration-timestamp': expirationTimestamp,
-    active,
-    keyword,
-    url,
-  } = jobDetails;
-
-  // 타임스탬프 처리
-  const postingDateFormatted = postingTimestamp
-    ? new Date(postingTimestamp * 1000).toLocaleString()
-    : "정보 없음";
-  const expirationDateFormatted = expirationTimestamp
-    ? new Date(expirationTimestamp * 1000).toLocaleString()
-    : "정보 없음";
-
-  // 기타 정보 추출
-  const companyName = company?.detail?.name || "정보 없음";
-  const companyUrl = company?.detail?.href || "#";
-  const locationName = position?.location?.name.replace(/&gt;/g, '>') || "정보 없음";
-  const jobType = position?.['job-type']?.name || "정보 없음";
-  const salaryText = salary?.name || "면접후 결정";
-  const experienceLevel = position?.['experience-level']?.name || "경력무관";
-  const industry = position?.industry?.name || "정보 없음";
-  const jobMidCode = position?.['job-mid-code']?.name || "정보 없음";
-
-  const handleGoBack = () => {
-    navigate(-1); // 이전 페이지로 돌아가기
-  };
-
-  const toggleFavorite = async (jobPostingId, newFavoritedState) => {
-    try {
-      if (newFavoritedState) {
-        const favoriteData = {
-          jobFavoritesNo: crypto.randomUUID(),
-          uuid: uuid, // uuid 사용
-          jobPostingId: jobPostingId,
-          jobCreatedDate: new Date().toISOString(),
-        };
-        const response = await secureApiRequest('/favorites', {
-          method: "POST",  
-          headers: { 'Content-Type': 'application/json' },
-          data: JSON.stringify(favoriteData),
-        });
-        if (response?.data) {
-          setFavorites((prevFavorites) => [...prevFavorites, response.data]);
-        }
-      } else {
-        await secureApiRequest(`/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`, { method: "DELETE" });
-        setFavorites(favorites.filter((fav) => fav.jobPostingId !== jobPostingId));
+    const fetchJobDetails = async () => {
+      try {
+        const response = await secureApiRequest(`/jobposting/${id}`, { method: "GET" });
+        setJobDetails(response?.data?.job);
+        checkFavorite(id); // 즐겨찾기 여부 확인
+      } catch (error) {
+        console.error("채용공고 상세 조회 중 오류:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      console.error("즐겨찾기 상태 변경 중 오류 발생:", err);
+    };
+
+    fetchJobDetails();
+  }, [id, secureApiRequest]);
+
+  const checkFavorite = async (jobPostingId) => {
+    try {
+      const response = await secureApiRequest(`/favorites/check?uuid=${uuid}&jobPostingId=${jobPostingId}`, {
+        method: "GET",
+      });
+      setIsFavorite(response?.data);
+    } catch (error) {
+      console.error("즐겨찾기 여부 확인 중 오류:", error);
     }
   };
+
+  const toggleFavorite = async () => {
+    try {
+      const url = isFavorite ? `/favorites/delete` : `/favorites`;
+      const method = isFavorite ? "DELETE" : "POST";
+      const body = isFavorite ? null : { jobPostingId: id, uuid };
+
+      await secureApiRequest(url, {
+        method,
+        body: body && JSON.stringify(body),
+      });
+
+      setIsFavorite((prev) => !prev);
+    } catch (error) {
+      console.error("즐겨찾기 토글 중 오류:", error);
+    }
+  };
+
+  if (loading) return <p>로딩 중...</p>;
+  if (!jobDetails) return <p>공고 정보를 불러오지 못했습니다.</p>;
 
   return (
     <div>
       <JobPostingSubMenubar />
-      <div className={styles.jobDetailContainer}>
-        <h1>{position?.title || "채용공고 정보 없음"}</h1>
-        <button onClick={handleGoBack} className={styles.goBackButton}>이전 목록</button> {/* 뒤로 가기 버튼 */}
-        <p><strong>회사:</strong> <a href={companyUrl} target="_blank" rel="noopener noreferrer">{companyName}</a></p>
-        <p><strong>위치:</strong> {locationName}</p>
-        <p><strong>직무:</strong> {jobType}</p>
-        <p><strong>급여:</strong> {salaryText}</p>
-        <p><strong>경력:</strong> {experienceLevel}</p>
-        <p><strong>업종:</strong> {industry}</p>
-        <p><strong>직무명:</strong> {jobMidCode}</p>
-        <p><strong>게시일:</strong> {postingDateFormatted}</p>
-        <p><strong>마감일:</strong> {expirationDateFormatted}</p>
-        <p><strong>공고진행여부:</strong> {active ? "진행중" : "마감"}</p>
-        <p><strong>키워드:</strong> {keyword || "정보 없음"}</p>
-        <p><strong>채용 공고 링크:</strong> <a href={url} target="_blank" rel="noopener noreferrer">상세보기</a></p>
-      </div>
+        <div className={styles.container}>
+          <h2>{jobDetails?.position?.title || "공고 제목 없음"}</h2>
+          <button onClick={toggleFavorite} className={styles.favoriteButton}>
+            {isFavorite ? "즐겨찾기 해제" : "즐겨찾기 추가"}
+          </button>
+          <p>회사명: {jobDetails?.company?.detail?.name || "정보 없음"}</p>
+          <p>위치: {jobDetails?.position?.location?.name || "정보 없음"}</p>
+          <p>급여: {jobDetails?.salary?.name || "정보 없음"}</p>
+          <p>공고 링크: <a href={jobDetails?.url} target="_blank" rel="noopener noreferrer">상세보기</a></p>
+          <button onClick={() => navigate(-1)}>뒤로가기</button>
+        </div>
     </div>
   );
 };
