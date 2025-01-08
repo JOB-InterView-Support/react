@@ -14,6 +14,16 @@ function SelectSelfIntroduce() {
   const [statusSubMessage, setStatusSubMessage] = useState("");
   const navigate = useNavigate();
 
+  // 화면 상단 UUID로 이동 버튼 핸들러
+  const handleNavigateToUUID = () => {
+    const storedUuid = localStorage.getItem("uuid"); // 로컬 스토리지에서 UUID 가져오기
+    if (!storedUuid) {
+      alert("로컬 스토리지에 UUID가 없습니다. 다시 로그인해주세요.");
+      return;
+    }
+    navigate(`/interviewResults/${storedUuid}`); // UUID 기반 URL로 이동
+  };
+
   useEffect(() => {
     const fetchIntroductions = async () => {
       setLoading(true);
@@ -114,6 +124,13 @@ function SelectSelfIntroduce() {
   return (
     <div>
       <AiInterviewSubmenubar />
+      {/* 상단 UUID로 이동 버튼 */}
+      <div className={styles.uuidButtonContainer}>
+        <button onClick={handleNavigateToUUID} className={styles.uuidButton}>
+          내 UUID로 이동
+        </button>
+      </div>
+
       <div className={styles.container}>
         <h1 className={styles.title}> 첨삭 자기소개서 선택</h1>
         <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
