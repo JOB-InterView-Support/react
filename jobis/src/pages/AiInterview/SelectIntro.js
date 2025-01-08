@@ -100,39 +100,20 @@ function SelectIntro({ resultData, setResultData }) {
   const handleGuideModalClose = () => setGuideModalOpen(false);
 
   const handleStartClick = async () => {
-    console.log("Start Button Clicked"); // 클릭 확인 로그
-    if (resultData) {
-      alert("모의 면접 결과 분석중입니다. 분석 완료 후 다시 시도해주세요.");
-      return;
-    }
-    console.log("Result Data is null or undefined"); // 이 부분이 실행되면 resultData가 없는 상태
-
     if (!selectedIntro) {
       alert("자기소개서를 선택해주세요.");
       return;
     }
-
-    const confirmUsage = window.confirm("정말 이용권을 차감하시겠습니까?");
-    if (!confirmUsage) {
-      return;
-    }
-
+  
     setLoading(true);
     setStatusMessage("서버와 연결 중입니다...");
     setStatusSubMessage("3~5분 정도 소요될 수 있습니다.");
-
+  
     try {
-      const selectedDate = new Date().toISOString();
-      const formattedDate = selectedDate.replace("T", " ").split(".")[0];
-
-      // 이용권 차감 요청
-      const backendResult = await requestTicketUsage(formattedDate);
-      console.log("이용권 차감 결과:", backendResult);
-
       // 모의 면접 질문 저장 요청
       setStatusMessage("AI가 질문을 생성하고 있습니다...");
       setStatusSubMessage("잠시만 기다려주세요.");
-
+  
       const response = await fetch(
         "http://127.0.0.1:8000/interview/addQuestions",
         {
@@ -141,24 +122,34 @@ function SelectIntro({ resultData, setResultData }) {
           body: JSON.stringify({ intro_no: selectedIntro }),
         }
       );
-
+  
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
+  
       const result = await response.json();
       const { RoundId, INT_ID } = result;
-
+  
       if (!RoundId || !INT_ID) {
         throw new Error("백엔드 응답에 필요한 데이터가 누락되었습니다.");
       }
+
+      // 성공적으로 질문 생성 후 이용권 차감
+      const selectedDate = new Date().toISOString();
+      const formattedDate = selectedDate.replace("T", " ").split(".")[0];
+      const backendResult = await requestTicketUsage(formattedDate);
+
+      if (backendResult.status !== "SUCCESS") {
+        throw new Error("이용권 차감 실패: " + backendResult.message);
+      }
+
 
       // "곧 모의 면접이 시작됩니다."로 상태 업데이트
       setTimeout(() => {
         setStatusMessage("곧 모의 면접이 시작됩니다.");
         setStatusSubMessage("");
       }, 2000);
-
+  
       // 2초 뒤 화면 이동
       setTimeout(() => {
         navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
