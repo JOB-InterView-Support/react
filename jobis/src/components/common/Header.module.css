@@ -70,4 +70,41 @@ nav {
     color: inherit; /* 부모 요소의 색상 상속 */
     cursor: pointer; 
   }
+
+  .ticketInfo {
+    background-color: #f0f4ff; /* 부드러운 파란색 배경 */
+    padding: 10px 15px; /* 내부 여백 */
+    border-radius: 8px; /* 모서리를 둥글게 */
+    border: 2px solid rgb(123, 123, 253);
+    display: flex; /* 콘텐츠를 가로로 배치 */
+    align-items: center; /* 세로 중앙 정렬 */
+    font-size: 14px; /* 글꼴 크기 */
+    font-weight: 700;
+    color: #333; /* 텍스트 색상 */
+    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    width: 130px;
+    height: 18px;
+    margin-left: 16px;
+    margin-top: 0px;
+  }
+  
+  .ticketInfo strong {
+    background-color: #fff; /* 흰색 배경 */
+    border: 1px solid #ccc; /* 연한 회색 테두리 */
+    padding: 5px 10px; /* 내부 여백 */
+    border-radius: 4px; /* 둥근 모서리 */
+    margin-left: 8px; /* 텍스트와 간격 */
+    color: #333; /* 텍스트 색상 */
+    font-size: 14px; /* 글꼴 크기 */
+    font-weight: bold; /* 글자 강조 */
+    display: inline-block; /* 박스처럼 표시 */
+  }
+  .bottom {
+    display: flex; /* 플렉스 박스 사용 */
+    justify-content: center; /* 가로로 중앙 정렬 */
+    gap: 10px; /* 버튼 간 간격 */
+    align-items: center; /* 세로 중앙 정렬 */
+    white-space: nowrap; 
+  }
+  
   
