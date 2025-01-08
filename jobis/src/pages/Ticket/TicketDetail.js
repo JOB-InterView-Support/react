@@ -14,6 +14,34 @@ function TicketDetail(){
     const navigate = useNavigate();
     const [ticket, setTicket] = useState([]); // Ticket 정보를 담을 상태
      
+    const handleRefund = async (paymentKey) => {
+        try {
+            const accessToken = localStorage.getItem("accessToken");
+            const refreshToken = localStorage.getItem("refreshToken");
+    
+            const response = await apiClient.put(
+                `/api/payments/refund/${paymentKey}`,
+                null, // PUT 요청에 Body는 필요 없음
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`,
+                        RefreshToken: `Bearer ${refreshToken}`,
+                    },
+                }
+            );
+    
+            if (response.status === 200) {
+                alert("환불이 성공적으로 처리되었습니다.");
+            } else {
+                throw new Error(response.data.message || "환불 실패");
+            }
+        } catch (error) {
+            console.error("환불 요청 실패:", error);
+            alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
+        }
+    };
+
     useEffect(() => {
         if (!isLoggedIn) {
           navigate("/login"); // 로그인 페이지로 이동
@@ -106,7 +134,12 @@ function TicketDetail(){
                     </div>
 
                     <div className={styles.buttonGroup}>
-                        <button className={styles.cancelButton}>환불 진행</button>
+                    <button
+                        className={styles.cancelButton}
+                        onClick={() => handleRefund("280a8a4d-a27f-4041-b031-2a003cc4c039")} // paymentKey 전달
+                    >
+                        환불 진행
+                    </button>
                         <button className={styles.backButton}>돌아가기</button>
                     </div>
                 </div>

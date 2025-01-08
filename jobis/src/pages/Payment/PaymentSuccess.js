@@ -12,6 +12,8 @@ export function PaymentSuccess() {
   const { secureApiRequest } = useContext(AuthContext);
   const [isRequesting, setIsRequesting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [userName, setUserName] = useState(null); // 사용자 이름 상태
+
 
   useEffect(() => {
     const paymentKey = searchParams.get("paymentKey");
@@ -19,6 +21,8 @@ export function PaymentSuccess() {
     const amount = searchParams.get("amount");
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
+    const storedUserName = localStorage.getItem("userName"); // 로컬 스토리지에서 userName 가져오기
+    setUserName(storedUserName || "알 수 없음"); // userName 상태 업데이트
 
     console.log("paymentKey:", paymentKey);
     console.log("orderId:", orderId);
@@ -119,7 +123,7 @@ export function PaymentSuccess() {
               </tr>
               <tr>
                 <th>결제자</th>
-                <td>홍길동</td>
+                <td>{userName || "알 수 없음"}</td>
               </tr>
               <tr>
                 <th>결제 금액</th>
