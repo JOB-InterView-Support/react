@@ -209,6 +209,19 @@
     justify-content: space-between;
     align-items: center;
     }
+    
+    @media (min-width: 769px) and (max-width: 1260px) {
+        .introductionGrid {
+            grid-template-columns: 1fr; /* 한 열에 하나씩 배치 */
+            gap: 20px; /* 간격 유지 */
+        }
+
+        .introductionCard h3, .introductionCardNew span {
+            font-size: 18px !important;
+        }
+
+    }
+
     @media (max-width: 768px) {
         .introductionGrid {
             grid-template-columns: 1fr; /* 한 열에 하나씩 배치 */
