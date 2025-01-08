@@ -46,7 +46,7 @@ function InterviewResultPage() {
             {loading && <p className={styles.error}>데이터를 불러오는 중...</p>}
             {error && <p className={styles.error}>{error}</p>}
             <div className={styles.gridContainer}>
-                {introduces.slice(0, 9).map((introduce) => (
+                {introduces.map((introduce) => (
                     <div
                         className={`${styles.card} ${
                             introduce.exists_in_interview === "N" ? styles.disabled : ""
