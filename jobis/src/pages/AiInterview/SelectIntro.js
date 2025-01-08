@@ -215,6 +215,52 @@ function SelectIntro({ resultData, setResultData }) {
           </button>
         </div>
 
+        {isGuideModalOpen && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <button
+                className={styles.modalCloseButton}
+                onClick={handleGuideModalClose}
+              >
+                닫기
+              </button>
+              <h2>이용 가이드</h2>
+              <ul>
+                <li>1. 자기소개서를 선택하세요.</li>
+                <li>2. 시작 버튼을 누른 후 3~5분 뒤 모의면접이 시작됩니다.</li>
+                <li className={styles.warning}>
+                  ※ 모의면접이 시작되면 이용권 횟수가 차감됩니다.
+                </li>
+              </ul>
+              <img
+                src={interviewguide}
+                alt="interviewguide"
+                className={styles.interviewguide}
+              />
+            </div>
+          </div>
+        )}
+
+        {isPermissionGuideModalOpen && (
+          <div className={styles.modalOverlay}>
+            <div className={styles.modalContent}>
+              <button
+                className={styles.modalCloseButton}
+                onClick={handlePermissionGuideModalClose}
+              >
+                닫기
+              </button>
+              <h2>카메라 및 마이크 권한 가이드</h2>
+              <p>카메라와 마이크 권한을 허용해야 정상적으로 작동합니다.</p>
+              <ol>
+                <li>우측 상단의 점 3개 클릭</li>
+                <li>설정 → 개인정보 보호 및 보안 → 사이트 설정 클릭</li>
+                <li>카메라 및 마이크 권한 허용</li>
+              </ol>
+            </div>
+          </div>
+        )}
+
         {introductions.length > 0 ? (
           <>
             <table className={styles.table}>
