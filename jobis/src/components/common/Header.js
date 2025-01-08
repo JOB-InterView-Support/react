@@ -57,6 +57,8 @@ function Header() {
 
   // TICKET_COUNT 가져오기
   useEffect(() => {
+    let intervalId;
+
     const fetchTicketCount = async () => {
       if (isLoggedIn) {
         try {
@@ -66,15 +68,15 @@ function Header() {
               "Content-Type": "application/json",
             },
           });
-  
+
           console.log("Ticket API 응답:", ticketResponse.data); // 응답 확인
           const ticketData = ticketResponse.data;
-  
+
           // 배열에서 남은 이용권 개수 추출
           const count = Array.isArray(ticketData.ticketCounts) && ticketData.ticketCounts.length > 0
             ? ticketData.ticketCounts[0]
             : 0;
-  
+
           setTicketCount(count); // 남은 이용권 수 업데이트
         } catch (error) {
           console.error("이용권 정보 가져오기 실패:", error.message);
@@ -82,10 +84,14 @@ function Header() {
         }
       }
     };
-  
+
     fetchTicketCount();
+
+    // 5초마다 갱신
+    intervalId = setInterval(fetchTicketCount, 5000);
+
+    return () => clearInterval(intervalId); // 컴포넌트 언마운트 시 타이머 제거
   }, [isLoggedIn, secureApiRequest]);
-  
 
   return (
     <header className={styles.header}>
@@ -128,21 +134,18 @@ function Header() {
           </li>
         </ul>
       </nav>
-      
 
       <div className={styles.rightBtn}>
-        
         {isLoggedIn ? (
           <>
-          
             <div className={styles.top}>{userName}님 환영합니다.</div>
             <div className={styles.bottom}>
               <button onClick={handleMyPage}>마이페이지</button>
               <button onClick={handleLogout}>로그아웃</button>
             </div>
             <div className={styles.ticketInfo}>
-            남은 이용권: <strong>{ticketCount}</strong>
-          </div>
+              남은 이용권: <strong>{ticketCount}</strong>
+            </div>
           </>
         ) : (
           <div className={styles.bottom}>
