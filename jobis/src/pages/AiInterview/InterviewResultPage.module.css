@@ -1,0 +1,74 @@
+/* 전체 페이지 컨테이너 */
+.pageContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* 전체 화면 높이 */
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    background-color: #f4f4f4; /* 배경 색상 추가 */
+}
+
+/* 제목 스타일 */
+h1 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    color: #333;
+    text-align: center;
+}
+
+/* 에러 메시지 스타일 */
+.error {
+    color: red;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+/* 카드 그리드 컨테이너 */
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 한 행에 3개의 카드 */
+    gap: 20px; /* 카드 간 간격 */
+    width: 80%; /* 그리드 너비를 화면 너비의 80%로 제한 */
+    height: 40%; /* 전체 화면 높이의 40%만 사용 */
+    margin-top: 15%; /* 상단 여백 15% */
+    margin-bottom: 15%; /* 하단 여백 15% */
+    justify-items: center;
+}
+
+/* 카드 스타일 */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    width: 100%; /* 카드 너비 */
+    height: 120px; /* 고정된 카드 높이 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+}
+
+/* 카드 비활성화 상태 */
+.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* 카드 호버 효과 */
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 상태 메시지 */
+.status {
+    font-size: 14px;
+    color: red;
+    margin-top: 10px;
+}
