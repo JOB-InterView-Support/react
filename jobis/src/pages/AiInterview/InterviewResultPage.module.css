@@ -2,40 +2,60 @@
 .pageContainer {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
     height: 100vh; /* 전체 화면 높이 */
     box-sizing: border-box;
-    padding: 0;
+    padding: 20px; /* 전체 여백 */
     margin: 0;
-    background-color: #f4f4f4; /* 배경 색상 추가 */
+    background-color: #f4f4f4; /* 배경색 */
 }
 
-/* 제목 스타일 */
+/* 제목 섹션 */
+.header {
+    flex: 0 0 auto; /* 고정 높이 */
+    text-align: center;
+    margin-bottom: 10px; /* 제목과 그리드 사이 여백 */
+}
+
 h1 {
-    margin-bottom: 20px;
     font-size: 24px;
     color: #333;
-    text-align: center;
+    margin: 0;
 }
 
-/* 에러 메시지 스타일 */
-.error {
-    color: red;
-    font-size: 16px;
-    margin-bottom: 20px;
+/* 그리드 섹션 */
+.gridContainerWrapper {
+    flex: 1; /* 남은 공간을 차지 */
+    display: flex;
+    justify-content: center; /* 그리드를 중앙에 배치 */
+    align-items: center;
+    overflow: hidden; /* 상하 영역에 스크롤바가 겹치지 않도록 */
 }
 
-/* 카드 그리드 컨테이너 */
 .gridContainer {
     display: grid;
     grid-template-columns: repeat(3, 1fr); /* 한 행에 3개의 카드 */
     gap: 20px; /* 카드 간 간격 */
-    width: 80%; /* 그리드 너비를 화면 너비의 80%로 제한 */
-    height: 40%; /* 전체 화면 높이의 40%만 사용 */
-    margin-top: 15%; /* 상단 여백 15% */
-    margin-bottom: 15%; /* 하단 여백 15% */
-    justify-items: center;
+    width: 100%; /* 그리드 너비를 화면 전체로 설정 */
+    max-width: 1200px; /* 그리드의 최대 너비 제한 */
+    margin: 0 auto; /* 중앙 정렬 */
+    max-height: 70%; /* 화면의 70%까지만 사용 */
+    overflow-y: auto; /* 세로 스크롤 추가 */
+    padding-right: 10px; /* 스크롤바 공간 확보 */
+    scrollbar-width: thin; /* 스크롤바 폭 (Firefox) */
+}
+
+/* 스크롤바 스타일 (Chrome, Edge, Safari) */
+.gridContainer::-webkit-scrollbar {
+    width: 8px;
+}
+
+.gridContainer::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 4px;
+}
+
+.gridContainer::-webkit-scrollbar-thumb:hover {
+    background-color: #aaa;
 }
 
 /* 카드 스타일 */
@@ -43,19 +63,22 @@ h1 {
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 8px;
-    width: 100%; /* 카드 너비 */
-    height: 120px; /* 고정된 카드 높이 */
+    padding: 20px; /* 내부 여백 추가 */
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+    width: 90%; /* 카드 너비 */
+    max-width: 300px; /* 카드의 최대 너비 제한 */
+    height: 150px; /* 고정된 카드 높이 */
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
 }
 
 /* 카드 비활성화 상태 */
-.disabled {
+.card.disabled {
     cursor: not-allowed;
     opacity: 0.5;
 }
