@@ -1,0 +1,92 @@
+.TopContainer {
+    display: flex; /* Flexbox 사용 */
+    flex-direction: column; /* 자식 요소들을 세로로 배치 */
+    align-items: center; /* 가로 방향으로 중앙 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+    height: 70vh; /* 전체 화면 높이 사용 */
+    justify-content: center; /* 세로 방향으로 중앙 정렬 */
+}
+
+.container {
+    display: flex;
+    flex-direction: row; /* 자식 요소를 가로로 배치 */
+    justify-content: center; /* 가로 방향 중앙 정렬 */
+    width: 80%; /* 적절한 너비 설정 */
+    margin-bottom: 20px; /* 아래쪽 여백 추가 */
+}
+
+.btnClass {
+    display: flex;
+    justify-content: center; /* 버튼을 가로 방향으로 중앙 정렬 */
+}
+
+.searchIdContainer, .searchPwContainer {
+    flex: 1; /* 두 컨테이너가 사용 가능한 공간을 균등하게 나누어 가짐 */
+    display: flex; /* Flexbox를 사용하도록 설정 */
+    flex-direction: column; /* 자식 요소를 세로로 배치 */
+    justify-content: center; /* 세로 방향 중앙 정렬 */
+    align-items: center; /* 가로 방향 중앙 정렬 */
+    margin: 10px; /* 주변 마진 추가 */
+    /* border: 1px solid red; 경계선 설정 */
+    background-color: rgba(240, 240, 240,0.3);
+    height: 50vh; /* 높이 설정 */
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 2%;
+}
+
+.subTitle {
+    font-size: 25px;
+}
+
+.searchIdInputContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.inputText {
+    width: 200px;
+    height: 30px;
+    margin-top: 2%;
+    margin-bottom: 1%;
+}
+
+.result {
+    color: rgba(109, 160, 255, 1);
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.searchBtn {
+    background-color: rgba(0, 200, 50, 0.5);
+    border: none;
+    border-radius: 5px;
+    width: 110px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}
+
+
+.pwText {
+    text-align: center; /* 텍스트 중앙 정렬 */
+   margin-bottom: 2%;
+    
+}
+
+.resetPwBtn {
+    background-color: rgba(255, 0, 0, 0.5);
+    border: none;
+    border-radius: 5px;
+    width: 170px;
+    height: 40px;
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+}

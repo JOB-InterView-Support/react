@@ -14,6 +14,7 @@ import qnaRouter from './qnaRouter';
 import reviewRouter from './reviewRouter';
 import ticketRouter from './ticketRouter';
 import interviewtestRouter from './interviewtestRouter';
+import Introduction from '../pages/Footer/Introduction';
 
 const router = ({ setResultData, resultData }) => {
   return (
@@ -30,7 +31,8 @@ const router = ({ setResultData, resultData }) => {
       {ticketRouter}
       {noticeRouter}
       {payRouter}
-
+      {/* Introduction Route 추가 */}
+      <Route path="/introduction" element={<Introduction />} />
       <Route path="/attachments/*" element={<></>} />
       <Route path="/" element={<MainPage />} />
     </Routes>
