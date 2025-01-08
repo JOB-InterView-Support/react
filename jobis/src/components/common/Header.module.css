@@ -37,7 +37,6 @@ nav {
 
 .rightBtn{
     all: unset; /* 기본 스타일 모두 제거 */
-    cursor: pointer; /* 클릭 가능한 커서 설정 */
     margin-right: 2%;
     justify-content: center;
     align-items: center;
@@ -105,6 +104,13 @@ nav {
     gap: 10px; /* 버튼 간 간격 */
     align-items: center; /* 세로 중앙 정렬 */
     white-space: nowrap; 
+  }
+  .buttonHover {
+    text-decoration: none; /* 기본 상태에서 밑줄 제거 */
+  }
+  
+  .buttonHover:hover {
+    text-decoration: underline; /* hover 시 밑줄 표시 */
   }
   
   

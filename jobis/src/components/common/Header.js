@@ -73,9 +73,11 @@ function Header() {
           const ticketData = ticketResponse.data;
 
           // 배열에서 남은 이용권 개수 추출
-          const count = Array.isArray(ticketData.ticketCounts) && ticketData.ticketCounts.length > 0
-            ? ticketData.ticketCounts[0]
-            : 0;
+          const count =
+            Array.isArray(ticketData.ticketCounts) &&
+            ticketData.ticketCounts.length > 0
+              ? ticketData.ticketCounts[0]
+              : 0;
 
           setTicketCount(count); // 남은 이용권 수 업데이트
         } catch (error) {
@@ -140,11 +142,12 @@ function Header() {
           <>
             <div className={styles.top}>{userName}님 환영합니다.</div>
             <div className={styles.bottom}>
-              <button onClick={handleMyPage}>마이페이지</button>
-              <button onClick={handleLogout}>로그아웃</button>
-            </div>
-            <div className={styles.ticketInfo}>
-              남은 이용권: <strong>{ticketCount}</strong>
+              <button className={styles.buttonHover} onClick={handleMyPage}>
+                마이페이지
+              </button>
+              <button className={styles.buttonHover} onClick={handleLogout}>
+                로그아웃
+              </button>
             </div>
           </>
         ) : (
@@ -157,8 +160,16 @@ function Header() {
         {isAdmin && (
           <div>
             <Link to="/adminMemberManagement">
-              <button>관리자페이지</button>
+              <button className={styles.buttonHover}>관리자페이지</button>
             </Link>
+            <div className={styles.ticketInfo}>
+              남은 이용권: <strong>{ticketCount}</strong>
+            </div>
+          </div>
+        )}
+        {!isAdmin && isLoggedIn && (
+          <div className={styles.ticketInfo}>
+            남은 이용권: <strong>{ticketCount}</strong>
           </div>
         )}
       </div>
