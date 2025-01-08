@@ -197,6 +197,13 @@
     border-left: none; /* 마지막 버튼 테두리 제거 */
 }
 
+.introContents {
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 말줄임표(...)를 추가 */
+    max-width: 100%; /* 부모 요소의 최대 너비를 따름 */
+  }
+
   .subtitleContainer {
     display: flex;
     justify-content: space-between;
