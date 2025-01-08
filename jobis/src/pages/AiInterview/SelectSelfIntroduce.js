@@ -1,19 +1,19 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider"; // 인증 컨텍스트
-import styles from "./SelectSelfIntroduce.module.css"; // 스타일 파일 연결
+import { AuthContext } from "../../AuthProvider";
+import styles from "./SelectSelfIntroduce.module.css";
 import AiInterviewSubmenubar from "../../components/common/subMenubar/AiInterviewSubMenubar";
 
 function SelectSelfIntroduce() {
-  const { secureApiRequest } = useContext(AuthContext); // 인증된 API 요청 함수
-  const [introductions, setIntroductions] = useState([]); // 자기소개서 목록 상태
-  const [selectedIntro, setSelectedIntro] = useState(null); // 선택된 자기소개서
-  const [loading, setLoading] = useState(false); // 로딩 상태
-  const [error, setError] = useState(""); // 오류 상태
-  const [statusMessage, setStatusMessage] = useState(""); // 상태 메시지
+  const { secureApiRequest } = useContext(AuthContext);
+  const [introductions, setIntroductions] = useState([]);
+  const [selectedIntro, setSelectedIntro] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
+  const [statusSubMessage, setStatusSubMessage] = useState("");
   const navigate = useNavigate();
 
-  // 자기소개서 목록 가져오기
   useEffect(() => {
     const fetchIntroductions = async () => {
       setLoading(true);
@@ -39,7 +39,7 @@ function SelectSelfIntroduce() {
           const filteredData = data.filter(
             (intro) => intro.introIsDeleted === "N"
           );
-          setIntroductions(filteredData); // 삭제되지 않은 자기소개서만 표시
+          setIntroductions(filteredData);
         } else {
           setError("서버로부터 예상치 못한 응답이 반환되었습니다.");
         }
@@ -66,12 +66,13 @@ function SelectSelfIntroduce() {
       return;
     }
 
-    console.log("선택된 introNo:", selectedIntro);
-    console.log("로컬 스토리지에서 가져온 UUID:", storedUuid);
+    setLoading(true);
+    setStatusMessage("작업을 시작합니다...");
+    setStatusSubMessage("잠시만 기다려주세요.");
 
     try {
-      const startResponse = await fetch(
-        "http://127.0.0.1:8000/addSelfIntroduce/insert_self_introduce", // AddSelfIntroduce API 호출
+      const response = await fetch(
+        "http://127.0.0.1:8000/addSelfIntroduce/insert_self_introduce",
         {
           method: "POST",
           headers: {
@@ -84,27 +85,30 @@ function SelectSelfIntroduce() {
         }
       );
 
-      console.log("API 응답 상태:", startResponse.status);
-      if (!startResponse.ok) {
-        const errorData = await startResponse.text();
+      if (!response.ok) {
+        const errorData = await response.text();
         console.error("API 오류 응답:", errorData);
-        throw new Error(`작업 시작 요청 실패: ${startResponse.status}`);
+        throw new Error(`작업 시작 요청 실패: ${response.status}`);
       }
 
-      const responseData = await startResponse.json();
-      const newIntroNo = responseData.new_intro_no; // 새로운 intro_no 받아오기
+      const responseData = await response.json();
+      const newIntroNo = responseData.new_intro_no;
 
-      console.log("작업 시작 성공, 새로운 intro_no:", newIntroNo);
-      alert("첨삭 작업이 완료되었습니다."); // 알림창 띄우기
-      navigate(`/myIntroductionList/${newIntroNo}`); // 상세 페이지로 이동
+      setStatusMessage("작업 완료!");
+      setStatusSubMessage("");
+
+      navigate(`/myIntroductionList/${newIntroNo}`);
     } catch (error) {
       console.error("작업 시작 중 오류:", error.message);
-      setStatusMessage("작업 시작 중 오류가 발생했습니다.");
+      setStatusMessage("작업 중 오류가 발생했습니다.");
+      setStatusSubMessage("다시 시도해주세요.");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleSelectIntro = (introNo) => {
-    setSelectedIntro((prev) => (prev === introNo ? null : introNo)); // 선택 상태 토글
+    setSelectedIntro(introNo);
   };
 
   return (
@@ -115,7 +119,7 @@ function SelectSelfIntroduce() {
         <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
 
         {loading ? (
-          <p className={styles.loadingMessage}>로딩 중...</p>
+          <p className={styles.loadingMessage}>작업을!!!!!!!!!!!!시작~~~~~~~~~~~~~하겠습니다!!!!!!!!!!!!!!!!!!!!!!!!!!!</p>
         ) : error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : introductions.length > 0 ? (
@@ -134,7 +138,7 @@ function SelectSelfIntroduce() {
                   <tr key={intro.introNo}>
                     <td>
                       <input
-                        type="radio"
+                        type="checkbox" // 체크박스 스타일 유지
                         checked={selectedIntro === intro.introNo}
                         onChange={() => handleSelectIntro(intro.introNo)}
                       />
@@ -151,13 +155,23 @@ function SelectSelfIntroduce() {
               </tbody>
             </table>
             <button
-              className={styles.proceedButton}
+              className={styles.startButton} // 정확한 클래스 사용
               onClick={handleProceed}
               disabled={loading}
             >
-              {loading ? "처리 중..." : "선택 완료"}
+              {loading ? (
+                <>
+                  <span>{statusMessage}</span>
+                  {statusSubMessage && (
+                    <div className={styles.statusSubMessage}>
+                      {statusSubMessage}
+                    </div>
+                  )}
+                </>
+              ) : (
+                "선택 완료"
+              )}
             </button>
-            <p className={styles.statusMessage}>{statusMessage}</p>
           </div>
         ) : (
           <p className={styles.nullMessage}>등록된 자기소개서가 없습니다.</p>
