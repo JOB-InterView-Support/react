@@ -21,7 +21,6 @@ function InterviewResultPage() {
                 if (Array.isArray(response.data)) {
                     setIntroduces(response.data);
                 } else if (response.data.message) {
-                    // 데이터가 없는 경우
                     alert("기록이 없습니다."); // 알림창 띄우기
                     navigate(-1); // 이전 페이지로 이동
                 } else {
@@ -29,7 +28,6 @@ function InterviewResultPage() {
                 }
             } catch (err) {
                 if (err.response && err.response.status === 404) {
-                    // FastAPI에서 404 Not Found 응답을 받았을 경우
                     alert("기록이 없습니다."); // 알림창 띄우기
                     navigate(-1); // 이전 페이지로 이동
                 } else {
@@ -42,6 +40,13 @@ function InterviewResultPage() {
 
         fetchComparisonData();
     }, [uuid, navigate]);
+
+    // 상세 페이지로 이동
+    const handleBoxClick = (introNo, intId, isClickable) => {
+        if (isClickable) {
+            navigate(`/details/${introNo}/${intId}`);
+        }
+    };
 
     return (
         <div className={styles.pageContainer}>
@@ -57,6 +62,12 @@ function InterviewResultPage() {
                                 : ""
                         }`}
                         key={introduce.intro_no}
+                        onClick={() =>
+                            handleBoxClick(introduce.intro_no, introduce.int_id, introduce.status === "Y")
+                        }
+                        style={{
+                            cursor: introduce.status === "Y" ? "pointer" : "not-allowed",
+                        }}
                     >
                         <h2>{introduce.intro_title}</h2>
                         {introduce.status === "N" && (

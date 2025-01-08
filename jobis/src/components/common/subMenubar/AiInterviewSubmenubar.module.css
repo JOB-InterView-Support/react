@@ -42,5 +42,26 @@
     font-weight: bold; /* 강조 효과 */
   }
 
+  .uuidButton {
+    background-color: #4caf50; /* 버튼 배경색 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    transition: background-color 0.3s;
+    margin-left: 10px; /* 다른 메뉴와의 간격 */
+  }
+  
+  .uuidButton:hover {
+    background-color: #45a049; /* 호버 시 색상 */
+  }
+  
+  .uuidButton:active {
+    background-color: #3e8e41; /* 클릭 시 색상 */
+  }
+  
+
 
  
