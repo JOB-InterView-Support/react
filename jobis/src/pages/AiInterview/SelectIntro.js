@@ -204,15 +204,18 @@ function SelectIntro({ resultData, setResultData }) {
         <h1 className={styles.title}>AI 모의면접</h1>
         <div className={styles.headerRow}>
           <h2 className={styles.subTitle}>자기소개서 선택</h2>
+          <div className={styles.buttons}>
           <button
             onClick={handlePermissionGuideModalOpen}
             className={styles.authorityGuide}
           >
             권한 가이드
           </button>
+          &nbsp;&nbsp;&nbsp;&nbsp;
           <button className={styles.guideLink} onClick={handleGuideModalOpen}>
             이용 가이드
           </button>
+          </div>
         </div>
 
         {isGuideModalOpen && (
