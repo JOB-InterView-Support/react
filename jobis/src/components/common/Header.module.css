@@ -1,116 +1,199 @@
 .header {
-    display: flex; /* 헤더를 플렉스 컨테이너로 설정 */
-    justify-content: center; /* 로고와 버튼 영역을 좌우 정렬 */
-    align-items: center; /* 헤더 내부 아이템을 수직 정렬 */
-    padding: 20px 20px; /* 헤더 안쪽 여백 */
-    position: relative; /* nav를 가운데 배치하기 위한 기준 */
-    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 13px;
+    position: relative;
 }
 
 .logo {
-    width: 12%; /* 로고 크기 설정 */
+    width: 12%;
     margin-left: 10%;
 }
 
 .navList {
-    list-style: none; /* 기본 리스트 스타일 제거 */
-    display: flex; /* 네비게이션을 가로로 정렬 */
-    gap: 45px; /* 메뉴 간 간격 설정 */
-    margin: 0; /* 기본 여백 제거 */
-    padding: 0; /* 기본 여백 제거 */
+    list-style: none;
+    display: flex;
+    gap: 45px;
+    margin: 0;
+    padding: 0;
     font-size: 20px;
     font-weight: bold;
 }
 
 nav {
-    position: absolute; /* nav를 헤더 안에서 자유롭게 배치 */
-    left: 50%; /* 헤더의 정가운데로 위치 이동 */
-    transform: translateX(-50%); /* 가운데 정렬 */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     justify-content: center;
 }
 
 .navList li {
-    cursor: pointer; /* 포인터 커서 추가 */
-    transition: color 0.3s ease; /* 마우스 호버 시 부드러운 색상 변화 */
+    cursor: pointer;
+    transition: color 0.3s ease;
 }
 
-.rightBtn{
-    all: unset; /* 기본 스타일 모두 제거 */
+.rightBtn {
+    all: unset;
     margin-right: 2%;
     justify-content: center;
     align-items: center;
+    font-size: 16px;
+    margin-bottom: 0px;
 }
 
 .rightBtn button {
-    border: none; /* 버튼의 테두리 제거 */
-    background: none; /* 버튼의 배경 제거 */
-    cursor: pointer; /* 클릭 가능한 상태 유지 */
-    padding: 5px 10px; /* 버튼 내용과의 간격 */
-    font-size: 16px; /* 텍스트 크기 */
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: inherit;
 }
 
 .rightBtn button a {
-    text-decoration: none; /* 링크 밑줄 제거 */
-    color: inherit; /* 부모 요소의 색상을 상속 */
-    font-size: inherit; /* 버튼의 텍스트 크기 상속 */
-    display: inline-block; /* 블록처럼 동작 */
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+    display: inline-block;
 }
 
-
 .top {
-    text-align: center; /* 텍스트를 가운데 정렬 */
-    width: 100%; /* 요소가 부모 컨테이너의 전체 너비를 사용 */
+    text-align: center;
+    width: 100%;
     margin-bottom: 5px;
 }
 
 .noLink {
-    text-decoration: none; /* 언더라인 제거 */
-    color: inherit; /* 부모 요소의 색상 상속 */
-    cursor: pointer; 
-  }
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
 
-  .ticketInfo {
-    background-color: #f0f4ff; /* 부드러운 파란색 배경 */
-    padding: 10px 15px; /* 내부 여백 */
-    border-radius: 8px; /* 모서리를 둥글게 */
+.ticketInfo {
+    background-color: #f0f4ff;
+    padding: 10px 15px;
+    border-radius: 8px;
     border: 2px solid rgb(123, 123, 253);
-    display: flex; /* 콘텐츠를 가로로 배치 */
-    align-items: center; /* 세로 중앙 정렬 */
-    font-size: 14px; /* 글꼴 크기 */
+    display: flex;
+    align-items: center;
+    font-size: 14px;
     font-weight: 700;
-    color: #333; /* 텍스트 색상 */
-    white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+    color: #333;
+    white-space: nowrap;
     width: 130px;
     height: 18px;
     margin-left: 16px;
     margin-top: 0px;
-  }
-  
-  .ticketInfo strong {
-    background-color: #fff; /* 흰색 배경 */
-    border: 1px solid #ccc; /* 연한 회색 테두리 */
-    padding: 5px 10px; /* 내부 여백 */
-    border-radius: 4px; /* 둥근 모서리 */
-    margin-left: 8px; /* 텍스트와 간격 */
-    color: #333; /* 텍스트 색상 */
-    font-size: 14px; /* 글꼴 크기 */
-    font-weight: bold; /* 글자 강조 */
-    display: inline-block; /* 박스처럼 표시 */
-  }
-  .bottom {
-    display: flex; /* 플렉스 박스 사용 */
-    justify-content: center; /* 가로로 중앙 정렬 */
-    gap: 10px; /* 버튼 간 간격 */
-    align-items: center; /* 세로 중앙 정렬 */
-    white-space: nowrap; 
-  }
-  .buttonHover {
-    text-decoration: none; /* 기본 상태에서 밑줄 제거 */
-  }
-  
-  .buttonHover:hover {
-    text-decoration: underline; /* hover 시 밑줄 표시 */
-  }
-  
-  
+    margin-bottom: 0px;
+}
+
+.ticketInfo strong {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-left: 8px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.bottom {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.buttonHover {
+    text-decoration: none;
+}
+
+.buttonHover:hover {
+    text-decoration: underline;
+}
+
+/* 반응형 스타일 추가 */
+@media screen and (max-width: 1100px) {
+    .navList {
+        font-size: 18px; /* 텍스트 크기 축소 */
+        gap: 30px; /* 메뉴 간 간격 축소 */
+    }
+    .rightBtn {
+        font-size: 14px; /* 버튼 텍스트 크기 축소 */
+    }
+    .ticketInfo {
+        font-size: 12px; /* 이용권 정보 텍스트 축소 */
+        padding: 5px 10px; /* 여백 축소 */
+    }
+    .ticketInfo strong {
+        font-size: 12px; /* strong 텍스트 크기 축소 */
+        padding: 4px 8px; /* 내부 여백 축소 */
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .header {
+        flex-direction: column; /* 요소들을 세로로 배치 */
+        align-items: flex-start; /* 왼쪽 정렬 */
+        padding: 10px 10px; /* 헤더 여백 축소 */
+    }
+    .logo {
+        width: 15%; /* 로고 크기 축소 */
+        margin-left: 0;
+    }
+    nav {
+        position: relative; /* 위치 고정 */
+        left: 0;
+        transform: none;
+        width: 100%; /* nav를 전체 너비로 설정 */
+        justify-content: center;
+    }
+    .navList {
+        justify-content: center;
+        font-size: 16px; /* 텍스트 크기 축소 */
+        gap: 20px; /* 메뉴 간 간격 축소 */
+    }
+    .rightBtn {
+        font-size: 12px; /* 버튼 텍스트 크기 축소 */
+        margin-right: 0;
+    }
+    .ticketInfo {
+        font-size: 10px; /* 이용권 정보 텍스트 축소 */
+        padding: 5px; /* 여백 축소 */
+        margin-top: 10px;
+        margin-left: 0;
+    }
+    .ticketInfo strong {
+        font-size: 10px; /* strong 텍스트 크기 축소 */
+        padding: 3px 6px; /* 내부 여백 축소 */
+    }
+    
+}
+
+@media screen and (max-width: 600px) {
+    .navList {
+        flex-direction: column; /* 메뉴를 세로로 배치 */
+        align-items: center;
+        font-size: 14px; /* 텍스트 크기 축소 */
+        gap: 10px; /* 간격 축소 */
+    }
+    .rightBtn {
+        flex-direction: column; /* 버튼들을 세로로 배치 */
+        align-items: center;
+    }
+    .ticketInfo {
+        margin-top: 5px;
+    }
+    .ticketInfo strong {
+        font-size: 9px; /* strong 텍스트 크기 축소 */
+        padding: 2px 4px; /* 내부 여백 축소 */
+    }
+}
