@@ -1,8 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // useNavigate 추가
 import styles from "./AiInterview.module.css"; // CSS 파일 가져오기
 
 const AiInterview = ({ setResultData }) => {
+  const navigate = useNavigate(); // useNavigate 훅 초기화
   const {
     intro_no: selectedIntro,
     round: RoundId,
@@ -18,6 +19,7 @@ const AiInterview = ({ setResultData }) => {
   const [filename, setFilename] = useState(null); // 파일명 저장
 
   const uuid = localStorage.getItem("uuid");
+  
 
   useEffect(() => {
     const getAudioDevices = async () => {
@@ -192,6 +194,8 @@ const AiInterview = ({ setResultData }) => {
           round_id: data.round_id,
           int_id: data.int_id,
         });
+          // 홈으로 네비게이트
+          navigate("/");
       }
     } catch (error) {
       console.error("Error fetching interview state:", error);
@@ -222,6 +226,7 @@ const AiInterview = ({ setResultData }) => {
   if (isConfirmed) {
     return (
       <div className={styles.fullscreenContainer}>
+        <h1>얼굴을 가운데에 위치시켜주세요!</h1>
         {isInterviewCompleted ? (
           // 인터뷰 완료 상태일 때
           <h1 className={styles.introHeader}>
