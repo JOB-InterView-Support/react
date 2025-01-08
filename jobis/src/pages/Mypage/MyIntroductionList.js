@@ -21,16 +21,21 @@ function MyIntroductionList() {
       }
 
       try {
-        const response = await secureApiRequest(`/mypage/intro/${storedUuid}?introIsEdited=${filter}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await secureApiRequest(
+          `/mypage/intro/${storedUuid}?introIsEdited=${filter}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         const data = response.data;
         if (Array.isArray(data)) {
-          const filteredData = data.filter((intro) => intro.introIsDeleted === "N");
+          const filteredData = data.filter(
+            (intro) => intro.introIsDeleted === "N"
+          );
           setIntroductions(filteredData);
           setFilteredIntroductions(
             filteredData.filter((intro) => intro.introIsEdited === filter)
@@ -60,12 +65,15 @@ function MyIntroductionList() {
   const handleNewIntroduction = async () => {
     const storedUuid = localStorage.getItem("uuid");
     try {
-      const response = await secureApiRequest(`/mypage/intro/check-limit/${storedUuid}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      const response = await secureApiRequest(
+        `/mypage/intro/check-limit/${storedUuid}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       if (response.status === 200) {
         navigate("/MyIntroductionInsert");
@@ -116,28 +124,47 @@ function MyIntroductionList() {
               </button>
             </div>
             {filteredIntroductions.length > 0 ? (
-              filteredIntroductions.map((intro) => (
-                <div
-                  key={intro.introNo}
-                  className={styles.introductionCard}
-                  onClick={() => handleItemClick(intro.introNo)}
-                >
-                  <div className={styles.circleicon}>
-                    <img src={icon} alt="Add Icon" className={styles.icon} />
+              filteredIntroductions.map((intro) => {
+                const date = new Date(intro.introDate);
+                const formattedDate = `${date.toLocaleDateString("ko-KR", {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                })}`;
+                const formattedTime = `${date.toLocaleTimeString("ko-KR", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}`;
+
+                return (
+                  <div
+                    key={intro.introNo}
+                    className={styles.introductionCard}
+                    onClick={() => handleItemClick(intro.introNo)}
+                  >
+                    <div className={styles.circleicon}>
+                      <img src={icon} alt="Add Icon" className={styles.icon} />
+                    </div>
+                    <h3>{intro.introTitle}</h3>
+                    <div className={styles.minicontents}>
+                      <p>
+                        {formattedDate}
+                        <br />
+                        {formattedTime}
+                      </p>
+                      <p className={styles.introContents}>
+                        {intro.introContents.length > 6
+                          ? `${intro.introContents.substring(0, 6)}...`
+                          : intro.introContents}
+                      </p>
+                    </div>
                   </div>
-                  <h3>{intro.introTitle}</h3>
-                  <div className={styles.minicontents}>
-                    <p>{intro.introDate.split("T")[0]}</p>
-                    <p>
-                      {intro.introContents.length > 8
-                        ? `${intro.introContents.substring(0, 8)}...`
-                        : intro.introContents}
-                    </p>
-                  </div>
-                </div>
-              ))
+                );
+              })
             ) : (
-              <p className={styles.nullmessage}>등록된 자기소개서가 없습니다.</p>
+              <p className={styles.nullmessage}>
+                등록된 자기소개서가 없습니다.
+              </p>
             )}
           </div>
         </div>
