@@ -154,3 +154,9 @@
     font-size: 25px;
     cursor: pointer;
 }
+
+.findIdPw a {
+    text-decoration: none; /* 밑줄 제거 */
+    color: black; /* 글씨 색상 검정 */
+    font-weight: bold; /* 글씨 볼드 */
+}

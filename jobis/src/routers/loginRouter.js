@@ -6,6 +6,8 @@ import KakaoLogin from '../pages/Login/KakaoLogin';
 import GoogleLogin from '../pages/Login/GoogleLogin';
 import NaverLogin from '../pages/Login/NaverLogin'
 import FaceLogin from '../pages/Login/FaceLogin';
+import FindIdPw from '../pages/Login/FindIdPw';
+
 
 const loginRouter = [
     <Route path="/login" element={<Login />} />,
@@ -13,6 +15,7 @@ const loginRouter = [
     <Route path="/googleLogin" element={<GoogleLogin />} />,
     <Route path="/naverLogin" element={<NaverLogin />} />,
     <Route path="/faceLogin" element={<FaceLogin />} />,
+    <Route path="/findIdPw" element={<FindIdPw />} />,
 ];
 
 export default loginRouter;
