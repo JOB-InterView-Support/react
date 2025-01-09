@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import styles from "./Introduction.module.css";
-import img1 from "../../assets/images/introduction/22.jpg";
+import img1 from "../../assets/images/slied8.png";
 import img2 from "../../assets/images/introduction/06.jpg";
 import img3 from "../../assets/images/introduction/02.jpg";
 
