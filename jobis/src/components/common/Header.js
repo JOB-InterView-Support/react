@@ -162,15 +162,19 @@ function Header() {
             <Link to="/adminMemberManagement">
               <button className={styles.buttonHover}>관리자페이지</button>
             </Link>
+            <Link to="/ticketList" className={styles.noLink}>
             <div className={styles.ticketInfo}>
               남은 이용권: <strong>{ticketCount}</strong>
             </div>
+            </Link>
           </div>
         )}
         {!isAdmin && isLoggedIn && (
+          <Link to="/ticketList" className={styles.noLink}>
           <div className={styles.ticketInfo}>
             남은 이용권: <strong>{ticketCount}</strong>
           </div>
+          </Link>
         )}
       </div>
     </header>
