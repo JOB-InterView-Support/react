@@ -43,7 +43,7 @@ function Service() {
         <p>
           JOBIS는 이용자의 개인정보를 중요하게 생각하며, 개인정보보호법 등
           관련 법령을 준수합니다. 자세한 내용은{" "}
-          <a href="/privacy-policy" className={styles.link}>
+          <a href="/privacy" className={styles.link}>
             개인정보 처리방침
           </a>
           을 참조하세요.
