@@ -22,12 +22,15 @@ function MyTicketList() {
       }
 
       try {
-        const response = await secureApiRequest(`/mypage/ticket/${storedUuid}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await secureApiRequest(
+          `/mypage/ticket/${storedUuid}`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          }
+        );
 
         if (response.status < 200 || response.status >= 300) {
           console.error(`API 요청 실패: 상태 코드 ${response.status}`);
@@ -64,46 +67,46 @@ function MyTicketList() {
 
   const handleRefund = async (paymentKey) => {
     const userConfirmed = window.confirm("이 티켓을 환불하시겠습니까?");
-    
+
     if (!userConfirmed) {
-        return; // 사용자가 취소한 경우
+      return; // 사용자가 취소한 경우
     }
 
     try {
-        const accessToken = localStorage.getItem("accessToken");
+      const accessToken = localStorage.getItem("accessToken");
 
-        // 1. 환불 상태 확인
-        const response = await apiClient.get(
-          `/api/payments/checkRefund/${paymentKey}`,
+      // 1. 환불 상태 확인
+      const response = await apiClient.get(
+        `/api/payments/checkRefund/${paymentKey}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
+      console.log("Refund status response:", response.data);
+
+      // 2. cancelYN 확인
+      if (response.data.cancelYN === "Y") {
+        alert("이미 환불된 이용권입니다.");
+        return;
+      }
+
+      // 3. ticketCount와 prodNumberOfTime 비교
+      if (selectedTicket.ticketCount === selectedTicket.prodNumberOfTime) {
+        // 4. 환불 요청 API 호출
+        const refundResponse = await apiClient.put(
+          `/api/payments/refund/${paymentKey}`,
+          null,
           {
-              headers: {
-                  "Content-Type": "application/json",
-                  Authorization: `Bearer ${accessToken}`,
-              },
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
           }
         );
-
-        console.log("Refund status response:", response.data);
-
-        // 2. cancelYN 확인
-        if (response.data.cancelYN === "Y") {
-          alert("이미 환불된 이용권입니다.");
-          return;
-        }
-
-        // 3. ticketCount와 prodNumberOfTime 비교
-        if (selectedTicket.ticketCount === selectedTicket.prodNumberOfTime) {
-          // 4. 환불 요청 API 호출
-          const refundResponse = await apiClient.put(
-            `/api/payments/refund/${paymentKey}`,
-            null,
-            {
-              headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
 
         if (refundResponse.status === 200) {
           alert("환불이 성공적으로 처리되었습니다.");
@@ -114,11 +117,13 @@ function MyTicketList() {
           throw new Error(refundResponse.data.message || "환불 실패");
         }
       } else {
-        alert("환불할 수 없는 이용권입니다. 사용 가능한 횟수가 남아있거나 조건이 맞지 않습니다.");
+        alert(
+          "환불할 수 없는 이용권입니다. 사용 가능한 횟수가 남아있거나 조건이 맞지 않습니다."
+        );
       }
     } catch (error) {
-        console.error("환불 처리 중 오류 발생:", error);
-        alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
+      console.error("환불 처리 중 오류 발생:", error);
+      alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -129,9 +134,11 @@ function MyTicketList() {
         <h1 className={styles.title}>마이페이지</h1>
         <h2 className={styles.subTitle}>이용권 내역</h2>
         {tickets.length === 0 ? (
-          <p className={styles.noTickets}>이용권 구매 내역이 존재하지 않습니다.</p>
+          <p className={styles.noTickets}>
+            이용권 구매 내역이 존재하지 않습니다.
+          </p>
         ) : (
-          <table className={styles.ticketTable}>
+          <table className={styles["ticketTable"]}>
             <thead>
               <tr>
                 <th>이용권 이름</th>
@@ -143,13 +150,19 @@ function MyTicketList() {
             </thead>
             <tbody>
               {tickets.map((ticket) => (
-                <tr className={styles.ticketContent} key={ticket.ticketKey} onClick={() => openModal(ticket)}>
+                <tr
+                  key={ticket.ticketKey}
+                  className={styles.ticketRow} // CSS 클래스 추가 확인
+                  onClick={() => openModal(ticket)}
+                >
                   <td>{ticket.ticketName}</td>
                   <td>
                     {ticket.ticketCount} / {ticket.prodNumberOfTime || "불명"}
                   </td>
                   <td>{ticket.ticketAmount.toLocaleString()}원</td>
-                  <td>{new Date(ticket.ticketStartDate).toLocaleDateString()}</td>
+                  <td>
+                    {new Date(ticket.ticketStartDate).toLocaleDateString()}
+                  </td>
                   <td>{new Date(ticket.ticketEndDate).toLocaleDateString()}</td>
                 </tr>
               ))}
@@ -157,40 +170,43 @@ function MyTicketList() {
           </table>
         )}
 
-      {isModalOpen && selectedTicket && (
+        {isModalOpen && selectedTicket && (
           <div className={styles.modal}>
-              <div className={styles.modalContent}>
-                  <h3 className={styles.modalTitle}>이용권 정보</h3>
-                  <div className={styles.modalBody}>
-                      <p>이용권 이름: {selectedTicket.ticketName}</p>
-                      <p>
-                          사용 시작 날짜:{" "}
-                          {new Date(selectedTicket.ticketStartDate).toLocaleDateString()}
-                      </p>
-                      <p>
-                          만료 날짜:{" "}
-                          {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}
-                      </p>
-                      <p>결제 금액: {selectedTicket.ticketAmount.toLocaleString()}원</p>
-                      <p>
-                          사용 가능 횟수: {selectedTicket.ticketCount} /{" "}
-                          {selectedTicket.prodNumberOfTime || "불명"}
-                      </p>
-                  </div>
-                  <div className={styles.buttonGroup}>
-                      <button
-                        className={styles.refundButton}
-                        onClick={() => handleRefund(selectedTicket.paymentKey)} // paymentKey 전달
-                      >
-                          환불하기
-                      </button>
-                      <button onClick={closeModal} className={styles.closeButton}>
-                          닫기
-                      </button>
-                  </div>
+            <div className={styles.modalContent}>
+              <h3 className={styles.modalTitle}>이용권 정보</h3>
+              <div className={styles.modalBody}>
+                <p>이용권 이름: {selectedTicket.ticketName}</p>
+                <p>
+                  사용 시작 날짜:{" "}
+                  {new Date(
+                    selectedTicket.ticketStartDate
+                  ).toLocaleDateString()}
+                </p>
+                <p>
+                  만료 날짜:{" "}
+                  {new Date(selectedTicket.ticketEndDate).toLocaleDateString()}
+                </p>
+                <p>
+                  결제 금액: {selectedTicket.ticketAmount.toLocaleString()}원
+                </p>
+                <p>
+                  사용 가능 횟수: {selectedTicket.ticketCount} /{" "}
+                  {selectedTicket.prodNumberOfTime || "불명"}
+                </p>
               </div>
+              <div className={styles.buttonGroup}>
+                <button
+                  className={styles.refundButton}
+                  onClick={() => handleRefund(selectedTicket.paymentKey)} // paymentKey 전달
+                >
+                  환불하기
+                </button>
+                <button onClick={closeModal} className={styles.closeButton}>
+                  닫기
+                </button>
+              </div>
+            </div>
           </div>
-
         )}
       </div>
     </div>
