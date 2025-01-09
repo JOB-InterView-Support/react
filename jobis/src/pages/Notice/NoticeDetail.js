@@ -134,7 +134,9 @@ function NoticeDetail() {
                 <span>조회수 : {notice.noticeVCount}</span>
             </div>
 
-            <div className={styles.noticecontent}>{notice.noticeContent}</div>
+            <div className={styles.noticecontent}
+                dangerouslySetInnerHTML={{
+                    __html: notice.noticeContent.replace(/\n/g, "<br />"), }}></div>
 
             {notice.noticePath && (
                 <div className={styles.noticeImageContainer}>
@@ -184,14 +186,14 @@ function NoticeDetail() {
                 </div>
             )}
 
-            <button onClick={handleBack} className={styles.backButton}>이전으로</button>
-
             {role === "ADMIN" && (
                 <div className={styles.buttonContainer}>
                     <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
                     <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
                 </div>
-            )}
+            )
+            }
+            <button onClick={handleBack} className={styles.backButton}>이전으로</button>
         </div>
     );
 }

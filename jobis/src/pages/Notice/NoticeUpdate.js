@@ -47,33 +47,6 @@ function NoticeUpdate() {
         }
     };
 
-    // 첨부파일 삭제 핸들러
-    // const handleFileDelete = async () => {
-    //     if (!originalNoticePath) {
-    //         alert("삭제할 파일이 없습니다.");
-    //         return;
-    //     }
-
-    //     if (window.confirm("첨부파일을 삭제하시겠습니까?")) {
-    //         try {
-    //             console.log("첨부파일 삭제 요청 실행");
-    //             await secureApiRequest(`/notice/update/${no}`, {
-    //                 method: "put",
-    //             });
-
-    //             setIsFileDeleted(true); // 삭제 상태로 설정
-    //             setFilePreview(null); // 미리보기 제거
-    //             setOriginalNoticePath(null); // 원본 경로 초기화
-    //             setNoticeFile(null); // 업로드 파일 초기화
-    //             alert("첨부파일이 성공적으로 삭제되었습니다.");
-    //         } catch (error) {
-    //             console.error("첨부파일 삭제 요청 실패:", error);
-    //             alert("첨부파일 삭제 중 오류가 발생했습니다.");
-    //         }
-    //     }
-    // };
-
-    // 첨부파일 삭제 핸들러
     const handleFileDelete = async () => {
         if (!originalNoticePath) {
             alert("삭제할 파일이 없습니다.");
@@ -90,14 +63,14 @@ function NoticeUpdate() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        deleteFile: true, // 첨부파일 삭제 플래그만 전달
+                        deleteFile: true,
                     }),
                 });
     
-                setIsFileDeleted(true); // 삭제 상태 설정
-                setFilePreview(null); // 미리보기 제거
-                setOriginalNoticePath(null); // 원본 경로 초기화
-                setNoticeFile(null); // 업로드 파일 초기화
+                setIsFileDeleted(true);
+                setFilePreview(null); 
+                setOriginalNoticePath(null); 
+                setNoticeFile(null); 
                 alert("첨부파일이 성공적으로 삭제되었습니다.");
             } catch (error) {
                 console.error("첨부파일 삭제 요청 실패:", error);
@@ -106,9 +79,6 @@ function NoticeUpdate() {
         }
     };
     
-
-
-    // 파일 변경 핸들러
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setNoticeFile(selectedFile);
@@ -125,34 +95,6 @@ function NoticeUpdate() {
             }
         }
     };
-
-    // 공지사항 업데이트 핸들러
-    // const handleUpdate = async () => {
-    //     try {
-    //         const formData = new FormData();
-    //         formData.append("noticeTitle", noticeTitle);
-    //         formData.append("noticeContent", noticeContent);
-
-    //         if (noticeFile) {
-    //             formData.append("file", noticeFile);
-    //         } else if (isFileDeleted) {
-    //             formData.append("deleteFile", "true");
-    //         }
-
-    //         await axios.put(`http://localhost:8080/notice/update/${no}`, formData, {
-    //             headers: {
-    //                 Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
-    //                 refreshToken: `Bearer ${localStorage.getItem("refreshToken")}`,
-    //             },
-    //         });
-
-    //         alert("공지사항이 성공적으로 수정되었습니다.");
-    //         navigate(`/notice/detail/${no}`);
-    //     } catch (error) {
-    //         console.error("공지사항 수정 요청 실패:", error.response || error.message);
-    //         alert("공지사항 수정 요청 중 오류가 발생했습니다.");
-    //     }
-    // };
 
     const handleUpdate = async () => {
         try {
@@ -181,7 +123,6 @@ function NoticeUpdate() {
         }
     };
     
-
     // 초기화
     useEffect(() => {
         handleNoticeDetail();

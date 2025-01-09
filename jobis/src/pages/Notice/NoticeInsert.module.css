@@ -37,6 +37,12 @@
     font-weight: bold;
 }
 
+.noticecontent {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
 .textarea {
     height: 150px;
     resize: none;
