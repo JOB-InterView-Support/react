@@ -37,6 +37,12 @@
     font-weight: bold;
 }
 
+.noticecontent {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
 .noticeinfo {
     font-size: 15px;
     text-align: right;
