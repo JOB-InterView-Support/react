@@ -47,13 +47,15 @@
   
 
   .qna-table th {
-    background-color: rgba(109, 160, 255, 0.2);
+    background-color: rgba(109, 160, 255, 0.21);
+    border-top: 2px solid rgba(90, 132, 211, 0.8);
+    border-bottom: 2px solid rgba(90, 132, 211, 0.8);
     font-weight: bold;
     color: #333;
   }
   
   .qna-table tbody tr:nth-child(even) {
-    background-color: rgba(109, 160, 255, 0.06);
+    background-color: rgba(109, 160, 255, 0.09);
   }
   
   .qna-table tbody tr:hover {

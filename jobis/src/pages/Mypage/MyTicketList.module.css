@@ -74,8 +74,7 @@
   border-right: 1px solid #dadada !important;
 }
 
-.ticketTable td {
-  background-color: white;
+.ticketTable tbody tr {
   font-weight: bold;
   border-bottom: 1px solid #dadada;
   border-right: none; /* 기존 border-right 제거 */
@@ -84,22 +83,26 @@
   position: relative; /* ::after 사용을 위한 상대 위치 */
   cursor: pointer;
 }
-
+.ticketRow:hover {
+  background-color: rgba(109, 160, 255, 0.3) !important;
+  transition: background-color 0.3s ease !important;
+}
+.ticketRow:nth-child(even) {
+  background-color: rgba(109, 160, 255, 0.09);
+}
 
 
 .ticketTable th:last-child {
     border-right: none; /* 마지막 열의 border-right 제거 */
 }
 
-.ticketTable tbody tr:hover {
-  background-color: #f0f8ff; /* 밝은 파란색 배경 */
-  transition: background-color 0.3s ease;
-  cursor: pointer;
+/* .ticketTable tbody tr:hover {
+  background-color: #f0f8ff !important;
+  transition: background-color 0.3s ease !important;
 }
-
-.ticketTable tr:nth-child(even) {
-  background-color: rgba(109, 160, 255, 0.09);
-}
+.ticketTable tbody tr:nth-child(even) {
+  background-color: rgba(109, 160, 255, 0.09) !important;
+} */
 
 
 
