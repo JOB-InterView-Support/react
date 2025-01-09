@@ -37,9 +37,9 @@ function AiInterviewSubmenubar() {
 
       {/* 내 비교 결과 보기 메뉴 */}
       {storedUuid ? (
-        <Link to={`/interviewResults/${storedUuid}`} className={styles.menuItem}>
+        <Link to={`/interviewResults/${storedUuid}`} className={styles.longMenuItem}>
           <div
-            className={`${styles.menuItem} ${
+            className={`${styles.longMenuItem} ${
               location.pathname.startsWith(`/interviewResults/${storedUuid}`)
                 ? styles.active
                 : ""

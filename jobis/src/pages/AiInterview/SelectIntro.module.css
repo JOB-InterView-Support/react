@@ -32,21 +32,37 @@
   
   .table th,
   .table td {
-    border: 1px solid #ddd;
+    border: 1px solid #dadada;
     padding: 8px;
     text-align: center;
     font-size: 15px;
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
+  }
+  .table th:nth-child(2) {
+    border-left: 1px solid #dadada !important;
+    border-right: 1px solid #dadada !important;
+  }
+  .table th:nth-child(3) {
+    border-right: 1px solid #dadada !important;
+  }
+  .table td:nth-child(2) {
+    border-left: 1px solid #dadada !important;
+    border-right: 1px solid #dadada !important;
+  }
+  .table td:nth-child(3) {
+    border-right: 1px solid #dadada !important;
   }
   
   .table th {
-    background-color: rgba(109, 160, 255, 0.15);
+    background-color: rgba(109, 160, 255, 0.21);
     font-weight: bold;
-    border-top: 2px solid #6DA0FF;
-    border-bottom: 1px solid #6DA0FF;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
   }
   
   .table tr:nth-child(even) {
-    background-color: #f9f9f9;
+    background-color: rgba(109, 160, 255, 0.09);
   }
   
   .nullMessage {
@@ -186,11 +202,13 @@
     color: #000;
   }
 
-  .interviewguide{
+  .interviewguide {
+    position: relative;
     width: 800px;
     height: 369px;
     border: 1px solid rgba(109, 160, 255, 0.5);
     border-radius: 10px;
+    margin-top: 20px;
   }
 
   .modalContent ul {
@@ -219,16 +237,20 @@
   .referenceText {
     font-size: 12px !important; /* 텍스트 크기 작게 */
     color: #666 !important; /* 텍스트 색상 회색 */
-    text-align: left; /* 텍스트 우측 정렬 */
     font-weight: bold;
-    margin-top: 20px; /* 위쪽 여백 추가 */
+    position: absolute; /* 절대 위치로 설정 */
+    top: 10px; /* 이미지 기준 위로 위치 조정 */
+    left: 0; /* 이미지 기준 왼쪽으로 위치 조정 */
+    transform: translateY(-100%); /* 텍스트를 이미지 위로 이동 */
+    margin: 0; /* 여백 제거 */
   }
   .modalContent {
+    position: relative; /* 내부 절대 위치 요소를 기준으로 설정 */
     display: flex;
     flex-direction: column; /* 수직 방향 정렬 */
     align-items: center; /* 중앙 정렬 */
-    text-align: center; /* 텍스트 중앙 정렬 */
-    padding: 20px; /* 적절한 패딩 추가 */
+    text-align: center;
+    padding: 20px;
   }
   
   

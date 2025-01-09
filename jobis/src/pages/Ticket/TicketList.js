@@ -17,8 +17,10 @@ function TicketList() {
     const [isLoading, setIsLoading] = useState(false);  
     const navigate = useNavigate();
     const [products, setProducts] = useState([]); // Products 정보를 담을 상태
-    
+    const [userName, setUserName] = useState(null); // 사용자 이름 상태
+    const [userDefaultEmail, setUserDefaultEmail] = useState(null); // 사용자 이름 상태
 
+    
     const [payment, setPayment] = useState(null);
     
     useEffect(() => {
@@ -94,55 +96,75 @@ function TicketList() {
     
     // ------ '결제하기' 버튼 누르면 결제창 띄우기 ------
     // @docs https://docs.tosspayments.com/sdk/v2/js#paymentrequestpayment
-    // 결제 요청
-async function requestPayment(product) {
-    console.log("Product data for payment:", product); // product 객체 출력
-    if (!payment) {
-        console.error("Payment instance is not ready");
-        return;
+    async function requestPayment(product) {
+        const storedUserName = localStorage.getItem("userName"); // 로컬 스토리지에서 userName 가져오기
+        const storedUserEmail = localStorage.getItem("userDefaultEmail"); // 로컬 스토리지에서 userName 가져오기
+        setUserName(storedUserName || "알 수 없음"); // userName 상태 업데이트
+        setUserDefaultEmail(storedUserEmail || "알 수 없음"); // userEmail 상태 업데이트
+
+        const accessToken = localStorage.getItem("accessToken");
+        const refreshToken = localStorage.getItem("refreshToken");    
+
+        if (!payment) {
+            console.error("Payment instance is not ready");
+            return;
+        }
+    
+        try {
+            const response = await apiClient.post(
+                "/api/payments/request",
+                {
+                    orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
+                    orderName: product.prodName,
+                    amount: product.prodAmount,
+                },
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${accessToken}`, // 인증 헤더에 AccessToken 추가
+                        refreshToken: `Bearer ${refreshToken}`, // 인증 헤더에 RefreshToken 추가
+                    },
+                }
+            );
+    
+            if (response.status === 200) {
+                // Toss Payments로 결제 진행
+                await payment.requestPayment({
+                    method: "CARD",
+                    amount: {
+                        currency: "KRW",
+                        value: product.prodAmount,
+                    },
+                    orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
+                    orderName: product.prodName,
+                    successUrl: window.location.origin + "/paymentSuccess",
+                    failUrl: window.location.origin + "/payments/fail",
+                    customerEmail: userDefaultEmail,
+                    customerName: userName,
+                    customerMobilePhone: "01012341234",
+                });
+            }
+        } catch (error) {
+            console.error("Error details:", error); // 전체 에러 객체를 출력
+            if (error.response) {
+                console.log("Response data:", error.response.data); // 응답 데이터 확인
+                console.log("Response status:", error.response.status); // 상태 코드 확인
+        
+                const errorField = error.response.data.error || ""; // error 필드 가져오기
+                const statusCode = errorField.split(" ")[0]; // error 필드에서 첫 번째 단어 추출
+        
+                if (statusCode === "409") { // 상태 코드 확인
+                    alert("이용권을 이미 가지고 있습니다."); // 메시지 출력
+                } else {
+                    console.error("Error message:", error.response.data.message || "Unknown error");
+                    alert("결제 요청에 실패했습니다. 관리자에게 문의하세요.");
+                }
+            } else {
+                console.error("Unexpected error:", error);
+                alert("결제 요청 중 예상치 못한 오류가 발생했습니다.");
+            }
+        }
     }
-
-    // amount 객체 생성
-    const amount = {
-        currency: "KRW",
-        value: product.prodAmount, // 개별 product의 금액 설정
-    };
-
-    try {
-        // 서버로 결제 정보를 보내기
-        const response = await apiClient.post("/api/payments/request", {
-            orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
-            orderName: product.prodName,
-            amount: product.prodAmount,
-            customerEmail: "customer123@gmail.com",
-            customerName: "김토스",
-            customerMobilePhone: "01012341234",
-        });
-
-        // Toss SDK로 결제 진행
-        await payment.requestPayment({
-            method: "CARD",
-            amount: amount,
-            orderId: `ORDER_${product.prodNumber}_${Date.now()}`,
-            orderName: product.prodName,
-            successUrl: window.location.origin + "/paymentSuccess",
-            failUrl: window.location.origin + "/payments/fail",
-            customerEmail: "customer123@gmail.com",
-            customerName: "김토스",
-            customerMobilePhone: "01012341234",
-            card: {
-                useEscrow: false,
-                flowMode: "DEFAULT",
-                useCardPoint: false,
-                useAppCardOnly: false,
-            },
-        });
-
-    } catch (error) {
-        console.error("Payment request failed:", error);
-    }
-}
-
 
     if (isLoading) {
         return <div className={styles.loading}>로딩 중...</div>; // 로딩 표시

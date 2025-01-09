@@ -1,0 +1,39 @@
+.menuContainer {
+  display: flex;
+  justify-content: center; /* 가운데 정렬 */
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #ddd;
+  max-width: 1200px; /* 최대 너비 제한 */
+  margin: 0 auto; /* 중앙 정렬 */
+}
+
+.menuList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuItem {
+  margin-right: 20px;
+}
+
+.menuItem a {
+  text-decoration: none;
+  color: #555;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.menuItem a:hover {
+  background-color: #e7f3ff;
+  color: #6da0ff;
+}
+
+.active a {
+  background-color: #6da0ff;
+  color: white;
+}
