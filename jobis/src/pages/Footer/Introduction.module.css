@@ -53,7 +53,7 @@
     font-family: Arial, sans-serif;
     color: #333;
     margin: 0 auto;
-    padding: 80px 20px 20px; /* 상단 네비게이션 높이만큼 여백 추가 */
+    padding: 20px 20px 20px; /* 상단 네비게이션 높이만큼 여백 추가 */
     max-width: 1200px;
   }
   
