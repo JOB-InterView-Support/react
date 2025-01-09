@@ -22,38 +22,39 @@ const InterviewResultDetailPage = () => {
         console.log("useParams로 추출한 int_no:", int_no);
 
         const fetchMediaPaths = async () => {
-            try {
-                console.log("Axios를 사용하여 데이터 가져오기 시작...");
-                const response = await axios.get(
-                    `http://127.0.0.1:8000/interviewResult/interview_detail/${intro_no}/${int_no}`
-                );
+    try {
+        console.log("Axios를 사용하여 데이터 가져오기 시작...");
+        const response = await axios.get(
+            `http://127.0.0.1:8000/interviewResult/interview_detail/${intro_no}/${int_no}`
+        );
 
-                console.log("Axios 응답 성공, 응답 데이터:", response.data);
+        console.log("Axios 응답 성공, 응답 데이터:", response.data);
 
-                const { video_path, audio_path } = response.data;
+        const { video_path, audio_path } = response.data;
 
-                // 로컬 파일 경로를 HTTP URL로 변환
-                const videoHttpPath = video_path.replace(
-                    "C:/JOBISIMG",
-                    "http://localhost:8001"
-                );
-                const audioHttpPath = audio_path.replace(
-                    "C:/JOBISIMG",
-                    "http://localhost:8001"
-                );
+        // 로컬 파일 경로를 HTTP URL로 변환
+        const videoHttpPath = video_path.replace(
+            "C:/JOBISIMG",
+            "http://localhost:8001"
+        );
+        const audioHttpPath = audio_path.replace(
+            "C:/JOBISIMG",
+            "http://localhost:8001"
+        );
 
-                console.log("변환된 비디오 경로:", videoHttpPath);
-                console.log("변환된 오디오 경로:", audioHttpPath);
+        console.log("변환된 비디오 경로:", videoHttpPath);
+        console.log("변환된 오디오 경로:", audioHttpPath);
 
-                setVideoSrc(videoHttpPath);
-                setAudioSrc(audioHttpPath);
-                setLoading(false);
-            } catch (err) {
-                console.error("데이터 가져오기 중 오류 발생:", err.message);
-                setError(err.message);
-                setLoading(false);
-            }
-        };
+        setVideoSrc(videoHttpPath);
+        setAudioSrc(audioHttpPath);
+        setLoading(false);
+    } catch (err) {
+        console.error("데이터 가져오기 중 오류 발생:", err.message);
+        setError(err.message);
+        setLoading(false);
+    }
+};
+
 
         fetchMediaPaths();
     }, [intro_no, int_no]);
@@ -81,7 +82,7 @@ const InterviewResultDetailPage = () => {
             <div>
                 <h2>음성</h2>
                 <audio controls ref={audioRef}>
-                    <source src={audioSrc} type="audio/mp3" />
+                    <source src={audioSrc} type="audio/mpeg" />
                     브라우저가 음성을 지원하지 않습니다.
                 </audio>
             </div>

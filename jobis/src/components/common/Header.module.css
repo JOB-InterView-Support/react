@@ -78,12 +78,12 @@ nav {
     background-color: #f0f4ff;
     padding: 10px 15px;
     border-radius: 8px;
-    border: 2px solid rgb(123, 123, 253);
+    border: 2px solid rgb(157, 157, 255);
     display: flex;
     align-items: center;
     font-size: 14px;
     font-weight: 700;
-    color: #333;
+    color: #4b4b4b;
     white-space: nowrap;
     width: 130px;
     height: 18px;
