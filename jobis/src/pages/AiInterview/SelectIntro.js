@@ -6,7 +6,6 @@ import AiInterviewSubmenubar from "../../components/common/subMenubar/AiIntervie
 import interviewguide from "../../assets/images/interviewguide.png";
 
 function SelectIntro({ resultData, setResultData }) {
- 
   // props 추가
   const { secureApiRequest } = useContext(AuthContext);
 
@@ -101,12 +100,12 @@ function SelectIntro({ resultData, setResultData }) {
       alert("모의 면접 결과 분석 중입니다. 분석 완료 후 다시 시도해주세요.");
       return;
     }
-  
+
     if (!selectedIntro) {
       alert("자기소개서를 선택해주세요.");
       return;
     }
-  
+
     try {
       const ticketResponse = await secureApiRequest("/ticket/check", {
         method: "GET",
@@ -115,33 +114,33 @@ function SelectIntro({ resultData, setResultData }) {
           "Cache-Control": "no-cache",
         },
       });
-  
+
       const ticketData = ticketResponse.data;
-  
+
       if (!ticketData.ticketCounts || ticketData.ticketCounts.length === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
         navigate("/ticketList");
         return;
       }
-  
+
       const totalTicketCount = ticketData.ticketCounts.reduce(
         (sum, count) => sum + count,
         0
       );
-  
+
       if (totalTicketCount === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
         navigate("/ticketList");
         return;
       }
-  
+
       setLoading(true);
       setStatusMessage("서버와 연결 중입니다...");
       setStatusSubMessage("3~5분 정도 소요될 수 있습니다.");
-  
+
       const selectedDate = new Date().toISOString();
       const formattedDate = selectedDate.replace("T", " ").split(".")[0];
-  
+
       // AI 질문 생성 요청
       const response = await fetch(
         "http://127.0.0.1:8000/interview/addQuestions",
@@ -151,31 +150,31 @@ function SelectIntro({ resultData, setResultData }) {
           body: JSON.stringify({ intro_no: selectedIntro }),
         }
       );
-  
+
       // 응답 상태 확인
       if (response.ok) {
         // 응답이 OK일 경우 이용권 차감 실행
         const backendResult = await requestTicketUsage(formattedDate);
-  
+
         if (backendResult.status !== "SUCCESS") {
           throw new Error("이용권 차감 실패: " + backendResult.message);
         }
-  
+
         setStatusMessage("AI가 질문을 생성하고 있습니다...");
         setStatusSubMessage("잠시만 기다려주세요.");
-  
+
         const result = await response.json();
         const { RoundId, INT_ID } = result;
-  
+
         if (!RoundId || !INT_ID) {
           throw new Error("백엔드 응답에 필요한 데이터가 누락되었습니다.");
         }
-  
+
         setTimeout(() => {
           setStatusMessage("곧 모의 면접이 시작됩니다.");
           setStatusSubMessage("");
         }, 2000);
-  
+
         setTimeout(() => {
           navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
         }, 4000);
@@ -191,7 +190,6 @@ function SelectIntro({ resultData, setResultData }) {
       setTimeout(() => setLoading(false), 4000);
     }
   };
-  
 
   const handleGuideModalOpen = () => setGuideModalOpen(true);
   const handleGuideModalClose = () => setGuideModalOpen(false);
@@ -208,16 +206,16 @@ function SelectIntro({ resultData, setResultData }) {
         <div className={styles.headerRow}>
           <h2 className={styles.subTitle}>자기소개서 선택</h2>
           <div className={styles.buttons}>
-          <button
-            onClick={handlePermissionGuideModalOpen}
-            className={styles.authorityGuide}
-          >
-            권한 가이드
-          </button>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button className={styles.guideLink} onClick={handleGuideModalOpen}>
-            이용 가이드
-          </button>
+            <button
+              onClick={handlePermissionGuideModalOpen}
+              className={styles.authorityGuide}
+            >
+              권한 가이드
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button className={styles.guideLink} onClick={handleGuideModalOpen}>
+              이용 가이드
+            </button>
           </div>
         </div>
 
@@ -238,11 +236,14 @@ function SelectIntro({ resultData, setResultData }) {
                   ※ 모의면접이 시작되면 이용권 횟수가 차감됩니다.
                 </li>
               </ul>
-              <img
-                src={interviewguide}
-                alt="interviewguide"
-                className={styles.interviewguide}
-              />
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <span className={styles.referenceText}>▶참고 화면</span>
+                <img
+                  src={interviewguide}
+                  alt="interviewguide"
+                  className={styles.interviewguide}
+                />
+              </div>
             </div>
           </div>
         )}
