@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import style from "./InterviewResultDetailPage.module.css";
 
 const InterviewResultDetailPage = () => {
     console.log("InterviewResultDetailPage 컴포넌트가 렌더링되었습니다.");
 
-    // URL에서 intro_no와 int_no 추출
     const { intro_no, int_no } = useParams(); // /details/:intro_no/:int_no 형태로 URL 설정
 
     const [videoSrc, setVideoSrc] = useState(null);
@@ -13,7 +13,6 @@ const InterviewResultDetailPage = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // useRef로 video와 audio 요소 참조
     const videoRef = useRef(null);
     const audioRef = useRef(null);
 
@@ -22,39 +21,37 @@ const InterviewResultDetailPage = () => {
         console.log("useParams로 추출한 int_no:", int_no);
 
         const fetchMediaPaths = async () => {
-    try {
-        console.log("Axios를 사용하여 데이터 가져오기 시작...");
-        const response = await axios.get(
-            `http://127.0.0.1:8000/interviewResult/interview_detail/${intro_no}/${int_no}`
-        );
+            try {
+                console.log("Axios를 사용하여 데이터 가져오기 시작...");
+                const response = await axios.get(
+                    `http://127.0.0.1:8000/interviewResult/interview_detail/${intro_no}/${int_no}`
+                );
 
-        console.log("Axios 응답 성공, 응답 데이터:", response.data);
+                console.log("Axios 응답 성공, 응답 데이터:", response.data);
 
-        const { video_path, audio_path } = response.data;
+                const { video_path, audio_path } = response.data;
 
-        // 로컬 파일 경로를 HTTP URL로 변환
-        const videoHttpPath = video_path.replace(
-            "C:/JOBISIMG",
-            "http://localhost:8001"
-        );
-        const audioHttpPath = audio_path.replace(
-            "C:/JOBISIMG",
-            "http://localhost:8001"
-        );
+                const videoHttpPath = video_path.replace(
+                    "C:/JOBISIMG",
+                    "http://localhost:8001"
+                );
+                const audioHttpPath = audio_path.replace(
+                    "C:/JOBISIMG",
+                    "http://localhost:8001"
+                );
 
-        console.log("변환된 비디오 경로:", videoHttpPath);
-        console.log("변환된 오디오 경로:", audioHttpPath);
+                console.log("변환된 비디오 경로:", videoHttpPath);
+                console.log("변환된 오디오 경로:", audioHttpPath);
 
-        setVideoSrc(videoHttpPath);
-        setAudioSrc(audioHttpPath);
-        setLoading(false);
-    } catch (err) {
-        console.error("데이터 가져오기 중 오류 발생:", err.message);
-        setError(err.message);
-        setLoading(false);
-    }
-};
-
+                setVideoSrc(videoHttpPath);
+                setAudioSrc(audioHttpPath);
+                setLoading(false);
+            } catch (err) {
+                console.error("데이터 가져오기 중 오류 발생:", err.message);
+                setError(err.message);
+                setLoading(false);
+            }
+        };
 
         fetchMediaPaths();
     }, [intro_no, int_no]);
@@ -69,39 +66,70 @@ const InterviewResultDetailPage = () => {
         return <div>오류: {error}</div>;
     }
 
+    const handlePlay = () => {
+        console.log("영상과 음성을 동시에 재생합니다.");
+        const videoElement = videoRef.current;
+        const audioElement = audioRef.current;
+        if (videoElement && audioElement) {
+            videoElement.play();
+            audioElement.play();
+            console.log("영상 및 음성 재생 시작.");
+        } else {
+            console.error("영상 또는 음성 요소를 찾을 수 없습니다.");
+        }
+    };
+
+    const handlePause = () => {
+        console.log("영상과 음성을 동시에 일시 정지합니다.");
+        const videoElement = videoRef.current;
+        const audioElement = audioRef.current;
+        if (videoElement && audioElement) {
+            videoElement.pause();
+            audioElement.pause();
+            console.log("영상 및 음성 일시 정지.");
+        } else {
+            console.error("영상 또는 음성 요소를 찾을 수 없습니다.");
+        }
+    };
+
+    const handleStop = () => {
+        console.log("영상과 음성을 동시에 정지합니다.");
+        const videoElement = videoRef.current;
+        const audioElement = audioRef.current;
+        if (videoElement && audioElement) {
+            videoElement.pause();
+            videoElement.currentTime = 0;
+            audioElement.pause();
+            audioElement.currentTime = 0;
+            console.log("영상 및 음성 정지 후 초기화.");
+        } else {
+            console.error("영상 또는 음성 요소를 찾을 수 없습니다.");
+        }
+    };
+
     return (
-        <div>
-            <h1>면접 결과 상세 페이지</h1>
-            <div>
-                <h2>영상</h2>
-                <video controls width="600" ref={videoRef}>
-                    <source src={videoSrc} type="video/mp4" />
-                    브라우저가 영상을 지원하지 않습니다.
-                </video>
+        <div className={style.interviewDetailContainer}>
+            <div className={style.leftContent}>
+                <h1 className={style.interviewTitle}>면접 결과 상세 페이지</h1>
+                <div className={style.videoContainer}>
+                    <video
+                        controlsList="nodownload noplaybackrate nofullscreen"
+                        controls={false}
+                        ref={videoRef}
+                        className={style.videoPlayer}
+                    >
+                        <source src={videoSrc} type="video/mp4" />
+                    </video>
+                    <div className={style.buttonOverlay}>
+                        <button className={style.videoButton} onClick={handlePlay}>▶</button>
+                        <button className={style.videoButton} onClick={handlePause}>⏸</button>
+                        <button className={style.videoButton} onClick={handleStop}>⏹</button>
+                    </div>
+                </div>
             </div>
-            <div>
-                <h2>음성</h2>
-                <audio controls ref={audioRef}>
-                    <source src={audioSrc} type="audio/mpeg" />
-                    브라우저가 음성을 지원하지 않습니다.
-                </audio>
+            <div className={style.rightContent}>
+                {/* 여기에 나중에 추가할 콘텐츠 배치 */}
             </div>
-            <button
-                onClick={() => {
-                    console.log("영상과 음성을 동시에 재생합니다.");
-                    const videoElement = videoRef.current;
-                    const audioElement = audioRef.current;
-                    if (videoElement && audioElement) {
-                        videoElement.play();
-                        audioElement.play();
-                        console.log("영상 및 음성 재생 시작.");
-                    } else {
-                        console.error("영상 또는 음성 요소를 찾을 수 없습니다.");
-                    }
-                }}
-            >
-                영상과 음성 동시 재생
-            </button>
         </div>
     );
 };

@@ -19,6 +19,7 @@ function TicketList() {
     const [products, setProducts] = useState([]); // Products 정보를 담을 상태
     const [userName, setUserName] = useState(null); // 사용자 이름 상태
     const [userDefaultEmail, setUserDefaultEmail] = useState(null); // 사용자 이름 상태
+    const [userPhone, setUserPhone] = useState(null); // 사용자 이름 상태
 
     
     const [payment, setPayment] = useState(null);
@@ -99,8 +100,11 @@ function TicketList() {
     async function requestPayment(product) {
         const storedUserName = localStorage.getItem("userName"); // 로컬 스토리지에서 userName 가져오기
         const storedUserEmail = localStorage.getItem("userDefaultEmail"); // 로컬 스토리지에서 userName 가져오기
+        const storedUserPhone = localStorage.getItem("userPhone");
         setUserName(storedUserName || "알 수 없음"); // userName 상태 업데이트
         setUserDefaultEmail(storedUserEmail || "알 수 없음"); // userEmail 상태 업데이트
+        setUserPhone(storedUserPhone || "알 수 없음")
+        const sanitizedPhone = storedUserPhone ? storedUserPhone.replace(/-/g, "") : "01000000000"; // 하이픈 제거
 
         const accessToken = localStorage.getItem("accessToken");
         const refreshToken = localStorage.getItem("refreshToken");    
@@ -141,7 +145,7 @@ function TicketList() {
                     failUrl: window.location.origin + "/payments/fail",
                     customerEmail: userDefaultEmail,
                     customerName: userName,
-                    customerMobilePhone: "01012341234",
+                    customerMobilePhone: sanitizedPhone,
                 });
             }
         } catch (error) {
@@ -160,8 +164,8 @@ function TicketList() {
                     alert("결제 요청에 실패했습니다. 관리자에게 문의하세요.");
                 }
             } else {
-                console.error("Unexpected error:", error);
-                alert("결제 요청 중 예상치 못한 오류가 발생했습니다.");
+                alert("결제를 취소하였습니다.")
+                return;
             }
         }
     }
