@@ -1,31 +1,52 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider";
+import axios from "axios";
 
 const InterviewResultDetailPage = () => {
     console.log("InterviewResultDetailPage 컴포넌트가 렌더링되었습니다.");
 
-    const { int_id } = useParams();
-    const { secureApiRequest } = useContext(AuthContext);
+    // URL에서 intro_no와 int_no 추출
+    const { intro_no, int_no } = useParams(); // /details/:intro_no/:int_no 형태로 URL 설정
 
-    const [data, setData] = useState(null);
+    const [videoSrc, setVideoSrc] = useState(null);
+    const [audioSrc, setAudioSrc] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    // useRef로 video와 audio 요소 참조
+    const videoRef = useRef(null);
+    const audioRef = useRef(null);
+
     useEffect(() => {
-        console.log("useParams로 추출한 int_id:", int_id);
+        console.log("useParams로 추출한 intro_no:", intro_no);
+        console.log("useParams로 추출한 int_no:", int_no);
 
-        const fetchData = async () => {
-            console.log(`int_id(${int_id})로 데이터를 가져오는 중입니다...`);
-
+        const fetchMediaPaths = async () => {
             try {
-                const response = await secureApiRequest(`/api/interview_detail/${int_id}`, {
-                    method: "GET",
-                });
+                console.log("Axios를 사용하여 데이터 가져오기 시작...");
+                const response = await axios.get(
+                    `http://127.0.0.1:8000/interviewResult/interview_detail/${intro_no}/${int_no}`
+                );
 
-                console.log("서버로부터 가져온 데이터:", response);
+                console.log("Axios 응답 성공, 응답 데이터:", response.data);
 
-                setData(response); // secureApiRequest에서 response.data를 반환하도록 수정된 경우
+                const { video_path, audio_path } = response.data;
+
+                // 로컬 파일 경로를 HTTP URL로 변환
+                const videoHttpPath = video_path.replace(
+                    "C:/JOBISIMG",
+                    "http://localhost:8001"
+                );
+                const audioHttpPath = audio_path.replace(
+                    "C:/JOBISIMG",
+                    "http://localhost:8001"
+                );
+
+                console.log("변환된 비디오 경로:", videoHttpPath);
+                console.log("변환된 오디오 경로:", audioHttpPath);
+
+                setVideoSrc(videoHttpPath);
+                setAudioSrc(audioHttpPath);
                 setLoading(false);
             } catch (err) {
                 console.error("데이터 가져오기 중 오류 발생:", err.message);
@@ -34,8 +55,8 @@ const InterviewResultDetailPage = () => {
             }
         };
 
-        fetchData();
-    }, [int_id, secureApiRequest]);
+        fetchMediaPaths();
+    }, [intro_no, int_no]);
 
     if (loading) {
         console.log("현재 로딩 중입니다...");
@@ -47,30 +68,35 @@ const InterviewResultDetailPage = () => {
         return <div>오류: {error}</div>;
     }
 
-    console.log("화면에 렌더링할 데이터:", data);
-
     return (
         <div>
             <h1>면접 결과 상세 페이지</h1>
             <div>
                 <h2>영상</h2>
-                <video controls width="600">
-                    <source src={data.video_path} type="video/mp4" />
+                <video controls width="600" ref={videoRef}>
+                    <source src={videoSrc} type="video/mp4" />
                     브라우저가 영상을 지원하지 않습니다.
                 </video>
             </div>
             <div>
                 <h2>음성</h2>
-                <audio controls>
-                    <source src={data.audio_path} type="audio/mpeg" />
+                <audio controls ref={audioRef}>
+                    <source src={audioSrc} type="audio/mp3" />
                     브라우저가 음성을 지원하지 않습니다.
                 </audio>
             </div>
             <button
                 onClick={() => {
                     console.log("영상과 음성을 동시에 재생합니다.");
-                    document.querySelector("video").play();
-                    document.querySelector("audio").play();
+                    const videoElement = videoRef.current;
+                    const audioElement = audioRef.current;
+                    if (videoElement && audioElement) {
+                        videoElement.play();
+                        audioElement.play();
+                        console.log("영상 및 음성 재생 시작.");
+                    } else {
+                        console.error("영상 또는 음성 요소를 찾을 수 없습니다.");
+                    }
                 }}
             >
                 영상과 음성 동시 재생

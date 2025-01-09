@@ -48,9 +48,9 @@ const aiInterviewRoutes = ({ setResultData, resultData }) => [
     element={<InterviewResultPage />}
   />,
   <Route
-  key="interview-result-detail-page"
-  path="/details/:int_id/:intro_id"
-  element={<InterviewResultDetailPage />}
+    key="interview-result-detail-page"
+    path="/details/:intro_no/:int_no"
+    element={<InterviewResultDetailPage />}
   />
 
 
