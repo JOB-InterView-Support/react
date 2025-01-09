@@ -62,45 +62,63 @@ function MyTicketList() {
     setIsModalOpen(false);
   };
 
-
-
-
   const handleRefund = async (paymentKey) => {
     const userConfirmed = window.confirm("이 티켓을 환불하시겠습니까?");
+    
     if (!userConfirmed) {
-      return; // 사용자가 취소한 경우
+        return; // 사용자가 취소한 경우
     }
-  
+
     try {
-      const accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
-  
-      const response = await apiClient.put(
-        `/api/payments/refund/${paymentKey}`, // 백엔드 API 호출
-        null, // Body는 필요 없음
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${accessToken}`,
-            RefreshToken: `Bearer ${refreshToken}`,
-          },
+        const accessToken = localStorage.getItem("accessToken");
+
+        // 1. 환불 상태 확인
+        const response = await apiClient.get(
+          `/api/payments/checkRefund/${paymentKey}`,
+          {
+              headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${accessToken}`,
+              },
+          }
+        );
+
+        console.log("Refund status response:", response.data);
+
+        // 2. cancelYN 확인
+        if (response.data.cancelYN === "Y") {
+          alert("이미 환불된 이용권입니다.");
+          return;
         }
-      );
-  
-      if (response.status === 200) {
-        window.alert("환불이 성공적으로 처리되었습니다.");
-        console.log("완료 alert 클릭")
-        setSelectedTicket(null); // 선택된 티켓 초기화
-        console.log("isModalOpen : ", isModalOpen);
-        setIsModalOpen(false); // 모달 닫기
-        console.log("isModalOpen : ", isModalOpen);
-        navigate("/MyTicketList");
+
+        // 3. ticketCount와 prodNumberOfTime 비교
+        if (selectedTicket.ticketCount === selectedTicket.prodNumberOfTime) {
+          // 4. 환불 요청 API 호출
+          const refundResponse = await apiClient.put(
+            `/api/payments/refund/${paymentKey}`,
+            null,
+            {
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+
+        if (refundResponse.status === 200) {
+          alert("환불이 성공적으로 처리되었습니다.");
+          setSelectedTicket(null);
+          setIsModalOpen(false);
+          navigate("/MyTicketList");
+        } else {
+          throw new Error(refundResponse.data.message || "환불 실패");
+        }
       } else {
-        throw new Error(response.data.message || "환불 실패");
+        alert("환불할 수 없는 이용권입니다. 사용 가능한 횟수가 남아있거나 조건이 맞지 않습니다.");
       }
     } catch (error) {
-      console.error("환불 요청 실패:", error);
-      window.alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
+        console.error("환불 처리 중 오류 발생:", error);
+        alert("환불 요청 중 문제가 발생했습니다. 다시 시도해주세요.");
     }
   };
 
