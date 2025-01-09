@@ -50,31 +50,30 @@ function InterviewResultPage() {
 
     return (
         <div className={styles.pageContainer}>
-            <h1>자기소개서 비교 결과</h1>
+            <h1 className={styles.header}>자기소개서 비교 결과</h1>
             {loading && <p className={styles.error}>데이터를 불러오는 중...</p>}
             {error && <p className={styles.error}>{error}</p>}
-            <div className={styles.gridContainer}>
-                {introduces.map((introduce) => (
-                    <div
-                        className={`${styles.card} ${
-                            introduce.status === "N" || introduce.status === "NOT_IN_INTERVIEW"
-                                ? styles.disabled
-                                : ""
-                        }`}
-                        key={introduce.intro_no}
-                        onClick={() =>
-                            handleBoxClick(introduce.intro_no, introduce.int_id, introduce.status === "Y")
-                        }
-                        style={{
-                            cursor: introduce.status === "Y" ? "pointer" : "not-allowed",
-                        }}
-                    >
-                        <h2>{introduce.intro_title}</h2>
-                        {introduce.status === "N" && (
-                            <p className={styles.status}>면접 종료되지 않음</p>
-                        )}
-                    </div>
-                ))}
+            <div className={styles.gridContainerWrapper}>
+                <div className={styles.gridContainer}>
+                    {introduces.map((introduce) => (
+                        <div
+                            className={`${styles.card} ${
+                                introduce.status === "N" || introduce.status === "NOT_IN_INTERVIEW"
+                                    ? styles.disabled
+                                    : ""
+                            }`}
+                            key={introduce.intro_no}
+                            onClick={() =>
+                                handleBoxClick(introduce.intro_no, introduce.int_id, introduce.status === "Y")
+                            }
+                        >
+                            <h3>{introduce.intro_title}</h3>
+                            {introduce.status === "N" && (
+                                <p className={styles.status}>면접 종료되지 않음</p>
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
