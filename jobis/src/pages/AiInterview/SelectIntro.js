@@ -6,7 +6,6 @@ import AiInterviewSubmenubar from "../../components/common/subMenubar/AiIntervie
 import interviewguide from "../../assets/images/interviewguide.png";
 
 function SelectIntro({ resultData, setResultData }) {
- 
   // props 추가
   const { secureApiRequest } = useContext(AuthContext);
 
@@ -98,11 +97,10 @@ function SelectIntro({ resultData, setResultData }) {
   const handleStartClick = async () => {
     console.log("Start Button Clicked"); // 클릭 확인 로그
     if (resultData) {
-      alert("모의 면접 결과 분석중입니다. 분석 완료 후 다시 시도해주세요.");
+      alert("모의 면접 결과 분석 중입니다. 분석 완료 후 다시 시도해주세요.");
       return;
     }
-    console.log("Result Data is null or undefined"); // 이 부분이 실행되면 resultData가 없는 상태
-    
+
     if (!selectedIntro) {
       alert("자기소개서를 선택해주세요.");
       return;
@@ -113,13 +111,13 @@ function SelectIntro({ resultData, setResultData }) {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Cache-Control": "no-cache",
         },
       });
 
       const ticketData = ticketResponse.data;
 
-      // ticketCounts 배열 확인
-      if (!ticketData.ticketCount || ticketData.ticketCount === 0) {
+      if (!ticketData.ticketCounts || ticketData.ticketCounts.length === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
         navigate("/ticketList");
         return;
@@ -132,6 +130,7 @@ function SelectIntro({ resultData, setResultData }) {
 
       if (totalTicketCount === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
+        navigate("/ticketList");
         return;
       }
 
@@ -142,15 +141,7 @@ function SelectIntro({ resultData, setResultData }) {
       const selectedDate = new Date().toISOString();
       const formattedDate = selectedDate.replace("T", " ").split(".")[0];
 
-      const backendResult = await requestTicketUsage(formattedDate);
-
-      if (backendResult.status !== "SUCCESS") {
-        throw new Error("이용권 차감 실패: " + backendResult.message);
-      }
-
-      setStatusMessage("AI가 질문을 생성하고 있습니다...");
-      setStatusSubMessage("잠시만 기다려주세요.");
-
+      // AI 질문 생성 요청
       const response = await fetch(
         "http://127.0.0.1:8000/interview/addQuestions",
         {
@@ -160,25 +151,36 @@ function SelectIntro({ resultData, setResultData }) {
         }
       );
 
-      if (!response.ok) {
+      // 응답 상태 확인
+      if (response.ok) {
+        // 응답이 OK일 경우 이용권 차감 실행
+        const backendResult = await requestTicketUsage(formattedDate);
+
+        if (backendResult.status !== "SUCCESS") {
+          throw new Error("이용권 차감 실패: " + backendResult.message);
+        }
+
+        setStatusMessage("AI가 질문을 생성하고 있습니다...");
+        setStatusSubMessage("잠시만 기다려주세요.");
+
+        const result = await response.json();
+        const { RoundId, INT_ID } = result;
+
+        if (!RoundId || !INT_ID) {
+          throw new Error("백엔드 응답에 필요한 데이터가 누락되었습니다.");
+        }
+
+        setTimeout(() => {
+          setStatusMessage("곧 모의 면접이 시작됩니다.");
+          setStatusSubMessage("");
+        }, 2000);
+
+        setTimeout(() => {
+          navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
+        }, 4000);
+      } else {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-
-      const result = await response.json();
-      const { RoundId, INT_ID } = result;
-
-      if (!RoundId || !INT_ID) {
-        throw new Error("백엔드 응답에 필요한 데이터가 누락되었습니다.");
-      }
-
-      setTimeout(() => {
-        setStatusMessage("곧 모의 면접이 시작됩니다.");
-        setStatusSubMessage("");
-      }, 2000);
-
-      setTimeout(() => {
-        navigate(`/aiInterview/${selectedIntro}/${RoundId}/${INT_ID}`);
-      }, 4000);
     } catch (error) {
       console.error("오류 발생:", error.message);
       alert("작업 중 오류가 발생했습니다. 다시 시도해주세요.");
@@ -204,16 +206,16 @@ function SelectIntro({ resultData, setResultData }) {
         <div className={styles.headerRow}>
           <h2 className={styles.subTitle}>자기소개서 선택</h2>
           <div className={styles.buttons}>
-          <button
-            onClick={handlePermissionGuideModalOpen}
-            className={styles.authorityGuide}
-          >
-            권한 가이드
-          </button>
-          &nbsp;&nbsp;&nbsp;&nbsp;
-          <button className={styles.guideLink} onClick={handleGuideModalOpen}>
-            이용 가이드
-          </button>
+            <button
+              onClick={handlePermissionGuideModalOpen}
+              className={styles.authorityGuide}
+            >
+              권한 가이드
+            </button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button className={styles.guideLink} onClick={handleGuideModalOpen}>
+              이용 가이드
+            </button>
           </div>
         </div>
 
@@ -234,11 +236,14 @@ function SelectIntro({ resultData, setResultData }) {
                   ※ 모의면접이 시작되면 이용권 횟수가 차감됩니다.
                 </li>
               </ul>
-              <img
-                src={interviewguide}
-                alt="interviewguide"
-                className={styles.interviewguide}
-              />
+              <div style={{ position: "relative", display: "inline-block" }}>
+                <span className={styles.referenceText}>▶참고 화면</span>
+                <img
+                  src={interviewguide}
+                  alt="interviewguide"
+                  className={styles.interviewguide}
+                />
+              </div>
             </div>
           </div>
         )}

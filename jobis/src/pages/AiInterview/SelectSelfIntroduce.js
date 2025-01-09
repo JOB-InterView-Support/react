@@ -14,6 +14,8 @@ function SelectSelfIntroduce() {
   const [statusSubMessage, setStatusSubMessage] = useState("");
   const navigate = useNavigate();
 
+  
+
   useEffect(() => {
     const fetchIntroductions = async () => {
       setLoading(true);

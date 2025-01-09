@@ -221,6 +221,9 @@ function Login() {
           {isLoggingIn ? "로그인 중..." : "로그인"}
         </button>
       </div>
+      <div className={styles.findIdPw}>
+        <Link to="/findIdPw">아이디찾기 / 비밀번호찾기</Link>
+      </div>
       <div className={styles.snsLogo}>
         <img
           src={kakao}
@@ -241,6 +244,7 @@ function Login() {
           onClick={handleGoogleLogin}
         />
       </div>
+      
       <div className={styles.snsName}>
         <div className={styles.kakaoName} onClick={handleKakaoLogin}>
           카카오

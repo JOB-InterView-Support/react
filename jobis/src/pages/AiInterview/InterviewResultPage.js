@@ -20,51 +20,60 @@ function InterviewResultPage() {
                 );
                 if (Array.isArray(response.data)) {
                     setIntroduces(response.data);
+                } else if (response.data.message) {
+                    alert("기록이 없습니다."); // 알림창 띄우기
+                    navigate(-1); // 이전 페이지로 이동
                 } else {
                     setError("유효하지 않은 데이터 형식입니다.");
                 }
             } catch (err) {
-                setError("데이터를 불러오는 중 오류가 발생했습니다.");
+                if (err.response && err.response.status === 404) {
+                    alert("기록이 없습니다."); // 알림창 띄우기
+                    navigate(-1); // 이전 페이지로 이동
+                } else {
+                    setError("데이터를 불러오는 중 오류가 발생했습니다.");
+                }
             } finally {
                 setLoading(false);
             }
         };
 
         fetchComparisonData();
-    }, [uuid]);
+    }, [uuid, navigate]);
 
     // 상세 페이지로 이동
-    const handleBoxClick = (introNo, isClickable) => {
+    const handleBoxClick = (introNo, intId, isClickable) => {
         if (isClickable) {
-            navigate(`/details/${introNo}`);
+            navigate(`/details/${introNo}/${intId}`);
         }
     };
 
     return (
         <div className={styles.pageContainer}>
-            <h1>자기소개서 비교 결과</h1>
+            <h1 className={styles.header}>자기소개서 비교 결과</h1>
             {loading && <p className={styles.error}>데이터를 불러오는 중...</p>}
             {error && <p className={styles.error}>{error}</p>}
-            <div className={styles.gridContainer}>
-                {introduces.map((introduce) => (
-                    <div
-                        className={`${styles.card} ${
-                            introduce.exists_in_interview === "N" ? styles.disabled : ""
-                        }`}
-                        key={introduce.intro_no}
-                        onClick={() =>
-                            handleBoxClick(introduce.intro_no, introduce.exists_in_interview === "Y")
-                        }
-                        style={{
-                            cursor: introduce.exists_in_interview === "Y" ? "pointer" : "not-allowed",
-                        }}
-                    >
-                        <h2>{introduce.intro_title}</h2>
-                        {introduce.exists_in_interview === "N" && (
-                            <p className={styles.status}>면접 종료되지 않음</p>
-                        )}
-                    </div>
-                ))}
+            <div className={styles.gridContainerWrapper}>
+                <div className={styles.gridContainer}>
+                    {introduces.map((introduce) => (
+                        <div
+                            className={`${styles.card} ${
+                                introduce.status === "N" || introduce.status === "NOT_IN_INTERVIEW"
+                                    ? styles.disabled
+                                    : ""
+                            }`}
+                            key={introduce.intro_no}
+                            onClick={() =>
+                                handleBoxClick(introduce.intro_no, introduce.int_id, introduce.status === "Y")
+                            }
+                        >
+                            <h3>{introduce.intro_title}</h3>
+                            {introduce.status === "N" && (
+                                <p className={styles.status}>면접 종료되지 않음</p>
+                            )}
+                        </div>
+                    ))}
+                </div>
             </div>
         </div>
     );
