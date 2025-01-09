@@ -22,8 +22,8 @@ function Footer() {
           <div>이용권 안내</div>
         </div>
         <div className={styles.centerBottom}>
-          <div>이용약관</div>
-          <div>개인정보 보호정책</div>
+          <Link to="/service" className={styles.noLink}>이용약관</Link>
+          <Link to="/privacy" className={styles.noLink}>개인정보처리방침</Link>
         </div>
         <div className={styles.bottom}>@2024 SS - SevenSegment</div>
       </div>
