@@ -9,7 +9,7 @@
 }
 
 .noticetitle {
-    font-size: 28px; /* 제목 글자 크기 */
+    font-size: 30px;
     font-weight: bold;
     color: #333333;
     text-align: left;
@@ -18,7 +18,54 @@
     padding-bottom: 10px;
 }
 
+.buttonContainer {
+    display: flex; /* 플렉스 박스를 사용해 버튼을 한 줄에 정렬 */
+    gap: 10px; /* 버튼 사이의 간격 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center; /* 수직 정렬 */
+    margin-top: 10px; /* 위쪽 여백 */
+    justify-content: flex-end;
+}
+
+.updateButton {
+        background-color: #28a745;
+        color: black;
+        padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    color: black;
+    padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+
+}
+
+.updateButton:hover {
+    background-color: #3a94e7; /* 호버 시 어두운 파란색 */      
+}
+
+.deleteButton:hover {
+        background-color: #3a94e7; /* 호버 시 어두운 파란색 */      
+}
+
 .noticecontent {
+    font-size: 17px;
     margin-top: 20px;
     margin-bottom: 20px;
     line-height: 1.8;
@@ -73,17 +120,37 @@
     padding: 5px;
 }
 
+.unsupportedMessage {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: red;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 16px;
+}
+
+.list {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 100px;
+    font-size: 16px;
+}
+
 .downloadButton {
     background: none;
     color: #007bff;
     text-decoration: underline;
     border: none;
     cursor: pointer;
-    margin-top: 10px;
-    font-size: 14px;
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 15px;
     display: flex;
     align-items: center; /* 이미지와 텍스트 수직 정렬 */
-    gap: 5px; /* 이미지와 텍스트 간 간격 */
+    gap: 8px; /* 이미지와 텍스트 간 간격 */
 }
 
 .downloadButton:hover {
@@ -91,16 +158,24 @@
 }
 
 .downloadIcon {
-    width: 16px; /* 아이콘 너비 */
-    height: 16px; /* 아이콘 높이 */
+    width: 20px;
+    height: 20px;
     display: inline-block;
 }
 
+.preview {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 3px;
+    font-size: 16px;
+}
 
 .backButton {
     position: relative;
-    margin-top: 10px; /* 위쪽 여백 */
-    margin-bottom: 10px; /* 아래쪽 여백 */
+    margin-top: 50px;
+    margin-bottom: 10px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -123,7 +198,6 @@
     text-decoration: underline;
     color: #0056b3;
 }
-
 
 .commentsTable {
     width: 100%;
@@ -153,44 +227,4 @@
     color: #666666;
     font-style: italic;
     margin-top: 20px;
-}
-
-.updateButton {
-        background-color: #28a745;
-        color: black;
-        padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
-        border: none;
-        border-radius: 8px;
-        font-size: 16px;
-        font-weight: 900; /* 글씨를 가장 두껍게 설정 */
-        cursor: pointer;
-        margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
-        display: block; /* 부모 요소의 정렬 방식에 따라 필요할 수 있음 */
-        margin-bottom: 10px;
-        font-family: Arial, sans-serif;
-        color: #ffffff;
-}
-
-.deleteButton {
-    background-color: #dc3545;
-    color: black;
-    padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 900; /* 글씨를 가장 두껍게 설정 */
-    cursor: pointer;
-    margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
-    display: block; /* 부모 요소의 정렬 방식에 따라 필요할 수 있음 */
-    margin-bottom: 10px;
-    font-family: Arial, sans-serif;
-    color: #ffffff;
-}
-
-.updateButton:hover {
-    background-color: #3a94e7; /* 호버 시 어두운 파란색 */      
-}
-
-.deleteButton:hover {
-        background-color: #3a94e7; /* 호버 시 어두운 파란색 */      
 }
