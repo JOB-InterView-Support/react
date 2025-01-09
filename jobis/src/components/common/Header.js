@@ -69,7 +69,7 @@ function Header() {
             },
           });
 
-          console.log("Ticket API 응답:", ticketResponse.data); // 응답 확인
+          // console.log("Ticket API 응답:", ticketResponse.data); // 응답 확인
           const ticketData = ticketResponse.data;
 
           // 배열에서 남은 이용권 개수 추출
