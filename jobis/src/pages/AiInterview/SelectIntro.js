@@ -120,6 +120,7 @@ function SelectIntro({ resultData, setResultData }) {
   
       if (!ticketData.ticketCounts || ticketData.ticketCounts.length === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
+        navigate("/ticketList");
         return;
       }
   
@@ -130,6 +131,7 @@ function SelectIntro({ resultData, setResultData }) {
   
       if (totalTicketCount === 0) {
         alert("사용 가능한 이용권이 존재하지 않습니다.");
+        navigate("/ticketList");
         return;
       }
   
