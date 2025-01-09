@@ -1,0 +1,64 @@
+.interviewDetailContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100vh;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+.leftContent {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.rightContent {
+    flex: 1;
+    /* 나중에 콘텐츠 추가 */
+}
+
+.videoContainer {
+    position: relative;
+    width: 80%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.videoPlayer {
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.buttonOverlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.videoButton {
+    background-color: rgba(0, 0, 0, 0.7);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
+}
+
+.videoButton:hover {
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+}
