@@ -22,14 +22,14 @@ function InterviewResultPage() {
                     setIntroduces(response.data);
                 } else if (response.data.message) {
                     alert("기록이 없습니다."); // 알림창 띄우기
-                    navigate(-1); // 이전 페이지로 이동
+                    navigate("/selectintro"); // 이전 페이지로 이동
                 } else {
                     setError("유효하지 않은 데이터 형식입니다.");
                 }
             } catch (err) {
                 if (err.response && err.response.status === 404) {
                     alert("기록이 없습니다."); // 알림창 띄우기
-                    navigate(-1); // 이전 페이지로 이동
+                    navigate("/selectintro"); // 이전 페이지로 이동
                 } else {
                     setError("데이터를 불러오는 중 오류가 발생했습니다.");
                 }
