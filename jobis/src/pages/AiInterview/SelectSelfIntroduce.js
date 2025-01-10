@@ -99,6 +99,7 @@ function SelectSelfIntroduce() {
       setStatusMessage("이용권 확인 중...");
       setStatusSubMessage("");
 
+      // 이용권 체크
       const ticketResponse = await secureApiRequest("/ticket/check", {
         method: "GET",
         headers: {
@@ -125,16 +126,10 @@ function SelectSelfIntroduce() {
         return;
       }
 
-      setStatusMessage("이용권 차감 중...");
-      const ticketResult = await requestTicketUsage();
-
-      if (ticketResult.status !== "SUCCESS") {
-        throw new Error("이용권 차감 실패");
-      }
-
       setStatusMessage("작업을 시작합니다...");
       setStatusSubMessage("잠시만 기다려주세요.");
 
+      // API 요청
       const response = await fetch(
         "http://127.0.0.1:8000/addSelfIntroduce/insert_self_introduce",
         {
@@ -149,19 +144,29 @@ function SelectSelfIntroduce() {
         }
       );
 
-      if (!response.ok) {
+      if (response.ok) {
+        const responseData = await response.json();
+        const newIntroNo = responseData.new_intro_no;
+
+        setStatusMessage("이용권 차감 중...");
+        setStatusSubMessage("");
+
+        // 이용권 차감
+        const ticketResult = await requestTicketUsage();
+
+        if (ticketResult.status !== "SUCCESS") {
+          throw new Error("이용권 차감 실패");
+        }
+
+        setStatusMessage("작업 완료!");
+        setStatusSubMessage("");
+
+        setTimeout(() => navigate(`/myIntroductionList/${newIntroNo}`), 2000);
+      } else {
         const errorData = await response.text();
         console.error("API 오류 응답:", errorData);
         throw new Error(`작업 시작 요청 실패: ${response.status}`);
       }
-
-      const responseData = await response.json();
-      const newIntroNo = responseData.new_intro_no;
-
-      setStatusMessage("작업 완료!");
-      setStatusSubMessage("");
-
-      setTimeout(() => navigate(`/myIntroductionList/${newIntroNo}`), 2000);
     } catch (error) {
       console.error("작업 중 오류:", error.message);
       setStatusMessage("작업 중 오류가 발생했습니다.");
@@ -176,10 +181,8 @@ function SelectSelfIntroduce() {
       <AiInterviewSubmenubar />
       <div className={styles.container}>
         <h1 className={styles.title}>첨삭 자기소개서 선택</h1>
-        <div className={styles.headerRow}>
         <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
-        <p className={styles.guideMessage}>※ 이용권이 차감됩니다.</p>
-        </div>
+
         {error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : introductions.length > 0 ? (
