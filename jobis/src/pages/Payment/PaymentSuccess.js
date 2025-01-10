@@ -14,6 +14,20 @@ export function PaymentSuccess() {
   const [errorMessage, setErrorMessage] = useState(null);
   const [userName, setUserName] = useState(null); // 사용자 이름 상태
 
+  // 날짜 포맷팅 함수
+  function formatDateTime(dateString) {
+    if (!dateString) return "-";
+    const date = new Date(dateString);
+    const options = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+    };
+    return new Intl.DateTimeFormat('ko-KR', options).format(date);
+  }
 
   useEffect(() => {
     const paymentKey = searchParams.get("paymentKey");
@@ -139,7 +153,7 @@ export function PaymentSuccess() {
               </tr>
               <tr>
                 <th>결제일자</th>
-                <td>{responseData?.approvedAt || "-"}</td>
+                <td>{formatDateTime(responseData?.approvedAt) || "-"}</td>
               </tr>
             </tbody>
           </table>

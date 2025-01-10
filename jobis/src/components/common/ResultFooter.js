@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 
+let hasAnalysisStarted = false; // 전역 변수: API 호출 여부를 추적
+
 const ResultFooter = ({ filename, introNo, roundId, intId, setResultData }) => {
-  const [isAnalysisRequested, setAnalysisRequested] = useState(false);
   const [videoMessage, setVideoMessage] = useState("모의 면접 결과 분석 중입니다...");
   const [audioMessage, setAudioMessage] = useState("");
 
   useEffect(() => {
     const postAnalysis = async () => {
-      if (!isAnalysisRequested && (filename.audio || filename.video || introNo || roundId || intId)) {
-        setAnalysisRequested(true);
+      if (!hasAnalysisStarted && (filename.audio || filename.video || introNo || roundId || intId)) {
+        hasAnalysisStarted = true; // 호출 시작 플래그 설정
 
         const formDataVideo = new FormData();
         formDataVideo.append("videoFilename", filename.video);
@@ -71,7 +72,7 @@ const ResultFooter = ({ filename, introNo, roundId, intId, setResultData }) => {
     };
 
     postAnalysis();
-  }, [isAnalysisRequested, filename, introNo, roundId, intId]);
+  }, [filename, introNo, roundId, intId]);
 
   const handleTestComplete = () => {
     if (setResultData) {
@@ -83,7 +84,7 @@ const ResultFooter = ({ filename, introNo, roundId, intId, setResultData }) => {
     <footer>
       <p>{videoMessage}</p>
       {audioMessage && <p>{audioMessage}</p>}
-      {!isAnalysisRequested && (
+      {!hasAnalysisStarted && (
         <div>
           <p>Audio File: {filename.audio || "N/A"}</p>
           <p>Video File: {filename.video || "N/A"}</p>
