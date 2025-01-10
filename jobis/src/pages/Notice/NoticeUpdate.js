@@ -63,14 +63,14 @@ function NoticeUpdate() {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify({
-                        deleteFile: true,
+                        deleteFile: true, // 첨부파일 삭제 플래그만 전달
                     }),
                 });
     
-                setIsFileDeleted(true);
-                setFilePreview(null); 
-                setOriginalNoticePath(null); 
-                setNoticeFile(null); 
+                setIsFileDeleted(true); // 삭제 상태 설정
+                setFilePreview(null); // 미리보기 제거
+                setOriginalNoticePath(null); // 원본 경로 초기화
+                setNoticeFile(null); // 업로드 파일 초기화
                 alert("첨부파일이 성공적으로 삭제되었습니다.");
             } catch (error) {
                 console.error("첨부파일 삭제 요청 실패:", error);
@@ -79,6 +79,9 @@ function NoticeUpdate() {
         }
     };
     
+
+
+    // 파일 변경 핸들러
     const handleFileChange = (e) => {
         const selectedFile = e.target.files[0];
         setNoticeFile(selectedFile);
@@ -123,7 +126,6 @@ function NoticeUpdate() {
         }
     };
     
-    // 초기화
     useEffect(() => {
         handleNoticeDetail();
     }, []);
@@ -152,28 +154,33 @@ function NoticeUpdate() {
                 ></textarea>
             </div>
 
+            <div className={styles.fileSection}>
+                <p className={styles.list}>첨부파일 목록</p>
+                <button onClick={handleFileDelete} className={styles.deleteButton}>삭제</button>
+                </div>
+                <div className={styles.listfile}>
+                    {originalNoticePath
+                        ? originalNoticePath.split('/').pop().replace("N_", "")
+                        : "첨부파일 없음"}
+            </div>
+
+            <p className={styles.preview}>첨부파일 수정</p>
             <div className={styles.fileInput}>
                 <input type="file" onChange={handleFileChange} />
-                {filePreview ? (
-                    isImageFile(filePreview) ? (
-                        <img
-                            src={filePreview}
-                            alt="새 첨부파일 미리보기"
-                            className={styles.previewImage}
-                            onError={() => console.error("미리보기 이미지 로드 실패:", filePreview)}
-                        />
-                    ) : (
-                        <></>
-                    )
-                ) : (
-                    <span>첨부파일 없음</span>
-                )}
                 {filePreview && (
-                    <button onClick={handleFileDelete} className={styles.deleteButton}>
-                        첨부파일 삭제
-                    </button>
+                    <div className={styles.previewContainer}>
+                        {isImageFile(filePreview) && (
+                            <img
+                                src={filePreview}
+                                alt="새 첨부파일 미리보기"
+                                className={styles.previewImage}
+                                onError={() => console.error("미리보기 이미지 로드 실패:", filePreview)}
+                            />
+                        )}
+                    </div>
                 )}
             </div>
+
 
             <div className={styles.buttonGroup}>
             <button onClick={handleBack} className={styles.backButton}>이전으로</button>

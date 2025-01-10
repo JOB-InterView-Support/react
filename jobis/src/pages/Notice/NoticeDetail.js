@@ -126,8 +126,15 @@ function NoticeDetail() {
 
     return (
         <div className={styles.noticecontainer}>
-            <h2 className={styles.noticetitle}>{notice.noticeTitle}</h2>
+            <h2 className={styles.noticetitle}>{notice.noticeTitle}
 
+            {role === "ADMIN" && (
+                <div className={styles.buttonContainer}>
+                    <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
+                    <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
+                </div>
+            )
+            }</h2>
             <div className={styles.noticeinfo}>
                 <span>작성일 : {notice.noticeWDate}</span>
                 <br />
@@ -138,61 +145,48 @@ function NoticeDetail() {
                 dangerouslySetInnerHTML={{
                     __html: notice.noticeContent.replace(/\n/g, "<br />"), }}></div>
 
+            <p className={styles.list}>첨부파일 목록</p>
+            <button onClick={handleDownload} className={styles.downloadButton}>
+                <img src={downloadIcon} alt="Download Icon" className={styles.downloadIcon} />
+                {notice.noticePath
+                    ? notice.noticePath.split('/').pop().replace("N_", "")
+                    : "첨부파일 없음"}
+            </button>
+            <br />
+            <p className={styles.preview}>파일 미리보기</p>
             {notice.noticePath && (
                 <div className={styles.noticeImageContainer}>
                     {isSupportedFile(notice.noticePath) ? (
                         isImageFile(notice.noticePath) ? (
-                            // 이미지 파일 자동 미리보기
+                            // 이미지 파일 미리보기
                             <img
-                                src={filePreview}
-                                alt={notice.noticePath.split('/').pop()}
+                                src={filePreview || notice.noticePath}
+                                alt="첨부파일 미리보기"
                                 className={styles.noticeImage}
                             />
                         ) : (
-                            filePreview ? (
-                                <embed
-                                    src={filePreview}
-                                    type="application/pdf"
-                                    width="100%"
-                                    height="500px"
-                                    className={styles.embedPreview}
-                                    onError={() => {
-                                        console.warn("브라우저에서 지원하지 않는 파일입니다.");
-                                        setFilePreview(null);
-                                    }}
-                                />
-                            ) : (
-                                <p className={styles.unsupportedMessage}>
-                                    미리보기를 지원하지 않는 파일 형식입니다.
-                                </p>
-                            )
+                            // PDF 파일 미리보기
+                            <embed
+                                src={filePreview || notice.noticePath}
+                                type="application/pdf"
+                                width="100%"
+                                height="500px"
+                                className={styles.embedPreview}
+                                onError={() => {
+                                    console.warn("브라우저에서 지원하지 않는 파일입니다.");
+                                    setFilePreview(null);
+                                }}
+                            />
                         )
                     ) : (
-                        <p className={styles.unsupportedMessage}>
+                        // 지원하지 않는 파일 형식 메시지
+                        <p className={styles.unsupprortedMessage}>
                             미리보기를 지원하지 않는 파일 형식입니다.
                         </p>
                     )}
-                    <button
-                        onClick={handleDownload}
-                        className={styles.downloadButton}
-                    >
-                        <img
-                            src={downloadIcon}
-                            alt="Download Icon"
-                            className={styles.downloadIcon}
-                        />
-                        {notice.noticePath.split('/').pop().replace("N_", "")}
-                    </button>
                 </div>
             )}
 
-            {role === "ADMIN" && (
-                <div className={styles.buttonContainer}>
-                    <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
-                    <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
-                </div>
-            )
-            }
             <button onClick={handleBack} className={styles.backButton}>이전으로</button>
         </div>
     );
