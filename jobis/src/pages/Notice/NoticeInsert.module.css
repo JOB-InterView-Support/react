@@ -80,7 +80,7 @@
     justify-content: center;
     background-color: transparent;
     color: #000;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -90,12 +90,12 @@
 .backButton::before {
     content: "←";
     margin-right: 8px;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .backButton:hover {
     text-decoration: underline;
-    color: #0056b3;
+    color: gray;
 }
 
 .insertButton {
