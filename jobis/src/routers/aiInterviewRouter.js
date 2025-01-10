@@ -8,6 +8,8 @@ import AddSelfIntroduce from "../pages/AiInterview/AddSelfIntroduce";
 import SelectSelfIntroduce from "../pages/AiInterview/SelectSelfIntroduce";
 import InterviewResultPage from "../pages/AiInterview/InterviewResultPage";
 import InterviewResultDetailPage from "../pages/AiInterview/InterviewResultDetailPage";
+import AiInterviewResult from "../pages/AiInterview/AiInterviewResult";
+import AiInterviewResultDetail from "../pages/AiInterview/AiInterviewResultDetail";
 
 const aiInterviewRoutes = ({ setResultData, resultData }) => [
   <Route
@@ -51,9 +53,10 @@ const aiInterviewRoutes = ({ setResultData, resultData }) => [
     key="interview-result-detail-page"
     path="/details/:intro_no/:int_no"
     element={<InterviewResultDetailPage />}
-  />
+  />,
 
-
+  <Route path="/aiInterviewResult" element={<AiInterviewResult />} />,
+  <Route path="/aiInterviewResultDetail/:interviewId" element={<AiInterviewResultDetail />} />,
 ];
 
 export default aiInterviewRoutes;

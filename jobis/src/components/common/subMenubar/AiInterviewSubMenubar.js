@@ -36,7 +36,7 @@ function AiInterviewSubmenubar() {
       </Link>
 
       {/* 내 비교 결과 보기 메뉴 */}
-      {storedUuid ? (
+      {/* {storedUuid ? (
         <Link to={`/interviewResults/${storedUuid}`} className={styles.longMenuItem}>
           <div
             className={`${styles.longMenuItem} ${
@@ -54,6 +54,20 @@ function AiInterviewSubmenubar() {
           onClick={() => alert("로컬 스토리지에 UUID가 없습니다. 다시 로그인해주세요.")}
         >
           내 비교 결과 보기
+        </div>
+      )} */}
+       {storedUuid ? (
+        <Link to={`/aiInterviewResult`} className={styles.longMenuItem}>
+          <div>
+            모의 면접 결과 보기
+          </div>
+        </Link>
+      ) : (
+        <div
+          className={`${styles.menuItem} ${styles.disabled}`}
+          onClick={() => alert("로컬 스토리지에 UUID가 없습니다. 다시 로그인해주세요.")}
+        >
+          모의 면접 결과 보기
         </div>
       )}
     </div>
