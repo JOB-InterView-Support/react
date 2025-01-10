@@ -156,13 +156,16 @@ function NoticeUpdate() {
 
             <div className={styles.fileSection}>
                 <p className={styles.list}>첨부파일 목록</p>
-                <button onClick={handleFileDelete} className={styles.deleteButton}>삭제</button>
-                </div>
-                <div className={styles.listfile}>
-                    {originalNoticePath
-                        ? originalNoticePath.split('/').pop().replace("N_", "")
-                        : "첨부파일 없음"}
+                {originalNoticePath && (
+                    <button onClick={handleFileDelete} className={styles.deleteButton}>삭제</button>
+                )}
             </div>
+            <div className={styles.listfile}>
+                {originalNoticePath
+                    ? originalNoticePath.split('/').pop().replace("N_", "")
+                    : "첨부파일 없음"}
+            </div>
+
 
             <p className={styles.preview}>첨부파일 수정</p>
             <div className={styles.fileInput}>

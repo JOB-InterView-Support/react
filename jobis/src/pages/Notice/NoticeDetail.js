@@ -8,7 +8,7 @@ function NoticeDetail() {
     const accessToken = localStorage.getItem("accessToken");
     const refreshToken = localStorage.getItem("refreshToken");
     
-    const { isLoggedIn, secureApiRequest, role } = useContext(AuthContext);
+    const { secureApiRequest, role } = useContext(AuthContext);
     const { no } = useParams();
     const navigate = useNavigate();
     const [notice, setNotice] = useState(null);
@@ -20,6 +20,7 @@ function NoticeDetail() {
 
     const isImageFile = (filePath) => {
         const imageExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+        if (!filePath) return false; // 파일 경로가 없으면 false 반환
         const extension = filePath.split('.').pop().toLowerCase();
         return imageExtensions.includes(extension);
     };
@@ -32,9 +33,9 @@ function NoticeDetail() {
             setNotice(response.data);
 
             if (response.data.noticePath) {
+                // 파일이 이미지인지 확인
                 if (isImageFile(response.data.noticePath)) {
-                    // 이미지 파일의 경우 바로 설정
-                    setFilePreview(response.data.noticePath);
+                    setFilePreview(response.data.noticePath); // 이미지 파일 경로 설정
                 } else {
                     // 이미지가 아닌 경우 fetch를 통해 미리보기 생성
                     const previewUrl = await fetchImage(response.data.noticePath);
@@ -43,10 +44,11 @@ function NoticeDetail() {
                     }
                 }
             }
-        } catch {
-            console.error("공지사항 데이터를 불러오지 못했습니다.");
+        } catch (error) {
+            console.error("공지사항 데이터를 불러오지 못했습니다.", error);
         }
     };
+
 
     const handleMoveUpdate = () => {
         navigate(`/notice/update/${no}`);
@@ -65,12 +67,14 @@ function NoticeDetail() {
         }
     };
 
+
+
     const fetchImage = async (url) => {
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error("파일 로드 실패");
             const blob = await response.blob();
-            return URL.createObjectURL(blob);
+            return URL.createObjectURL(blob); // 미리보기 URL 생성
         } catch (error) {
             console.error("파일 미리보기 오류:", error);
             return null;
@@ -78,6 +82,11 @@ function NoticeDetail() {
     };
 
     const handleDownload = async () => {
+        if (!notice.noticePath) {
+            alert("다운로드할 파일이 없습니다.");
+            return;
+        }
+
         try {
             const response = await fetch(notice.noticePath, {
                 method: "GET",
@@ -106,12 +115,6 @@ function NoticeDetail() {
         }
     };
 
-    const isSupportedFile = (filePath) => {
-        const supportedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'pdf', 'txt'];
-        const extension = filePath.split('.').pop().toLowerCase();
-        return supportedExtensions.includes(extension);
-    };
-
     useEffect(() => {
         handleNoticeDetail();
     }, []);
@@ -127,14 +130,13 @@ function NoticeDetail() {
     return (
         <div className={styles.noticecontainer}>
             <h2 className={styles.noticetitle}>{notice.noticeTitle}
-
-            {role === "ADMIN" && (
-                <div className={styles.buttonContainer}>
-                    <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
-                    <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
-                </div>
-            )
-            }</h2>
+                {role === "ADMIN" && (
+                    <div className={styles.buttonContainer}>
+                        <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
+                        <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
+                    </div>
+                )}
+            </h2>
             <div className={styles.noticeinfo}>
                 <span>작성일 : {notice.noticeWDate}</span>
                 <br />
@@ -143,45 +145,37 @@ function NoticeDetail() {
 
             <div className={styles.noticecontent}
                 dangerouslySetInnerHTML={{
-                    __html: notice.noticeContent.replace(/\n/g, "<br />"), }}></div>
+                    __html: notice.noticeContent.replace(/\n/g, "<br />"),
+                }}>
+            </div>
 
             <p className={styles.list}>첨부파일 목록</p>
-                    <button onClick={handleDownload} className={styles.downloadButton}>
-                    <img src={downloadIcon} alt="Download Icon"
-                        className={styles.downloadIcon}/>
-                        {notice.noticePath.split('/').pop().replace("N_", "")}
-                    </button>
-            <br />
-            <p className={styles.preview}>파일 미리보기</p>
-            {notice.noticePath && (
+            {notice.noticePath ? (
+                <button onClick={handleDownload} className={styles.downloadButton}>
+                    <img src={downloadIcon} alt="Download Icon" className={styles.downloadIcon} />
+                    {notice.noticePath.split('/').pop().replace("N_", "")}
+                </button>
+            ) : (
+                <p className={styles.noFile}>첨부파일 없음</p>
+            )}
+
+            {notice.noticePath && filePreview && (
                 <div className={styles.noticeImageContainer}>
-                    {isSupportedFile(notice.noticePath) ? (
-                        isImageFile(notice.noticePath) ? (
-                            // 이미지 파일 미리보기
-                            <img
-                                src={filePreview || notice.noticePath}
-                                alt="첨부파일 미리보기"
-                                className={styles.noticeImage}
-                            />
-                        ) : (
-                            // PDF 파일 미리보기
-                            <embed
-                                src={filePreview || notice.noticePath}
-                                type="application/pdf"
-                                width="100%"
-                                height="500px"
-                                className={styles.embedPreview}
-                                onError={() => {
-                                    console.warn("브라우저에서 지원하지 않는 파일입니다.");
-                                    setFilePreview(null);
-                                }}
-                            />
-                        )
+                    <p className={styles.preview}>파일 미리보기</p>
+                    {isImageFile(notice.noticePath) ? (
+                        <img
+                            src={filePreview}
+                            alt="첨부파일 미리보기"
+                            className={styles.noticeImage}
+                        />
                     ) : (
-                        // 지원하지 않는 파일 형식 메시지
-                        <p className={styles.unsupprortedMessage}>
-                            미리보기를 지원하지 않는 파일 형식입니다.
-                        </p>
+                        <embed
+                            src={filePreview}
+                            type="application/pdf"
+                            width="100%"
+                            height="500px"
+                            className={styles.embedPreview}
+                        />
                     )}
                 </div>
             )}

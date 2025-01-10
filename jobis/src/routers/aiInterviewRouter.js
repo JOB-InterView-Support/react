@@ -4,7 +4,7 @@ import SelectIntro from "../pages/AiInterview/SelectIntro";
 import InterviewPage from "../pages/AiInterview/InterviewPage";
 import InterviewTest from "../pages/AiInterview/InterviewTest";
 import AiInterview from "../pages/AiInterview/AiInterview";
-import AddSelfIntroduce from "../pages/AiInterview/AddSelfIntroduce";
+// import AddSelfIntroduce from "../pages/AiInterview/AddSelfIntroduce";
 import SelectSelfIntroduce from "../pages/AiInterview/SelectSelfIntroduce";
 import InterviewResultPage from "../pages/AiInterview/InterviewResultPage";
 import InterviewResultDetailPage from "../pages/AiInterview/InterviewResultDetailPage";
@@ -34,11 +34,11 @@ const aiInterviewRoutes = ({ setResultData, resultData }) => [
     path="/aiInterview/:intro_no/:round/:int_id"
     element={<AiInterview setResultData={setResultData} />}
   />,
-  <Route
-    key="add-self-introduce"
-    path="/addSelfIntroduce/:introNo"
-    element={<AddSelfIntroduce />}
-  />,
+  // <Route
+  //   key="add-self-introduce"
+  //   path="/addSelfIntroduce/:introNo"
+  //   element={<AddSelfIntroduce />}
+  // />,
   <Route
     key="select-self-introduce"
     path="/selectSelfIntroduce"
