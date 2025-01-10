@@ -96,7 +96,7 @@ function NoticeList() {
               onClick={() => handleMoveDetail(notice.noticeNo)}
               className={styles.noticerow}
             >
-              <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+              <td>{totalItems - (index + (currentPage - 1) * itemsPerPage)}</td>
               <td>{notice.noticeTitle}</td>
               <td>{formatDate(notice.noticeWDate)}</td>
             </tr>
