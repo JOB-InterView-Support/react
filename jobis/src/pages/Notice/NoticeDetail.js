@@ -146,11 +146,12 @@ function NoticeDetail() {
                     __html: notice.noticeContent.replace(/\n/g, "<br />"), }}></div>
 
             <p className={styles.list}>첨부파일 목록</p>
-                    <button onClick={handleDownload} className={styles.downloadButton}>
-                    <img src={downloadIcon} alt="Download Icon"
-                        className={styles.downloadIcon}/>
-                        {notice.noticePath.split('/').pop().replace("N_", "")}
-                    </button>
+            <button onClick={handleDownload} className={styles.downloadButton}>
+                <img src={downloadIcon} alt="Download Icon" className={styles.downloadIcon} />
+                {notice.noticePath
+                    ? notice.noticePath.split('/').pop().replace("N_", "")
+                    : "첨부파일 없음"}
+            </button>
             <br />
             <p className={styles.preview}>파일 미리보기</p>
             {notice.noticePath && (
