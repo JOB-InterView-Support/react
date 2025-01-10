@@ -7,14 +7,15 @@ import downloadIcon from "../../assets/images/download_icon.png";
 
 function ReviewDetail() {
     const accessToken = localStorage.getItem("accessToken");
-    const { secureApiRequest } = useContext(AuthContext);
+
     const { rno } = useParams();
     const navigate = useNavigate();
     const [review, setReview] = useState(null);
     const [error, setError] = useState(null);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [filePreview, setFilePreview] = useState(null); // 파일 미리보기 URL
-
+    const { isLoggedIn, userid, username, role, secureApiRequest } =
+        useContext(AuthContext);
     const handleDelete = async () => {
         try {
             await secureApiRequest(`/review/${rno}/delete`, {
@@ -106,6 +107,14 @@ function ReviewDetail() {
     };
 
     useEffect(() => {
+        if (isLoggedIn) {
+          fetchReviewDetail(); // 로그인된 상태에서 데이터 요청
+        } else {
+          setError("로그인이 필요합니다.");
+        }
+      }, [rno, isLoggedIn]);
+
+    useEffect(() => {
         fetchReviewDetail();
     }, [fetchReviewDetail]);
 
@@ -175,20 +184,25 @@ function ReviewDetail() {
             )}
 
             {/* 수정 및 삭제 버튼 */}
-            <div className={styles.buttonGroup}>
-                <button
-                    onClick={() => navigate(`/review/update/${rno}`)}
-                    className={styles.editButton}
-                >
-                    수정
-                </button>
-                <button
-                    onClick={() => setDeleteModalOpen(true)}
-                    className={styles.deleteButton}
-                >
-                    삭제
-                </button>
-            </div>
+<div className={styles.buttonGroup}>
+  {(isLoggedIn && (username === review.rwriter || role === "ADMIN")) && (
+    <>
+      <button
+        onClick={() => navigate(`/review/update/${rno}`)}
+        className={styles.editButton}
+      >
+        수정
+      </button>
+      <button
+        onClick={() => setDeleteModalOpen(true)}
+        className={styles.deleteButton}
+      >
+        삭제
+      </button>
+    </>
+  )}
+</div>
+
 
             {/* 뒤로가기 버튼 */}
             <button onClick={handleBack} className={styles.backButton}>
