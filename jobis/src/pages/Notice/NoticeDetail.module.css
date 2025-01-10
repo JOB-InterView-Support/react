@@ -127,9 +127,10 @@
     cursor: pointer;
     text-align: left;
     color: red;
+    font-weight: bold;
     margin-top: 20px;
     margin-bottom: 20px;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .list {
