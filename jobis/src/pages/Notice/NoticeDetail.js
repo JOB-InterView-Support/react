@@ -107,6 +107,7 @@ function NoticeDetail() {
     };
 
     const isSupportedFile = (filePath) => {
+        if (!filePath) return false;
         const supportedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'pdf'];
         const extension = filePath.split('.').pop().toLowerCase();
         return supportedExtensions.includes(extension);
@@ -126,15 +127,15 @@ function NoticeDetail() {
 
     return (
         <div className={styles.noticecontainer}>
-            <h2 className={styles.noticetitle}>{notice.noticeTitle}
+            <h2 className={styles.noticetitle}>{notice.noticeTitle}</h2>
 
             {role === "ADMIN" && (
                 <div className={styles.buttonContainer}>
                     <button onClick={handleMoveUpdate} className={styles.updateButton}>수 정</button>
                     <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
                 </div>
-            )
-            }</h2>
+            )}
+
             <div className={styles.noticeinfo}>
                 <span>작성일 : {notice.noticeWDate}</span>
                 <br />
