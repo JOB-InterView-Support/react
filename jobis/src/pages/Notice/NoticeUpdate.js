@@ -32,20 +32,23 @@ function NoticeUpdate() {
         try {
             const response = await secureApiRequest(`/notice/detail/${no}`, { method: "GET" });
             const { noticeTitle, noticeContent, noticePath } = response.data;
-
+    
             setNoticeTitle(noticeTitle || "");
             setNoticeContent(noticeContent || "");
-
+    
             if (noticePath) {
+                // 중복 경로 방지: 서버에서 이미 절대 경로로 반환했는지 확인
                 const isAbsolutePath = noticePath.startsWith("http://") || noticePath.startsWith("https://");
-                const fullPath = isAbsolutePath ? noticePath : `http://localhost:8080/attachments/${noticePath}`;
-                setFilePreview(fullPath);
+                const fullPath = isAbsolutePath
+                    ? noticePath
+                    : `http://localhost:8080/attachments${noticePath}`;
                 setOriginalNoticePath(fullPath);
             }
         } catch (error) {
             console.error("공지사항 데이터를 불러오지 못했습니다:", error);
         }
     };
+    
 
     const handleFileDelete = async () => {
         if (!originalNoticePath) {
@@ -78,8 +81,6 @@ function NoticeUpdate() {
             }
         }
     };
-    
-
 
     // 파일 변경 핸들러
     const handleFileChange = (e) => {
@@ -87,7 +88,7 @@ function NoticeUpdate() {
         setNoticeFile(selectedFile);
 
         if (selectedFile) {
-            const isImage = selectedFile.name.match(/\.(jpg|jpeg|png|gif|bmp)$/i);
+            const isImage = selectedFile.name.match(/\.(jpg|jpeg|png|gif|bmp|pdf)$/i);
             if (isImage) {
                 const reader = new FileReader();
                 reader.onload = (event) => setFilePreview(event.target.result);
@@ -156,16 +157,13 @@ function NoticeUpdate() {
 
             <div className={styles.fileSection}>
                 <p className={styles.list}>첨부파일 목록</p>
-                {originalNoticePath && (
-                    <button onClick={handleFileDelete} className={styles.deleteButton}>삭제</button>
-                )}
+                <button onClick={handleFileDelete} className={styles.deleteButton}>삭제</button>
+                </div>
+                <div className={styles.listfile}>
+                    {originalNoticePath
+                        ? originalNoticePath.split('/').pop().replace("N_", "")
+                        : "첨부파일 없음"}
             </div>
-            <div className={styles.listfile}>
-                {originalNoticePath
-                    ? originalNoticePath.split('/').pop().replace("N_", "")
-                    : "첨부파일 없음"}
-            </div>
-
 
             <p className={styles.preview}>첨부파일 수정</p>
             <div className={styles.fileInput}>
@@ -183,7 +181,6 @@ function NoticeUpdate() {
                     </div>
                 )}
             </div>
-
 
             <div className={styles.buttonGroup}>
             <button onClick={handleBack} className={styles.backButton}>이전으로</button>
