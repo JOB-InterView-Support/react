@@ -105,7 +105,7 @@ const ReviewList = () => {
                 // Review 데이터가 있을 경우 테이블에 행 생성
                 reviewList.map((review, index) => (
                   <tr key={review.rno} onClick={() => handleDetailClick(review.rno)}>
-                    <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                    <td>{totalItems - (index + (currentPage - 1) * itemsPerPage)}</td>
                     <td>{review.rtitle}</td>
                     <td>{review.rwriter}</td>
                     <td>{new Date(review.rwdate).toLocaleDateString()}</td>
