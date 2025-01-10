@@ -60,7 +60,10 @@ function SelectSelfIntroduce() {
 
   const requestTicketUsage = async () => {
     try {
-      const formattedDate = new Date().toISOString().replace("T", " ").split(".")[0];
+      const formattedDate = new Date()
+        .toISOString()
+        .replace("T", " ")
+        .split(".")[0];
       const response = await secureApiRequest("/ticket/start", {
         method: "POST",
         headers: {
@@ -72,7 +75,9 @@ function SelectSelfIntroduce() {
       const result = response.data;
 
       if (result.status !== "SUCCESS") {
-        throw new Error(result.message || "이용권 차감 중 문제가 발생했습니다.");
+        throw new Error(
+          result.message || "이용권 차감 중 문제가 발생했습니다."
+        );
       }
 
       return result;
@@ -181,8 +186,12 @@ function SelectSelfIntroduce() {
       <AiInterviewSubmenubar />
       <div className={styles.container}>
         <h1 className={styles.title}>첨삭 자기소개서 선택</h1>
-        <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
-
+        <div className={styles.headerRow}>
+          <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
+          <div className={styles.guidebox}>
+            <p className={styles.guideMessage}>※ 이용권이 차감됩니다.</p>
+          </div>
+        </div>
         {error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : introductions.length > 0 ? (
