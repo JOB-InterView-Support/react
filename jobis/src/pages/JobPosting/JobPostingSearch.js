@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../../AuthProvider"; // 인증 컨텍스트
+import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./JobPostingSearch.module.css";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 
-// 필터 옵션 데이터 (이미 제공된 필터 옵션 데이터 그대로 사용)
+// 필터 옵션 데이터
 const filterOptions = {
   job_mid_cd: [
     { value: "", label: "직무 선택" },
@@ -29,7 +29,7 @@ const filterOptions = {
     { value: "13", label: "미디어·문화·스포츠" },
     { value: "17", label: "금융·보험" },
     { value: "20", label: "공공·복지" },
-  ],
+],
   loc_mcd: [
     { value: "", label: "지역 선택" },
     { value: "117000", label: "전국" },
@@ -50,7 +50,7 @@ const filterOptions = {
     { value: "115000", label: "충남" },
     { value: "116000", label: "제주" },
     { value: "118000", label: "세종" },
-  ],
+],
   edu_lv: [
     { value: "", label: "학력 선택" },
     { value: "0", label: "학력무관" },
@@ -63,7 +63,7 @@ const filterOptions = {
     { value: "7", label: "대학졸업(2,3년)이상" },
     { value: "8", label: "대학교졸업(4년)이상" },
     { value: "9", label: "석사졸업이상" },
-  ],
+],
   job_type: [
     { value: "", label: "근무형태 선택" },
     { value: "1", label: "정규직" },
@@ -73,21 +73,23 @@ const filterOptions = {
     { value: "10", label: "계약직 (정규직 전환가능)" },
     { value: "11", label: "인턴직 (정규직 전환가능)" },
     { value: "16", label: "기간제" },
-  ],
+],
 };
 
 const JobPostingSearch = () => {
-  const { secureApiRequest } = useContext();
-  const navigate = useNavigate();
-  const [filters, setFilters] = useState({
+  const { secureApiRequest, uuid } = useContext(AuthContext); // uuid 가져오기
+  const initialFilters = {
     job_mid_cd: "",
     loc_mcd: "",
     edu_lv: "",
     job_type: "",
-  });
+  };
+  const [filters, setFilters] = useState(initialFilters);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
+  // 필터 변경 핸들러
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({
@@ -96,95 +98,75 @@ const JobPostingSearch = () => {
     }));
   };
 
+  // 검색 핸들러
   const handleSearch = async () => {
     setLoading(true);
     setError(null);
-
     try {
-      const uuid = localStorage.getItem("uuid");
-      const accessToken = localStorage.getItem("accessToken");
-      const refreshToken = localStorage.getItem("refreshToken");
-      if (!uuid) {
-        setError("사용자 인증 정보가 누락되었습니다. 다시 로그인해주세요.");
-        navigate("/login");
-        return;
-      }
+      const queryParams = new URLSearchParams();
 
-      const queryParams = Object.entries(filters)
-        .filter(([_, value]) => value)
-        .map(([key, value]) => `${key}=${value}`)
-        .join("&");
-
-      // secureApiRequest를 사용하여 요청 보내기
-      const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          Authorization: `Bearer ${accessToken}`,
-          refreshToken: `Bearer ${refreshToken}`,
-          "X-User-UUID": uuid,
-        },
+      // 필터 값이 있을 경우만 쿼리 문자열에 추가
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value) queryParams.append(key, value);
       });
 
-      if (response?.data?.jobs?.job?.length) {
-        navigate("/jobPosting/search", {
-          state: { jobPostings: response.data.jobs.job, filters },
-        });
-      } else {
-        setError("검색 결과가 없습니다.");
+      if (uuid) {
+        queryParams.append("uuid", uuid);
       }
-    } catch (err) {
-      console.error("검색 중 오류:", err);
-      setError("검색 요청 중 오류가 발생했습니다. 다시 시도해주세요.");
+
+      const response = await secureApiRequest(`/jobposting/search?${queryParams}`, {
+        method: "GET",
+      });
+
+      if (response.data) {
+        navigate("/jobPosting/search", {
+          state: { jobPosting: response.data.jobPosting, filters },
+        });
+      }
+    } catch (error) {
+      console.error("채용공고 검색 중 오류가 발생했습니다:", error);
+      setError("채용공고 검색 중 오류가 발생했습니다.");
     } finally {
       setLoading(false);
     }
   };
 
+  // 필터 초기화
   const resetFilters = () => {
-    setFilters({
-      job_mid_cd: "",
-      loc_mcd: "",
-      edu_lv: "",
-      job_type: "",
-    });
+    setFilters(initialFilters);
   };
-
-  const isSearchDisabled = Object.values(filters).every((value) => !value);
 
   return (
     <div>
       <JobPostingSubMenubar />
       <div className={styles.container}>
-        <h2>채용공고 검색</h2>
-        <div className={styles.filters}>
-          {Object.keys(filters).map((key) => (
-            <select
-              key={key}
-              name={key}
-              value={filters[key]}
-              onChange={handleInputChange}
-              className={styles.select}
-            >
-              {filterOptions[key].map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-              ))}
-            </select>
-          ))}
-          <button
-            onClick={handleSearch}
-            className={styles.searchButton}
-            disabled={loading || isSearchDisabled}
-          >
-            {loading ? "검색 중..." : "검색"}
-          </button>
-          <button onClick={resetFilters} className={styles.resetButton}>
-            초기화
-          </button>
+        <div className={styles.table}>
+          <h2>채용공고 검색</h2>
+          <div className={styles.filters}>
+            {Object.entries(filterOptions).map(([key, options]) => (
+              <select
+                key={key}
+                name={key}
+                value={filters[key]}
+                onChange={handleInputChange}
+                className={styles.select}
+              >
+                {options.map(({ value, label }) => (
+                  <option key={value} value={value}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            ))}
+            <button onClick={handleSearch} className={styles.searchButton} disabled={loading}>
+              {loading ? "검색 중..." : "검색"}
+            </button>
+            <button onClick={resetFilters} className={styles.resetButton}>
+              초기화
+            </button>
+          </div>
+          {error && <div className={styles.error}>{error}</div>}
         </div>
-        {error && <div className={styles.error}>⚠️ {error}</div>}
       </div>
     </div>
   );
