@@ -11,13 +11,15 @@
   margin: 10px; /* 컨테이너 간의 간격 조정 */
 }
 
-.videoaudioContainer{
-    display: flex;
-    flex-direction: column; /* 요소들을 가로로 나열 */
-    align-items: center; /* 세로 중앙 정렬 */
-    justify-content: center; /* 가로 중앙 정렬 */
+.videoaudioContainer {
+  display: flex;
+  flex-direction: column; /* 요소들을 가로로 나열 */
+  align-items: center; /* 세로 중앙 정렬 */
+  justify-content: center; /* 가로 중앙 정렬 */
 }
-
+.aiAnalysisResults {
+  width: 25%;
+}
 .btnClass {
   margin-top: 2%;
   margin-bottom: 2%;
@@ -40,7 +42,7 @@
 }
 
 .reproductionBtn:hover {
-    background-color: rgba(100, 200, 150, 1);
+  background-color: rgba(100, 200, 150, 1);
 }
 
 .pauseBtn {
@@ -58,6 +60,15 @@
 
 .pauseBtn:hover {
   background-color: rgba(255, 109, 109, 1); /* 호버 시 더 진한 컬러 */
+}
+
+.active {
+  background-color: rgba(100, 200, 150, 1); /* 재생 버튼 활성화 색상 */
+}
+
+/* 정지 버튼에 대한 활성화 색상 변경이 필요하면 CSS에 다음을 추가하세요. */
+.pauseBtn.active {
+  background-color: rgba(255, 109, 109, 1);
 }
 
 .feelingTable {
@@ -116,4 +127,27 @@
 .positionTable th {
   background-color: rgba(109, 160, 255, 0.5);
   font-weight: bold;
+}
+
+.sttTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.sttTable th,
+.sttTable td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.sttTable th {
+  background-color: rgba(109, 160, 255, 0.5);
+  font-weight: bold;
+}
+
+.sttResult {
+  /* border: 1px solid red; */
+  width: 30%;
 }
