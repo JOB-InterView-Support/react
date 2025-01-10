@@ -6,6 +6,8 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     font-family: Arial, sans-serif;
+    margin-bottom: 100px;
+    margin-top: 50px;
 }
 
 .noticetitle {
@@ -78,7 +80,7 @@
     justify-content: center;
     background-color: transparent;
     color: #000;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -88,12 +90,12 @@
 .backButton::before {
     content: "←";
     margin-right: 8px;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .backButton:hover {
     text-decoration: underline;
-    color: #0056b3;
+    color: gray;
 }
 
 .insertButton {
