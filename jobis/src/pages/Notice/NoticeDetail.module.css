@@ -13,7 +13,7 @@
     font-weight: bold;
     color: #333333;
     text-align: left;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     border-bottom: 2px solid #ddd; /* 아래 선 추가 */
     padding-bottom: 10px;
 }
@@ -57,11 +57,11 @@
 }
 
 .updateButton:hover {
-    background-color: #3a94e7; /* 호버 시 어두운 파란색 */      
+    background-color: #138a2e; /* 호버 시 어두운 파란색 */      
 }
 
 .deleteButton:hover {
-        background-color: #3a94e7; /* 호버 시 어두운 파란색 */      
+        background-color: #c02131; /* 호버 시 어두운 파란색 */      
 }
 
 .noticecontent {
@@ -109,7 +109,7 @@
 
 .noticeImageContainer {
     margin-top: 20px;
-    text-align: center;
+    text-align: left;
 }
 
 .noticeImage {
@@ -117,7 +117,7 @@
     height: auto;
     border: 1px solid #ddd;
     border-radius: 5px;
-    padding: 5px;
+    padding: 3px;
 }
 
 .unsupportedMessage {
@@ -135,31 +135,31 @@
     cursor: pointer;
     text-align: left;
     font-weight: bold;
-    margin-top: 100px;
+    margin-top: 80px;
     font-size: 16px;
 }
 
 .downloadButton {
     background: none;
-    color: #007bff;
-    text-decoration: underline;
+    color: black;
     border: none;
     cursor: pointer;
-    margin-top: 15px;
-    margin-bottom: 20px;
-    font-size: 15px;
+    margin-top: 2px;
+    margin-bottom: 35px;
+    font-size: 14px;
     display: flex;
     align-items: center; /* 이미지와 텍스트 수직 정렬 */
-    gap: 8px; /* 이미지와 텍스트 간 간격 */
+    gap: 7px; /* 이미지와 텍스트 간 간격 */
 }
 
 .downloadButton:hover {
-    color: #0056b3;
+    color: #007bff;
+    text-decoration: underline;
 }
 
 .downloadIcon {
-    width: 20px;
-    height: 20px;
+    width: 19px;
+    height: 19px;
     display: inline-block;
 }
 
@@ -180,8 +180,7 @@
     align-items: center;
     justify-content: center;
     background-color: transparent;
-    color: #000;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     border: none;
     cursor: pointer;
@@ -191,12 +190,12 @@
 .backButton::before {
     content: "←";
     margin-right: 8px;
-    font-size: 16px;
+    font-size: 15px;
 }
 
 .backButton:hover {
     text-decoration: underline;
-    color: #0056b3;
+    color: gray;
 }
 
 .commentsTable {
@@ -227,4 +226,11 @@
     color: #666666;
     font-style: italic;
     margin-top: 20px;
+}
+
+.noFile {
+    text-align: left;
+    color: rgb(151, 151, 151);
+    margin-top: 2px;
+    font-size: 14px;
 }
