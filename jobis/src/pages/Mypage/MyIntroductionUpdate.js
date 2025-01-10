@@ -94,6 +94,8 @@ function MyIntroductionUpdate() {
               name="introTitle"
               value={formData.introTitle}
               onChange={handleInputChange}
+              placeholder="제목 입력"
+              maxLength="30"
             />
           </div>
           <div className={styles.rowContainer}>
@@ -105,6 +107,8 @@ function MyIntroductionUpdate() {
                 name="applicationCompanyName"
                 value={formData.applicationCompanyName}
                 onChange={handleInputChange}
+                placeholder="지원 회사명"
+                maxLength="50"
               />
             </div>
             <div className={styles.infoBox}>
@@ -115,6 +119,8 @@ function MyIntroductionUpdate() {
                 name="workType"
                 value={formData.workType}
                 onChange={handleInputChange}
+                placeholder="지원 직무"
+                maxLength="50"
               />
             </div>
             <div className={styles.infoBox}>
@@ -125,6 +131,8 @@ function MyIntroductionUpdate() {
                 name="certificate"
                 value={formData.certificate}
                 onChange={handleInputChange}
+                placeholder="보유 자격증"
+                maxLength="50"
               />
             </div>
           </div>
@@ -136,6 +144,8 @@ function MyIntroductionUpdate() {
               name="introContents"
               value={formData.introContents}
               onChange={handleInputChange}
+              maxLength="1200" // 입력 제한
+              placeholder="최대 1200 글자까지 입력 가능합니다."
             ></textarea>
           </div>
         </div>

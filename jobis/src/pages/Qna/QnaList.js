@@ -115,7 +115,7 @@ const QnaList = () => {
                         cursor: canAccess ? "pointer" : "not-allowed",
                       }}
                     >
-                      <td>{index + 1 + (currentPage - 1) * itemsPerPage}</td>
+                      <td>{totalItems - (index + (currentPage - 1) * itemsPerPage)}</td>
                       <td>
                         {!canAccess && isSecret ? "비밀글입니다" : qna.qtitle}
                       </td>
