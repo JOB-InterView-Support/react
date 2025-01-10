@@ -127,7 +127,7 @@ function NoticeDetail() {
 
     return (
         <div className={styles.noticecontainer}>
-            <h2 className={styles.noticetitle}>{notice.noticeTitle}</h2>
+            <h2 className={styles.noticetitle}>{notice.noticeTitle}
 
             {role === "ADMIN" && (
                 <div className={styles.buttonContainer}>
@@ -135,7 +135,7 @@ function NoticeDetail() {
                     <button onClick={handleNoticeDelete} className={styles.deleteButton}>삭 제</button>
                 </div>
             )}
-
+            </h2>
             <div className={styles.noticeinfo}>
                 <span>작성일 : {notice.noticeWDate}</span>
                 <br />
