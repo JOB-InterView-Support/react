@@ -73,7 +73,7 @@ export function PaymentSuccess() {
           setResponseData(response.data); // 응답 데이터 저장
 
           // 응답 데이터를 백엔드로 전송
-          return apiClient.post(
+          return secureApiRequest.post(
             "/api/payments/save",
             {
               ...response.data,
@@ -81,8 +81,6 @@ export function PaymentSuccess() {
             {
               headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${accessToken}`, // AccessToken 추가
-                RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
               },
             }
           );
@@ -163,9 +161,9 @@ export function PaymentSuccess() {
           <button className={styles.cancelButton}>환불 진행</button>
           <button
             className={styles.backButton}
-            onClick={() => (window.location.href = "http://localhost:8080")}
+            onClick={() => navigate("")}
           >
-            돌아가기
+            돌아가기 
           </button>
         </div>
 

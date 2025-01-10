@@ -20,16 +20,7 @@ function TicketList() {
     const [userName, setUserName] = useState(null); // 사용자 이름 상태
     const [userDefaultEmail, setUserDefaultEmail] = useState(null); // 사용자 이름 상태
     const [userPhone, setUserPhone] = useState(null); // 사용자 이름 상태
-    const [isModalOpen, setIsModalOpen] = useState(false); // 모달 상태
-    const [newProduct, setNewProduct] = useState({
-        prodName: '',
-        prodDescription: '',
-        prodAmount: '',
-        prodPeriod: '',
-        prodNumberOfTime: '',
-    });
 
-    
     const [payment, setPayment] = useState(null);
     
     useEffect(() => {
@@ -37,7 +28,6 @@ function TicketList() {
             navigate("/login"); // 로그인 페이지로 이동
         }
     }, [isLoggedIn,  navigate]);
-    
     
 
     useEffect(() => {
@@ -78,34 +68,8 @@ function TicketList() {
             }
         } fetchProducts();
     }, []);
-    
-    const handleOpenModal = () => setIsModalOpen(true);
-    const handleCloseModal = () => setIsModalOpen(false);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setNewProduct((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleRegisterProduct = async () => {
-        try {
-            const response = await apiClient.post('/products/register', {
-                ...newProduct,
-                prodSellable: 'N',
-            });
-            if (response.status === 201) {
-                alert('상품이 성공적으로 등록되었습니다.');
-                setProducts((prev) => [...prev, response.data]);
-                handleCloseModal();
-            }
-        } catch (error) {
-            console.error('상품 등록 중 오류 발생:', error);
-            alert('상품 등록에 실패했습니다.');
-        }
-    };
-    
     const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-    
+   
     function selectPaymentMethod(method) {
         setSelectedPaymentMethod(method);
     }
@@ -225,66 +189,7 @@ function TicketList() {
                             <p>상품이 없습니다.</p>
                         )
                     )}
-                {role == "ADMIN" &&(
-                       <button onClick={handleOpenModal}>이용권 등록</button>
-                )}
                 </div>
-
-                {isModalOpen && (
-                    <div className={styles.modal}>
-                    <div className={styles.modalContent}>
-                        <div className={styles.modalHeader}>이용권 등록</div>
-                        <div className={styles.modalBody}>
-                        <label>상품명</label>
-                        <input
-                            type="text"
-                            name="prodName"
-                            value={newProduct.prodName}
-                            onChange={handleChange}
-                        />
-
-                        <label>설명</label>
-                        <textarea
-                            name="prodDescription"
-                            value={newProduct.prodDescription}
-                            onChange={handleChange}
-                        />
-
-                        <label>가격(원)</label>
-                        <input
-                            type="number"
-                            name="prodAmount"
-                            value={newProduct.prodAmount}
-                            onChange={handleChange}
-                        />
-
-                        <label>기간(개월 / 시간)</label>
-                        <input
-                            type="text"
-                            name="prodPeriod"
-                            value={newProduct.prodPeriod}
-                            onChange={handleChange}
-                        />
-
-                        <label>사용 가능 횟수(회)</label>
-                        <input
-                            type="number"
-                            name="prodNumberOfTime"
-                            value={newProduct.prodNumberOfTime}
-                            onChange={handleChange}
-                        />
-                        </div>
-                        <div className={styles.modalFooter}>
-                        <button className={styles.saveButton} onClick={handleRegisterProduct}>
-                            등록
-                        </button>
-                        <button className={styles.cancelButton} onClick={handleCloseModal}>
-                            닫기
-                        </button>
-                        </div>
-                    </div>
-                    </div>
-                )}
         </div>
     );
 }
