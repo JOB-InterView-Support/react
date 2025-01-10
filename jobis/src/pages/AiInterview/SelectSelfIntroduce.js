@@ -14,8 +14,6 @@ function SelectSelfIntroduce() {
   const [statusSubMessage, setStatusSubMessage] = useState("");
   const navigate = useNavigate();
 
-  
-
   useEffect(() => {
     const fetchIntroductions = async () => {
       setLoading(true);
@@ -56,6 +54,34 @@ function SelectSelfIntroduce() {
     fetchIntroductions();
   }, [secureApiRequest]);
 
+  const handleSelectIntro = (introNo) => {
+    setSelectedIntro(introNo);
+  };
+
+  const requestTicketUsage = async () => {
+    try {
+      const formattedDate = new Date().toISOString().replace("T", " ").split(".")[0];
+      const response = await secureApiRequest("/ticket/start", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ date: formattedDate }),
+      });
+
+      const result = response.data;
+
+      if (result.status !== "SUCCESS") {
+        throw new Error(result.message || "이용권 차감 중 문제가 발생했습니다.");
+      }
+
+      return result;
+    } catch (error) {
+      console.error("이용권 차감 요청 중 오류 발생:", error.message);
+      throw error;
+    }
+  };
+
   const handleProceed = async () => {
     if (!selectedIntro) {
       alert("자기소개서를 선택해주세요.");
@@ -68,11 +94,47 @@ function SelectSelfIntroduce() {
       return;
     }
 
-    setLoading(true);
-    setStatusMessage("작업을 시작합니다...");
-    setStatusSubMessage("잠시만 기다려주세요.");
-
     try {
+      setLoading(true);
+      setStatusMessage("이용권 확인 중...");
+      setStatusSubMessage("");
+
+      const ticketResponse = await secureApiRequest("/ticket/check", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      const ticketData = ticketResponse.data;
+
+      if (!ticketData.ticketCounts || ticketData.ticketCounts.length === 0) {
+        alert("사용 가능한 이용권이 존재하지 않습니다.");
+        navigate("/ticketList");
+        return;
+      }
+
+      const totalTicketCount = ticketData.ticketCounts.reduce(
+        (sum, count) => sum + count,
+        0
+      );
+
+      if (totalTicketCount === 0) {
+        alert("사용 가능한 이용권이 존재하지 않습니다.");
+        navigate("/ticketList");
+        return;
+      }
+
+      setStatusMessage("이용권 차감 중...");
+      const ticketResult = await requestTicketUsage();
+
+      if (ticketResult.status !== "SUCCESS") {
+        throw new Error("이용권 차감 실패");
+      }
+
+      setStatusMessage("작업을 시작합니다...");
+      setStatusSubMessage("잠시만 기다려주세요.");
+
       const response = await fetch(
         "http://127.0.0.1:8000/addSelfIntroduce/insert_self_introduce",
         {
@@ -101,7 +163,7 @@ function SelectSelfIntroduce() {
 
       setTimeout(() => navigate(`/myIntroductionList/${newIntroNo}`), 2000);
     } catch (error) {
-      console.error("작업 시작 중 오류:", error.message);
+      console.error("작업 중 오류:", error.message);
       setStatusMessage("작업 중 오류가 발생했습니다.");
       setStatusSubMessage("다시 시도해주세요.");
     } finally {
@@ -109,17 +171,15 @@ function SelectSelfIntroduce() {
     }
   };
 
-  const handleSelectIntro = (introNo) => {
-    setSelectedIntro(introNo);
-  };
-
   return (
     <div>
       <AiInterviewSubmenubar />
       <div className={styles.container}>
-        <h1 className={styles.title}> 첨삭 자기소개서 선택</h1>
+        <h1 className={styles.title}>첨삭 자기소개서 선택</h1>
+        <div className={styles.headerRow}>
         <h2 className={styles.subTitle}>첨삭할 자기소개서를 선택해주세요.</h2>
-
+        <p className={styles.guideMessage}>※ 이용권이 차감됩니다.</p>
+        </div>
         {error ? (
           <p className={styles.errorMessage}>{error}</p>
         ) : introductions.length > 0 ? (
@@ -141,6 +201,7 @@ function SelectSelfIntroduce() {
                         type="checkbox"
                         checked={selectedIntro === intro.introNo}
                         onChange={() => handleSelectIntro(intro.introNo)}
+                        disabled={loading}
                       />
                     </td>
                     <td>{intro.introTitle}</td>
@@ -158,7 +219,7 @@ function SelectSelfIntroduce() {
               <button
                 className={styles.startButton}
                 onClick={handleProceed}
-                disabled={loading || !selectedIntro} // 로딩 중이거나 선택된 자기소개서가 없으면 비활성화
+                disabled={loading || !selectedIntro}
               >
                 <span>{statusMessage}</span>
                 {loading && statusSubMessage && (
