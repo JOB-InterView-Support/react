@@ -50,37 +50,31 @@ export function PaymentSuccess() {
     window.addEventListener("beforeunload", handleBeforeUnload);
 
     if (paymentKey && orderId && amount) {
-      setIsRequesting(true); // 요청 중 상태 활성화
-      setErrorMessage(null); // 에러 메시지 초기화
+      setIsRequesting(true);
+      setErrorMessage(null);
 
       apiClient
-        .post(  "/api/payments/confirm",
-          {
-            paymentKey,
-            orderId,
-            amount: Number(amount),
-          },
+        .post(
+          "/api/payments/confirm",
+          { paymentKey, orderId, amount: Number(amount) },
           {
             headers: {
               "Content-Type": "application/json",
-              Authorization: `Bearer ${accessToken}`, // AccessToken 추가
-              RefreshToken: `Bearer ${refreshToken}`, // RefreshToken 추가
+              Authorization: `Bearer ${accessToken}`,
             },
           }
         )
         .then((response) => {
           console.log("Payment confirmed:", response.data);
-          setResponseData(response.data); // 응답 데이터 저장
+          setResponseData(response.data);
 
-          // 응답 데이터를 백엔드로 전송
-          return secureApiRequest.post(
+          return apiClient.post(
             "/api/payments/save",
-            {
-              ...response.data,
-            },
+            response.data,
             {
               headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${accessToken}`,
               },
             }
           );
@@ -89,15 +83,13 @@ export function PaymentSuccess() {
           console.log("Payment data saved successfully:", saveResponse.data);
         })
         .catch((error) => {
-          console.log("AccessToken:", localStorage.getItem("AccessToken"));
-          console.log("RefreshToken:", localStorage.getItem("RefreshToken"));
-          console.error("Error confirming payment:", error);
+          console.error("Error confirming or saving payment:", error);
           setErrorMessage(
             "결제 확인 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요."
           );
         })
         .finally(() => {
-          setIsRequesting(false); // 요청 완료 상태로 변경
+          setIsRequesting(false);
           window.removeEventListener("beforeunload", handleBeforeUnload);
         });
     }
