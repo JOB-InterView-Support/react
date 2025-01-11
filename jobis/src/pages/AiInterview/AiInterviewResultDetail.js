@@ -40,10 +40,7 @@ function AiInterviewResultDetail() {
     IVP_BEDSHOULDER: null,
     IVP_BADPOSE: null,
   });
-  const [activeButton, setActiveButton] = useState('');
-
-  
-  
+  const [activeButton, setActiveButton] = useState("");
 
   useEffect(() => {
     async function fetchData() {
@@ -174,7 +171,7 @@ function AiInterviewResultDetail() {
   }, []); // 빈 배열로 한 번만 실행
 
   const handlePlayBoth = () => {
-    setActiveButton('play');
+    setActiveButton("play");
     const video = videoRef.current;
     const audio = audioRef.current;
     if (video && audio) {
@@ -187,7 +184,7 @@ function AiInterviewResultDetail() {
   };
 
   const handleStopBoth = () => {
-    setActiveButton('stop');
+    setActiveButton("stop");
     const video = videoRef.current;
     const audio = audioRef.current;
     if (video && audio) {
@@ -256,155 +253,6 @@ function AiInterviewResultDetail() {
           </div>
           <BackButton />
         </div>
-
-        <div className={styles.aiAnalysisResults}>
-          <div className={styles.feelingResult}>
-            <table className={styles.feelingTable}>
-              <thead>
-                <tr>
-                  <th colSpan="2" className={styles.tableHeader}>
-                    감정 분석 결과
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>행복함</td>
-                  <td>
-                    {happy !== null && happy !== undefined ? happy : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>중립</td>
-                  <td>
-                    {neutrality !== null && neutrality !== undefined
-                      ? neutrality
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>놀라움</td>
-                  <td>
-                    {surprised !== null && surprised !== undefined
-                      ? surprised
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>화남</td>
-                  <td>
-                    {angry !== null && angry !== undefined ? angry : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>두려움</td>
-                  <td>
-                    {fear !== null && fear !== undefined ? fear : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>슬픔</td>
-                  <td>{sad !== null && sad !== undefined ? sad : "로딩중"}</td>
-                </tr>
-                <tr>
-                  <td>혐오</td>
-                  <td>
-                    {disgust !== null && disgust !== undefined
-                      ? disgust
-                      : "로딩중"}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>{" "}
-          {/*feelingResult*/}
-          <div className={styles.gazeResult}>
-            <table className={styles.gazeTable}>
-              <thead>
-                <tr>
-                  <th colSpan="2" className={styles.tableHeader}>
-                    시선 분석 결과
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>평균 시선</td>
-                  <td>
-                    {gazeData.IVG_AVG !== null && gazeData.IVG_AVG !== undefined
-                      ? gazeData.IVG_AVG
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>최소 시선</td>
-                  <td>
-                    {gazeData.IVG_MIN !== null && gazeData.IVG_MIN !== undefined
-                      ? gazeData.IVG_MIN
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>최대 시선</td>
-                  <td>
-                    {gazeData.IVG_MAX !== null && gazeData.IVG_MAX !== undefined
-                      ? gazeData.IVG_MAX
-                      : "로딩중"}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <div className={styles.positionResult}>
-            <table className={styles.positionTable}>
-              <thead>
-                <tr>
-                  <th colSpan="2" className={styles.tableHeader}>
-                    포지션 분석 결과
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>좋은 자세</td>
-                  <td>
-                    {positionData.IVP_GOODPOSE !== null &&
-                    positionData.IVP_GOODPOSE !== undefined
-                      ? positionData.IVP_GOODPOSE
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>나쁜 목 자세</td>
-                  <td>
-                    {positionData.IVP_BEDNECK !== null &&
-                    positionData.IVP_BEDNECK !== undefined
-                      ? positionData.IVP_BEDNECK
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>나쁜 어깨 자세</td>
-                  <td>
-                    {positionData.IVP_BEDSHOULDER !== null &&
-                    positionData.IVP_BEDSHOULDER !== undefined
-                      ? positionData.IVP_BEDSHOULDER
-                      : "로딩중"}
-                  </td>
-                </tr>
-                <tr>
-                  <td>나쁜 자세</td>
-                  <td>
-                    {positionData.IVP_BADPOSE !== null &&
-                    positionData.IVP_BADPOSE !== undefined
-                      ? positionData.IVP_BADPOSE
-                      : "로딩중"}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
         <div className={styles.sttResult}>
           <table className={styles.sttTable}>
             <thead>
@@ -422,6 +270,152 @@ function AiInterviewResultDetail() {
                     : sttContent
                     ? sttContent
                     : "STT 내용이 없습니다."}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div className={styles.aiAnalysisResults}>
+        <div className={styles.feelingResult}>
+          <table className={styles.feelingTable}>
+            <thead>
+              <tr>
+                <th colSpan="2" className={styles.tableHeader}>
+                  감정 분석 결과
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>행복함</td>
+                <td>
+                  {happy !== null && happy !== undefined ? happy : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>중립</td>
+                <td>
+                  {neutrality !== null && neutrality !== undefined
+                    ? neutrality
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>놀라움</td>
+                <td>
+                  {surprised !== null && surprised !== undefined
+                    ? surprised
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>화남</td>
+                <td>
+                  {angry !== null && angry !== undefined ? angry : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>두려움</td>
+                <td>{fear !== null && fear !== undefined ? fear : "로딩중"}</td>
+              </tr>
+              <tr>
+                <td>슬픔</td>
+                <td>{sad !== null && sad !== undefined ? sad : "로딩중"}</td>
+              </tr>
+              <tr>
+                <td>혐오</td>
+                <td>
+                  {disgust !== null && disgust !== undefined
+                    ? disgust
+                    : "로딩중"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>{" "}
+        {/*feelingResult*/}
+        <div className={styles.gazeResult}>
+          <table className={styles.gazeTable}>
+            <thead>
+              <tr>
+                <th colSpan="2" className={styles.tableHeader}>
+                  시선 분석 결과
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>평균 시선</td>
+                <td>
+                  {gazeData.IVG_AVG !== null && gazeData.IVG_AVG !== undefined
+                    ? gazeData.IVG_AVG
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>최소 시선</td>
+                <td>
+                  {gazeData.IVG_MIN !== null && gazeData.IVG_MIN !== undefined
+                    ? gazeData.IVG_MIN
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>최대 시선</td>
+                <td>
+                  {gazeData.IVG_MAX !== null && gazeData.IVG_MAX !== undefined
+                    ? gazeData.IVG_MAX
+                    : "로딩중"}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className={styles.positionResult}>
+          <table className={styles.positionTable}>
+            <thead>
+              <tr>
+                <th colSpan="2" className={styles.tableHeader}>
+                  포지션 분석 결과
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>좋은 자세</td>
+                <td>
+                  {positionData.IVP_GOODPOSE !== null &&
+                  positionData.IVP_GOODPOSE !== undefined
+                    ? positionData.IVP_GOODPOSE
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>나쁜 목 자세</td>
+                <td>
+                  {positionData.IVP_BEDNECK !== null &&
+                  positionData.IVP_BEDNECK !== undefined
+                    ? positionData.IVP_BEDNECK
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>나쁜 어깨 자세</td>
+                <td>
+                  {positionData.IVP_BEDSHOULDER !== null &&
+                  positionData.IVP_BEDSHOULDER !== undefined
+                    ? positionData.IVP_BEDSHOULDER
+                    : "로딩중"}
+                </td>
+              </tr>
+              <tr>
+                <td>나쁜 자세</td>
+                <td>
+                  {positionData.IVP_BADPOSE !== null &&
+                  positionData.IVP_BADPOSE !== undefined
+                    ? positionData.IVP_BADPOSE
+                    : "로딩중"}
                 </td>
               </tr>
             </tbody>
