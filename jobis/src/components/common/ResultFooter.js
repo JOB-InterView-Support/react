@@ -130,9 +130,9 @@ const ResultFooter = ({ filename, introNo, roundId, intId, setResultData }) => {
           <div>값없음</div>
         </div>
       )}
-      <button onClick={handleTestComplete} style={{ marginTop: "10px" }}>
+      {/* <button onClick={handleTestComplete} style={{ marginTop: "10px" }}>
         테스트 완료
-      </button>
+      </button> */}
     </footer>
   );
 };
