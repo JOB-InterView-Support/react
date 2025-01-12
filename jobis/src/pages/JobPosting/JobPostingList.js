@@ -41,20 +41,56 @@ const JobPostingList = () => {
     };
 
     const fetchFavorites = async () => {
-      if (uuid) {
-        console.log('uuid : {}:', uuid);
-        try {
-          const response = await secureApiRequest(`/favorites/search?uuid=${uuid}`, { method: 'GET' });
-          setFavorites(response?.data || []);
-        } catch (err) {
-          console.error('즐겨찾기 데이터를 가져오는 중 오류 발생:', err);
-        }
-      }
-    };
+      setLoading(true);
+      setError(null);
 
-    fetchJobPostings();
-    fetchFavorites();
-  }, [currentPage, uuid, secureApiRequest]);
+      try {
+          const favoritesResponse = await secureApiRequest(
+              `/favorites/search?uuid=${uuid}`,
+              { method: "GET" }
+          );
+
+          if (!favoritesResponse?.data) {
+              setFavorites([]);
+              return;
+          }
+
+          const favoritesWithDetails = await Promise.all(
+              favoritesResponse.data.map(async (favorite) => {
+                  // 채용공고 상세 정보를 사람인 API에서 조회
+                  const jobResponse = await secureApiRequest(
+                      `/jobposting/${favorite.jobPostingId}`,
+                      { method: "GET" }
+                  );
+
+                  // 채용공고의 데이터가 없으면 기본값을 사용
+                  const jobData = jobResponse?.data?.jobs?.job || {};
+
+                  return {
+                      ...favorite,
+                      jobTitle: jobData?.position?.title || "정보 없음", // 제목
+                      industry: jobData?.position?.industry?.name || "정보 없음", // 업종
+                      location: jobData?.position?.location?.name.replace(/&gt;/g, '>') || "정보 없음", // 위치
+                      salary: jobData?.salary?.name || "정보 없음", // 연봉
+                      company: jobData?.company?.detail?.name || "정보 없음", // 회사명
+                  };
+              })
+          );
+
+          setFavorites(favoritesWithDetails);
+      } catch (err) {
+          setError("즐겨찾기 목록을 불러오는 중 오류가 발생했습니다.");
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  if (uuid) {
+      fetchFavorites();
+  } else {
+      setLoading(false);
+  }
+}, [uuid, secureApiRequest]);
 
   const toggleFavorite = async (jobPostingId, newFavoritedState) => {
     try {
@@ -73,7 +109,8 @@ const JobPostingList = () => {
           },
           body: JSON.stringify(favoriteData)
         });
-
+        console.log('즐겨찾기 추가 응답:', response);
+        
         if (response?.data) {
           setFavorites([...favorites, response.data]);
         }
