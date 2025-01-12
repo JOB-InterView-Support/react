@@ -138,45 +138,43 @@ function Header() {
       </nav>
 
       <div className={styles.rightBtn}>
-        {isLoggedIn ? (
-          <>
-            <div className={styles.top}>{userName}님 환영합니다.</div>
-            <div className={styles.bottom}>
-              <button className={styles.buttonHover} onClick={handleMyPage}>
-                마이페이지
-              </button>
-              <button className={styles.buttonHover} onClick={handleLogout}>
-                로그아웃
-              </button>
-            </div>
-          </>
-        ) : (
-          <div className={styles.bottom}>
-            <button>
-              <Link to="/login">로그인</Link>
-            </button>
-          </div>
-        )}
+  {isLoggedIn ? (
+    <>
+      <div className={styles.top}>
+        {userName}님 환영합니다.
+        <button className={styles.logout} onClick={handleLogout}>
+          로그아웃
+        </button>
+      </div>
+      <div className={styles.bottom}>
+        <button className={styles.buttonHover} onClick={handleMyPage}>
+          마이페이지
+        </button>
         {isAdmin && (
-          <div>
-            <Link to="/adminMemberManagement">
-              <button className={styles.buttonHover}>관리자페이지</button>
-            </Link>
-            <Link to="/ticketList" className={styles.noLink}>
-            <div className={styles.ticketInfo}>
-              남은 이용권: <strong>{ticketCount}</strong>
-            </div>
-            </Link>
-          </div>
-        )}
-        {!isAdmin && isLoggedIn && (
-          <Link to="/ticketList" className={styles.noLink}>
-          <div className={styles.ticketInfo}>
-            남은 이용권: <strong>{ticketCount}</strong>
-          </div>
-          </Link>
+          <button
+            className={styles.buttonHover}
+            onClick={() => navigate("/adminMemberManagement")}
+          >
+            관리자페이지
+          </button>
         )}
       </div>
+    </>
+  ) : (
+    <div className={styles.bottom}>
+      <button>
+        <Link to="/login">로그인</Link>
+      </button>
+    </div>
+  )}
+  {isLoggedIn && (
+    <Link to="/ticketList" className={styles.noLink}>
+      <div className={styles.ticketInfo}>
+        잔여 이용권 수 : <strong>{ticketCount}</strong>
+      </div>
+    </Link>
+  )}
+</div>
     </header>
   );
 }

@@ -85,10 +85,12 @@ nav {
     font-weight: 700;
     color: #4b4b4b;
     white-space: nowrap;
-    width: 130px;
+    width: 175px;
     height: 18px;
+    position: relative;
+    left: -4px;
     margin-left: 16px;
-    margin-top: 0px;
+    margin-top: 10px;
     margin-bottom: 0px;
 }
 
@@ -97,7 +99,7 @@ nav {
     border: 1px solid #ccc;
     padding: 5px 10px;
     border-radius: 4px;
-    margin-left: 8px;
+    margin-left: 13px;
     color: #333;
     font-size: 14px;
     font-weight: bold;
@@ -199,4 +201,15 @@ nav {
         font-size: 9px; /* strong 텍스트 크기 축소 */
         padding: 2px 4px; /* 내부 여백 축소 */
     }
+}
+
+.logout {
+    color: #a5a5a5;
+    text-decoration: underline;
+}
+
+.logout:hover {
+    color:rgb(238, 0, 0);
+    font-weight: bold;
+    text-decoration: underline;
 }
