@@ -10,8 +10,9 @@ const FavoriteStar = ({ initialFavorited, onToggle, jobPostingId }) => {
 
   const handleClick = (e) => {
     e.stopPropagation();  // 이벤트 전파 방지
-    setIsFavorited(!isFavorited);
-    onToggle(!isFavorited);  // 새로운 즐겨찾기 상태 전달
+    const newFavoriteState = !isFavorited;
+    setIsFavorited(newFavoriteState);
+    onToggle(newFavoriteState);  // 새로운 즐겨찾기 상태 전달
   };
 
   return (

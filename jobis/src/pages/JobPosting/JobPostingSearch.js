@@ -140,8 +140,9 @@ const JobPostingSearch = () => {
     <div>
       <JobPostingSubMenubar />
       <div className={styles.container}>
-        <div className={styles.table}>
+        
           <h2>채용공고 검색</h2>
+          <div className={styles.table}>
           <div className={styles.filters}>
             {Object.entries(filterOptions).map(([key, options]) => (
               <select

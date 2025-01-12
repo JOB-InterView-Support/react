@@ -5,7 +5,6 @@ import styles from "./JobPostingList.module.css";
 import Paging from "../../components/common/Paging";
 import JobPostingSubMenubar from "../../components/common/subMenubar/JobPostingSubMenubar";
 import FavoriteStar from "./FavoriteStar"; // Import the FavoriteStar component
-import apiClient from "../../utils/axios";
 
 const JobPostingList = () => {
   const [jobPostings, setJobPostings] = useState([]);
@@ -16,15 +15,16 @@ const JobPostingList = () => {
   const [totalItems, setTotalItems] = useState(0);
   const itemsPerPage = 10;
   const navigate = useNavigate();
-  const { secureApiRequest, uuid } = useContext(AuthContext);
-
+  const { secureApiRequest } = useContext(AuthContext);
+  const uuid = localStorage.getItem('uuid');  // 로컬스토리지에서 uuid 가져옴
+ 
   useEffect(() => {
     const fetchJobPostings = async () => {
       setLoading(true);
       setError(null);
       try {
         const response = await secureApiRequest(
-          `/jobposting/search?page=${currentPage - 1}&size=${itemsPerPage}`,
+          `/jobposting/search?start=${currentPage - 1}&count=${itemsPerPage}`,
           { method: 'GET' }
         );
         if (response?.data?.jobs?.job) {
@@ -42,6 +42,7 @@ const JobPostingList = () => {
 
     const fetchFavorites = async () => {
       if (uuid) {
+        console.log('uuid : {}:', uuid);
         try {
           const response = await secureApiRequest(`/favorites/search?uuid=${uuid}`, { method: 'GET' });
           setFavorites(response?.data || []);
@@ -65,26 +66,22 @@ const JobPostingList = () => {
           jobCreatedDate: new Date().toISOString()
         };
 
-        const response = await secureApiRequest(
-          `/favorites`, 
-          { 
-            method: 'POST', 
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(favoriteData), // 데이터를 body에 포함
-          }
-        );
+        const response = await secureApiRequest(`/favorites`, {
+          method: "POST",
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(favoriteData)
+        });
+
         if (response?.data) {
           setFavorites([...favorites, response.data]);
         }
       } else {
-        await apiClient.delete(`/favorites/delete`, {
-          params: {
-            uuid: uuid,
-            jobPostingId: jobPostingId,
-          },
-        });
+        await secureApiRequest(
+          `/favorites/delete?uuid=${uuid}&jobPostingId=${jobPostingId}`,
+          { method: "DELETE" }
+        );
         setFavorites(favorites.filter(fav => fav.jobPostingId !== jobPostingId));
       }
     } catch (err) {
@@ -101,8 +98,8 @@ const JobPostingList = () => {
     <div>
       <JobPostingSubMenubar />
       <div className={styles.container}>
-        <div table={styles.table}>
         <h2>채용공고 목록</h2>
+        <div className={styles.table}>
         <div className={styles.jobList}>
           {jobPostings.length > 0 ? (
             jobPostings.map((job) => (
@@ -138,7 +135,7 @@ const JobPostingList = () => {
         )}
       </div>
     </div>
-    </div>
+  </div>
   );
 };
 
