@@ -193,6 +193,27 @@ function TicketInfo() {
     }
   };
 
+  // 상품 삭제 처리
+  const handleDeleteProduct = async () => {
+    if (!selectedProduct) return; // 선택된 상품이 없으면 실행하지 않음
+    const confirmDelete = window.confirm(`"${selectedProduct.prodName}" 상품을 삭제하시겠습니까?`);
+    if (!confirmDelete) return; // 사용자가 삭제 취소
+
+    try {
+      // 서버로 삭제 요청
+      await secureApiRequest(`/products/${selectedProduct.prodNumber}`, {
+        method: "DELETE",
+      });
+
+      alert("상품이 성공적으로 삭제되었습니다.");
+      handleEditModalClose(); // 모달 닫기
+      fetchProductList(currentPage); // 삭제 후 상품 목록 갱신
+    } catch (error) {
+      console.error("상품 삭제 중 오류 발생:", error);
+      alert("상품 삭제에 실패했습니다.");
+    }
+  };
+
   return (
     <div className={styles.noticecontainer}>
        <TicketSubMenubar/>
@@ -345,6 +366,7 @@ function TicketInfo() {
                   onChange={handleEditChange}
                 />
                 <button onClick={handleEditSubmit} className={styles.saveButton}>저장</button>
+                <button onClick={handleDeleteProduct} className={styles.deleteButton}>삭제</button>
                 <button onClick={handleEditModalClose} className={styles.cancelButton}>취소</button>
               </div>
             </div>
