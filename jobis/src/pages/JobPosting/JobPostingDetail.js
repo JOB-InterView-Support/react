@@ -13,7 +13,7 @@ const JobPostingDetail = () => {
     try {
       const response = await secureApiRequest(`/jobposting/search?&id=${jobId}`, { method: "GET" });
       console.log("Full API Response:", response); // 전체 응답 확인
-      const jobData = response.data.jobs.job[0];
+      const jobData = response.data.jobs.job[0] || null;;
       console.log("Parsed Job Data:", jobData); // 파싱된 데이터 확인
       setJobDetails(jobData);
     } catch (error) {
@@ -77,8 +77,8 @@ const JobPostingDetail = () => {
     <div>
       <JobPostingSubMenubar />
       <div className={styles.jobDetailContainer}>
-        <div table={styles.table}>
         <h1>{position?.title || "채용공고 정보 없음"}</h1>
+        <div table={styles.table}>
         <p><strong>회사:</strong> <a href={companyUrl} target="_blank" rel="noopener noreferrer">{companyName}</a></p>
         <p><strong>위치:</strong> {locationName}</p>
         <p><strong>직무:</strong> {jobType}</p>
