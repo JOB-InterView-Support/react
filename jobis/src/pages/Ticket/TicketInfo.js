@@ -29,7 +29,6 @@ function TicketInfo() {
   const navigate = useNavigate();
   const itemsPerPage = 10; // 한 페이지에 보여줄 아이템 수
 
-  // 상품 목록 데이터 가져오기
   const fetchProductList = async (page = 0) => {
     setIsLoading(true);
     setError(null);
@@ -37,10 +36,23 @@ function TicketInfo() {
       const response = await secureApiRequest(`/products/manage?page=${page}&size=${itemsPerPage}`, {
         method: "GET",
       });
-
-      setProductList(response.data.content || []); // 상품 데이터 설정
-      setTotalItems(response.data.totalElements || 0); // 전체 아이템 수 설정
-      setCurrentPage(page); // 현재 페이지 설정 (0 기반)
+  
+      setProductList(
+        response.data.content.map((product) => ({
+          ...product,
+          prodSellable: product.prodSellable ?? "N", // 기본값 설정
+        }))
+      );
+  
+      // 체크 상태 초기화
+      setCheckedProducts(
+        response.data.content
+          .filter((product) => product.prodSellable === "Y")
+          .map((product) => product.prodNumber)
+      );
+  
+      setTotalItems(response.data.totalElements || 0);
+      setCurrentPage(page);
     } catch (err) {
       console.error("상품 목록 로드 실패:", err);
       setError("데이터를 불러오는 중 문제가 발생했습니다.");
@@ -83,10 +95,13 @@ function TicketInfo() {
     try {
       const response = await secureApiRequest("/products/insert", {
         method: "POST",
-        data: {
-          ...newProduct,
-          prodSellable: "N",
+        headers: {
+          "Content-Type": "application/json", // 반드시 JSON 형식임을 명시
         },
+        body: JSON.stringify({
+          ...newProduct, // 기존 제품 데이터
+          prodSellable: "N", // 기본값 설정
+        }),
       });
 
       if (response.status === 201) {
@@ -101,27 +116,36 @@ function TicketInfo() {
   };
 
   const handleSellableChange = async (prodNumber, isChecked) => {
+    // 업데이트된 체크 상태 계산
     const updatedCheckedProducts = isChecked
-      ? [...checkedProducts, prodNumber] // 체크된 상품 추가
+      ? [...checkedProducts, prodNumber] // 체크 추가
       : checkedProducts.filter((id) => id !== prodNumber); // 체크 해제
   
+    // 조건 확인: 최대 3개 초과
     if (updatedCheckedProducts.length > 3) {
-      alert("등록할 수 있는 상품은 3개 까지 입니다.");
-      return; // 체크 상태를 변경하지 않음
+      alert("등록할 수 있는 상품은 3개까지 가능합니다.");
+      return; // 상태 업데이트 및 서버 요청 차단
     }
+  
+    // 상태 업데이트
+    setCheckedProducts(updatedCheckedProducts);
   
     try {
       const sellable = isChecked ? "Y" : "N";
+  
+      // 서버 상태 업데이트 요청
       await secureApiRequest(`/products/${prodNumber}/sellable?sellable=${sellable}`, {
         method: "PATCH",
       });
   
+      // 상품 리스트 업데이트 (UI에 반영)
       setProductList((prevList) =>
         prevList.map((product) =>
-          product.prodNumber === prodNumber ? { ...product, prodSellable: sellable } : product
+          product.prodNumber === prodNumber
+            ? { ...product, prodSellable: sellable }
+            : product
         )
       );
-      setCheckedProducts(updatedCheckedProducts); // 상태 업데이트
     } catch (error) {
       console.error("Failed to update product sellable:", error);
       alert("상태를 업데이트하는 중 문제가 발생했습니다.");
@@ -201,12 +225,12 @@ function TicketInfo() {
                   <td>{product.prodAmount}</td>
                   <td>{product.prodPeriod}</td>
                   <td>
-                    <input
-                      type="checkbox"
-                      checked={product.prodSellable === "Y"}
-                      onChange={(e) => handleSellableChange(product.prodNumber, e.target.checked)}
-                      onClick={(e) => e.stopPropagation()} 
-                    />
+                  <input
+                    type="checkbox"
+                    checked={checkedProducts.includes(product.prodNumber)} // checkedProducts와 연동
+                    onChange={(e) => handleSellableChange(product.prodNumber, e.target.checked)}
+                    onClick={(e) => e.stopPropagation()} // 클릭 이벤트 버블링 방지
+                  />
                   </td>
                   <td>{product.prodNumberOfTime}</td>
                 </tr>
