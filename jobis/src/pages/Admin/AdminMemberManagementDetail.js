@@ -85,7 +85,7 @@ function AdminMemberManagementDetail() {
       });
 
       alert("회원 제재가 성공적으로 해제되었습니다.");
-      navigate("/adminMemberDetail");
+      navigate("/adminMemberManagement");
     } catch (error) {
       console.error("제재 해제 요청 중 오류 발생:", error);
       alert("제재 해제 요청에 실패했습니다.");
@@ -111,7 +111,7 @@ function AdminMemberManagementDetail() {
       });
 
       alert("회원의 탈퇴 상태가 성공적으로 해제되었습니다.");
-      navigate("/adminMemberDetail");
+      navigate("/adminMemberManagement");
     } catch (error) {
       console.error("탈퇴 해제 요청 중 오류 발생:", error);
       alert("탈퇴 해제 요청에 실패했습니다.");
@@ -164,7 +164,7 @@ function AdminMemberManagementDetail() {
 
       setMember({ ...member, adminYn: "Y" });
       alert("관리자로 승격되었습니다.");
-      navigate("/adminMemberDetail");
+      navigate("/adminMemberManagement");
     } catch (error) {
       console.error("승격 요청 중 오류 발생:", error);
       alert(`관리자로 승격 요청에 실패했습니다: ${error.message}`);
@@ -195,7 +195,7 @@ function AdminMemberManagementDetail() {
 
       setMember({ ...member, adminYn: "N" });
       alert("일반 회원으로 변경되었습니다.");
-      navigate("/adminMemberDetail");
+      navigate("/adminMemberManagement");
     } catch (error) {
       console.error("강등 요청 중 오류 발생:", error);
       alert(`일반 회원으로 변경 요청에 실패했습니다: ${error.message}`);
@@ -244,12 +244,12 @@ function AdminMemberManagementDetail() {
             <td>{member.userGender === "M" ? "남" : "여"}</td>
           </tr>
 
-          <tr>
+          {/* <tr>
             <td className={styles.title}>이용권</td>
             <td></td>
             <td className={styles.title}>이용권 유효기간</td>
             <td></td>
-          </tr>
+          </tr> */}
 
           <tr>
             <td className={styles.title}>카카오 이메일</td>

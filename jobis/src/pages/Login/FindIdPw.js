@@ -59,7 +59,7 @@ function FindIdPw() {
             </button>
           </div>
           {userId && (
-            <div className={styles.result}>이메일은 "{userId}" 입니다.</div>
+            <div className={styles.result}>아이디는 "{userId}" 입니다.</div>
           )}
           {error && <div className={styles.error}>{error}</div>}
         </div>
