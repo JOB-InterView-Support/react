@@ -2,9 +2,7 @@ import React from "react";
 import { Route } from "react-router-dom";
 import SelectIntro from "../pages/AiInterview/SelectIntro";
 import InterviewPage from "../pages/AiInterview/InterviewPage";
-import InterviewTest from "../pages/AiInterview/InterviewTest";
 import AiInterview from "../pages/AiInterview/AiInterview";
-// import AddSelfIntroduce from "../pages/AiInterview/AddSelfIntroduce";
 import SelectSelfIntroduce from "../pages/AiInterview/SelectSelfIntroduce";
 import InterviewResultPage from "../pages/AiInterview/InterviewResultPage";
 import InterviewResultDetailPage from "../pages/AiInterview/InterviewResultDetailPage";
@@ -24,11 +22,7 @@ const aiInterviewRoutes = ({ setResultData, resultData }) => [
     path="/interview/:intro_no/:round"
     element={<InterviewPage />}
   />,
-  <Route
-    key="interview-test"
-    path="/interviewtest"
-    element={<InterviewTest />}
-  />,
+
   <Route
     key="ai-interview"
     path="/aiInterview/:intro_no/:round/:int_id"
@@ -56,7 +50,10 @@ const aiInterviewRoutes = ({ setResultData, resultData }) => [
   />,
 
   <Route path="/aiInterviewResult" element={<AiInterviewResult />} />,
-  <Route path="/aiInterviewResultDetail/:interviewId" element={<AiInterviewResultDetail />} />,
+  <Route
+    path="/aiInterviewResultDetail/:interviewId"
+    element={<AiInterviewResultDetail />}
+  />,
 ];
 
 export default aiInterviewRoutes;

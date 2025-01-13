@@ -13,7 +13,7 @@ import payRouter from './payRouter';
 import qnaRouter from './qnaRouter';
 import reviewRouter from './reviewRouter';
 import ticketRouter from './ticketRouter';
-import interviewtestRouter from './interviewtestRouter';
+
 import Introduction from '../pages/Footer/Introduction';
 import Service from '../pages/Footer/Service';
 import Privacy from '../pages/Footer/Privacy';
@@ -24,7 +24,7 @@ const router = ({ setResultData, resultData }) => {
     <Routes>
       {adminRouter}
       {aiInterviewRouter({ setResultData, resultData })}
-      {interviewtestRouter}
+
       {jobPostingRouter}
       {loginRouter}
       {signupRouter}
