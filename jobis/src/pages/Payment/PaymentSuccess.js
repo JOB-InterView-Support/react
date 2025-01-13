@@ -153,7 +153,7 @@ export function PaymentSuccess() {
           <button className={styles.cancelButton}>환불 진행</button>
           <button
             className={styles.backButton}
-            onClick={() => navigate("")}
+            onClick={() => navigate("/")}
           >
             돌아가기 
           </button>
