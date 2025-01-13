@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../AuthProvider"; // AuthContext 가져오기
 import styles from "./JobPostingSearch.module.css";
@@ -77,7 +77,8 @@ const filterOptions = {
 };
 
 const JobPostingSearch = () => {
-  const { secureApiRequest, uuid } = useContext(AuthContext); // uuid 가져오기
+  const { isLoggedIn, isAuthInitialized, secureApiRequest, uuid } = useContext(AuthContext);
+  const navigate = useNavigate();
   const initialFilters = {
     job_mid_cd: "",
     loc_mcd: "",
@@ -87,7 +88,16 @@ const JobPostingSearch = () => {
   const [filters, setFilters] = useState(initialFilters);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const navigate = useNavigate();
+  
+
+  // 로그인 여부 확인
+  useEffect(() => {
+    if (isAuthInitialized && !isLoggedIn) {
+      console.log("로그인되지 않은 상태입니다. 로그인 페이지로 이동합니다.");
+      alert("로그인이 필요합니다."); // 알림창 표시
+      navigate("/login"); // 로그인되지 않은 경우 로그인 페이지로 이동
+    }
+  }, [isLoggedIn, isAuthInitialized, navigate]);
 
   // 필터 변경 핸들러
   const handleInputChange = (e) => {
