@@ -13,11 +13,11 @@ function AdminSubMenubar() {
         </div>
       </Link>
 
-      <Link to="/adminStatistics" className={styles.menuItem}>
+      {/* <Link to="/adminStatistics" className={styles.menuItem}>
         <div className={`${styles.menuItem} ${location.pathname === "/adminStatistics" ? styles.active : ""}`}>
           통계
         </div>
-      </Link>
+      </Link> */}
 
       <Link to="/adminSalesHistory" className={styles.menuItem}>
         <div className={`${styles.menuItem} ${location.pathname === "/adminSalesHistory" ? styles.active : ""}`}>

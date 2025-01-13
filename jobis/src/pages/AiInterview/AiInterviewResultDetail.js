@@ -264,6 +264,9 @@ function AiInterviewResultDetail() {
             </thead>
             <tbody>
               <tr>
+                <td className={styles.texter}>*텍스트 변환이 원활하지 않은 것은 목소리가 작거나,<br/> 발음이 올바르지 못한 것입니다.*</td>
+              </tr>
+              <tr>
                 <td>
                   {isLoading
                     ? "로딩중..."

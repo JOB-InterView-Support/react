@@ -122,12 +122,12 @@ const ResultFooter = ({ filename, introNo, roundId, intId, setResultData }) => {
       )}
       {!hasAnalysisStarted && (
         <div>
-          <p>Audio File: {filename.audio || "N/A"}</p>
+          {/* <p>Audio File: {filename.audio || "N/A"}</p>
           <p>Video File: {filename.video || "N/A"}</p>
           <p>Intro No: {introNo || "N/A"}</p>
           <p>Round ID: {roundId || "N/A"}</p>
           <p>Interview ID: {intId || "N/A"}</p>
-          <div>값없음</div>
+          <div>값없음</div> */}
         </div>
       )}
       {/* <button onClick={handleTestComplete} style={{ marginTop: "10px" }}>
