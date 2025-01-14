@@ -18,13 +18,13 @@ function MypageSubMenubar() {
       </Link>
 
       <Link to="/myTicketList" className={styles.menuItem}>
-      <div
-        className={`${styles.menuItem} ${
-          location.pathname === "/myTicketList" ? styles.active : ""
-        }`}
-      >
-        이용권 내역
-      </div>
+        <div
+          className={`${styles.menuItem} ${
+            location.pathname === "/myTicketList" ? styles.active : ""
+          }`}
+        >
+          이용권 내역
+        </div>
       </Link>
 
       <Link to="/deleteUser" className={styles.menuItem}>
@@ -38,18 +38,20 @@ function MypageSubMenubar() {
       </Link>
 
       <Link to="/myIntroductionList" className={styles.menuItem}>
-      <div
+        <div
           className={`${styles.menuItem} ${
             location.pathname === "/myIntroductionList" ||
             location.pathname === "/MyIntroductionInsert" ||
             location.pathname.startsWith("/myIntroductionList/")
               ? styles.active
+              : "" || location.pathname.startsWith("/MyIntroductionUpdate/")
+              ? styles.active
               : ""
           }`}
         >
-        자기소개서
-      </div>
-      </Link> 
+          자기소개서
+        </div>
+      </Link>
     </div>
   );
 }
