@@ -13,8 +13,6 @@ const FavoritesList = () => {
   const { secureApiRequest } = useContext(AuthContext);
   const uuid = localStorage.getItem("uuid");
 
-  console.log("로컬스토리지에서 가져온 UUID:", uuid);
-
   useEffect(() => {
     const fetchFavorites = async () => {
       setLoading(true);
@@ -109,39 +107,37 @@ const FavoritesList = () => {
       <JobPostingSubMenubar />
       <div className={styles.container}>
         <h2>즐겨찾기 목록</h2>
-        <div className={styles.table}>
-          <div className={styles.favoriteList}>
-            {favorites.length > 0 ? (
-              favorites.map((favorite) => (
-                <div key={favorite.jobFavoritesNo} className={styles.favoriteCard}>
-                  <div className={styles.cardHeader}>
-                    <h3>{favorite.jobTitle}</h3>
-                    <span className={styles.company}>{favorite.company}</span>
-                  </div>
-                  <div className={styles.cardContent}>
-                    <p>업종: {favorite.industry}</p>
-                    <p>위치: {favorite.location}</p>
-                    <p>연봉: {favorite.salary}</p>
-                  </div>
-                  <div className={styles.cardActions}>
-                    <button
-                      className={styles.viewButton}
-                      onClick={() => handleJobClick(favorite.jobPostingId)}
-                    >
-                      상세보기
-                    </button>
-                    <FavoriteStar
-                      initialFavorited={true}
-                      onToggle={() => removeFavorite(favorite.jobPostingId)}
-                      jobPostingId={favorite.jobPostingId}
-                    />
-                  </div>
+        <div className={styles.cardList}>
+          {favorites.length > 0 ? (
+            favorites.map((favorite) => (
+              <div key={favorite.jobFavoritesNo} className={styles.card}>
+                <div className={styles.cardHeader}>
+                  <h3>{favorite.jobTitle}</h3>
+                  <span className={styles.company}>{favorite.company}</span>
                 </div>
-              ))
-            ) : (
-              <p>즐겨찾기한 채용공고가 없습니다.</p>
-            )}
-          </div>
+                <div className={styles.cardContent}>
+                  <p>업종: {favorite.industry}</p>
+                  <p>위치: {favorite.location}</p>
+                  <p>연봉: {favorite.salary}</p>
+                </div>
+                <div className={styles.cardActions}>
+                  <button
+                    className={styles.viewButton}
+                    onClick={() => handleJobClick(favorite.jobPostingId)}
+                  >
+                    상세보기
+                  </button>
+                  <FavoriteStar
+                    initialFavorited={true}
+                    onToggle={() => removeFavorite(favorite.jobPostingId)}
+                    jobPostingId={favorite.jobPostingId}
+                  />
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>즐겨찾기한 채용공고가 없습니다.</p>
+          )}
         </div>
       </div>
     </div>
