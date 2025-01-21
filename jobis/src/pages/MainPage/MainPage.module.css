@@ -1,0 +1,179 @@
+.container {
+  padding: 20px;
+  text-align: center;
+}
+
+.title {
+  font-size: 2rem;
+  color: #2db400;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #555;
+}
+
+.logo {
+  width: 100%;
+}
+
+.secondContainer {
+  background-color: #dfe8ec;
+  width: 100%;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.secondTop {
+  margin-top: 30px;
+  font-weight: bold;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.secondMiddleContainer {
+  width: 100%;
+  height: 500px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.secondMiddleBar {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.secondMiddleCenterBar {
+  background-color: #f1f5f7;
+  width: 100%;
+  height: 300px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.secondMiddleThree {
+  width: 350px;
+  height: 380px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid black;
+  margin-left: 120px;
+  margin-right: 120px;
+}
+
+.secondImg {
+  width: 80%;
+  height: 220px;
+  margin-bottom: 15px;
+}
+
+.secondImage {
+  width: 100%;
+  height: 100%;
+}
+
+.secondText {
+  width: 80%;
+  height: 100px;
+  display: flex;
+}
+
+.secondTextImg {
+  width: 30%;
+  height: 100px;
+}
+
+.secondTextTitle {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.thirdContainer {
+  width: 100%;
+  height: 700px;
+  background-color:  rgba(109, 160, 255, 0.15);;
+  overflow: hidden;
+  position: relative;
+}
+
+.thirdContainerWrapper {
+  display: flex;
+  align-items: center;
+  height: 80%;
+  overflow: hidden;
+}
+
+.thirdContainerBoxs {
+  display: flex;
+  animation: scroll 20s linear infinite;
+  width: max-content;
+}
+
+.thirdBox {
+  width: 30%;
+  height: 350px;
+  flex-shrink: 0;
+  margin: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border: 1px solid black;
+  overflow: hidden;
+}
+
+.boxImage {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-1 * var(--total-width)));
+  }
+}
+
+.thirdBottom {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  margin-top: -30px;
+}
+
+.thirdTopText {
+  margin-top: 3%;
+  margin-bottom: -3%;
+  margin-left: 4%;
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.thirdBottomTextTop {
+  font-size: 18px;
+  text-align: center;
+}
+
+.thirdBottomTextBottom {
+  font-size: 30px;
+  font-weight: bold;
+  text-align: center;
+}

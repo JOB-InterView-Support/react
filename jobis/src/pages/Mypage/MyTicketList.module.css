@@ -1,0 +1,213 @@
+.container {
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 7%;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  .title {
+    font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-align: left;
+    color: #004F99;
+  }
+  
+  .noTickets {
+    text-align: center;
+    color: #888;
+    margin-top: 20px;
+    font-size: 30px;
+  }
+
+  .subTitle {
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 10px;
+    text-align: left;
+    color: #006DD2;
+  }
+  .ticketTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    
+}
+
+.ticketTable th, .ticketTable td {
+  border: 1px solid #dadada;
+  padding: 8px;
+  text-align: center;
+  font-size: 15px;
+  border-right: none; /* 기존 border-right 제거 */
+  border-left: none;
+}
+
+.ticketTable th {
+    background-color: rgba(109, 160, 255, 0.21);
+    font-weight: bold;
+    border-top: 2px solid rgba(90, 132, 211, 0.8);
+    border-bottom: 2px solid rgba(90, 132, 211, 0.8);
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
+    font-size: 15px;
+    position: relative; /* ::after 사용을 위한 상대 위치 */
+}
+.ticketTable th:nth-child(2) {
+  border-left: 1px solid #dadada !important;
+  border-right: 1px solid #dadada !important;
+}
+.ticketTable th:nth-child(3) {
+  border-right: 1px solid #dadada !important;
+}
+.ticketTable th:nth-child(4) {
+  border-right: 1px solid #dadada !important;
+}
+.ticketTable td:nth-child(2) {
+  border-left: 1px solid #dadada !important;
+  border-right: 1px solid #dadada !important;
+}
+.ticketTable td:nth-child(3) {
+  border-right: 1px solid #dadada !important;
+}
+.ticketTable td:nth-child(4) {
+  border-right: 1px solid #dadada !important;
+}
+
+.ticketTable tbody tr {
+  font-weight: bold;
+  border-bottom: 1px solid #dadada;
+  border-right: none; /* 기존 border-right 제거 */
+  border-left: none;
+  font-size: 15px;
+  position: relative; /* ::after 사용을 위한 상대 위치 */
+  cursor: pointer;
+}
+.ticketRow:hover {
+  background-color: rgba(109, 160, 255, 0.3) !important;
+  transition: background-color 0.3s ease !important;
+}
+.ticketRow:nth-child(even) {
+  background-color: rgba(109, 160, 255, 0.09);
+}
+
+
+.ticketTable th:last-child {
+    border-right: none; /* 마지막 열의 border-right 제거 */
+}
+
+/* .ticketTable tbody tr:hover {
+  background-color: #f0f8ff !important;
+  transition: background-color 0.3s ease !important;
+}
+.ticketTable tbody tr:nth-child(even) {
+  background-color: rgba(109, 160, 255, 0.09) !important;
+} */
+
+
+
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modalContent {
+  width: 80%;
+  max-width: 800px;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.modalTitle {
+  font-size: 24px;
+  font-weight: bold;
+  color: #2f4f9e;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.modalBody {
+  border: 1px solid #ddd;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f9f9f9;
+}
+
+.hidden {
+  display: none; /* 모달 숨기기 */
+}
+
+.button {
+  margin-top: 20px;
+}
+
+.refundButton {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.buttonGroup {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.cancelButton,
+.closeButton {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.cancelButton {
+  background-color: #2f4f9e;
+  color: #fff;
+  margin-right: 10px;
+}
+
+.cancelButton:hover {
+  background-color: #1d3c77;
+}
+
+.closeButton {
+  background-color: #ccc;
+  color: #333;
+}
+
+.closeButton:hover {
+  background-color: #bbb;
+}
+
+.refundButton:hover {
+  background-color: #d32f2f;
+}
+
+.closeButton {
+  background-color: #555;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.closeButton:hover {
+  background-color: #333;
+}

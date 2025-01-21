@@ -1,0 +1,215 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-bottom: 13px;
+    position: relative;
+}
+
+.logo {
+    width: 12%;
+    margin-left: 10%;
+}
+
+.navList {
+    list-style: none;
+    display: flex;
+    gap: 45px;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+nav {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+}
+
+.navList li {
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.rightBtn {
+    all: unset;
+    margin-right: 2%;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+    margin-bottom: 0px;
+}
+
+.rightBtn button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    font-size: inherit;
+}
+
+.rightBtn button a {
+    text-decoration: none;
+    color: inherit;
+    font-size: inherit;
+    display: inline-block;
+}
+
+.top {
+    text-align: center;
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+.noLink {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.ticketInfo {
+    background-color: #f0f4ff;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 2px solid rgb(157, 157, 255);
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 700;
+    color: #4b4b4b;
+    white-space: nowrap;
+    width: 175px;
+    height: 18px;
+    position: relative;
+    left: -4px;
+    margin-left: 16px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+.ticketInfo strong {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 5px 10px;
+    border-radius: 4px;
+    margin-left: 13px;
+    color: #333;
+    font-size: 14px;
+    font-weight: bold;
+    display: inline-block;
+    text-decoration: none;
+}
+
+.bottom {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    align-items: center;
+    white-space: nowrap;
+}
+
+.buttonHover {
+    text-decoration: none;
+}
+
+.buttonHover:hover {
+    text-decoration: underline;
+}
+
+
+
+/* 반응형 스타일 추가 */
+@media screen and (max-width: 1100px) {
+    .navList {
+        font-size: 18px; /* 텍스트 크기 축소 */
+        gap: 30px; /* 메뉴 간 간격 축소 */
+    }
+    .rightBtn {
+        font-size: 14px; /* 버튼 텍스트 크기 축소 */
+    }
+    .ticketInfo {
+        font-size: 12px; /* 이용권 정보 텍스트 축소 */
+        padding: 5px 10px; /* 여백 축소 */
+    }
+    .ticketInfo strong {
+        font-size: 12px; /* strong 텍스트 크기 축소 */
+        padding: 4px 8px; /* 내부 여백 축소 */
+    }
+}
+
+@media screen and (max-width: 900px) {
+    .header {
+        flex-direction: column; /* 요소들을 세로로 배치 */
+        align-items: flex-start; /* 왼쪽 정렬 */
+        padding: 10px 10px; /* 헤더 여백 축소 */
+    }
+    .logo {
+        width: 15%; /* 로고 크기 축소 */
+        margin-left: 0;
+    }
+    nav {
+        position: relative; /* 위치 고정 */
+        left: 0;
+        transform: none;
+        width: 100%; /* nav를 전체 너비로 설정 */
+        justify-content: center;
+    }
+    .navList {
+        justify-content: center;
+        font-size: 16px; /* 텍스트 크기 축소 */
+        gap: 20px; /* 메뉴 간 간격 축소 */
+    }
+    .rightBtn {
+        font-size: 12px; /* 버튼 텍스트 크기 축소 */
+        margin-right: 0;
+    }
+    .ticketInfo {
+        font-size: 10px; /* 이용권 정보 텍스트 축소 */
+        padding: 5px; /* 여백 축소 */
+        margin-top: 10px;
+        margin-left: 0;
+    }
+    .ticketInfo strong {
+        font-size: 10px; /* strong 텍스트 크기 축소 */
+        padding: 3px 6px; /* 내부 여백 축소 */
+    }
+    
+}
+
+@media screen and (max-width: 600px) {
+    .navList {
+        flex-direction: column; /* 메뉴를 세로로 배치 */
+        align-items: center;
+        font-size: 14px; /* 텍스트 크기 축소 */
+        gap: 10px; /* 간격 축소 */
+    }
+    .rightBtn {
+        flex-direction: column; /* 버튼들을 세로로 배치 */
+        align-items: center;
+    }
+    .ticketInfo {
+        margin-top: 5px;
+    }
+    .ticketInfo strong {
+        font-size: 9px; /* strong 텍스트 크기 축소 */
+        padding: 2px 4px; /* 내부 여백 축소 */
+    }
+}
+
+.logout {
+    color: #a5a5a5;
+    text-decoration: underline;
+}
+
+.logout:hover {
+    color:rgb(238, 0, 0);
+    font-weight: bold;
+    text-decoration: underline;
+}

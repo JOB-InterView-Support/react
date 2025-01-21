@@ -1,0 +1,20 @@
+.insertButton {
+    background-color: rgb(109,160,255);
+    color: black;
+    padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+    cursor: pointer;
+    margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
+    display: block; 
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+  }
+  
+  .insertButton:hover {
+    background-color: rgb(75, 137, 253); /* 호버 시 어두운 파란색 */
+  }
+  

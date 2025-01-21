@@ -1,0 +1,73 @@
+.noticecontainer {
+    width: 50%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.noticetitle {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: #004F99;
+    margin-bottom: 20px;
+}
+
+.noticetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.noticetable th,
+.noticetable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    height: 19px;
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
+}
+
+.noticetable td {
+    cursor: pointer;    
+}
+
+.noticetable th {
+    background-color: rgba(109, 160, 255, 0.2);
+    font-weight: bold;
+    color: #333;
+}
+
+.noticetable tbody tr:nth-child(even) {
+    background-color: rgba(109, 160, 255, 0.06);
+}
+
+.noticetable tbody tr:hover {
+    background-color: rgba(109, 160, 255, 0.3);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination button:hover {
+    background-color: #f2f2f2;
+}

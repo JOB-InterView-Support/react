@@ -1,0 +1,246 @@
+/* QnA 상세 페이지 스타일 */
+
+.qnaDetailContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* 배경색 흰색으로 수정 */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif; /* 기본 폰트 지정 */
+    margin-bottom: 100px; 
+    margin-top: 100px;
+  }
+  .innerContainer {
+    border: 2px solid #c0c0c0;
+    background-color: #fff;
+    border-radius: 5px;
+    padding: 25px;
+    margin-bottom: 100px;
+  }
+
+  .editButton,
+  .deleteButton,
+  .backButton {
+    padding: 10px 25px;
+    font-size: 16px;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  .backButton{
+    background-color: rgb(109,160,255);
+  }
+  .backButton:hover {
+    background-color: rgb(75, 137, 253); /* 호버 시 더 진한 파란색 */
+  }
+  .Container {
+    width: 50%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+  }
+  .qnaTitle {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+    color: #333333; /* 텍스트 색상 수정 */
+  }
+  
+  .buttonGroup {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .editButton {
+    background-color: #28a745;
+  }
+  .editButton:hover {
+    background-color: #218838;
+  }
+  .deleteButton {
+    background-color: #dc3545;
+  }
+  .deleteButton:hover {
+    background-color: #c82333;
+  }
+  
+  .qnaTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .qnaTable th,
+  .qnaTable td {
+    padding: 10px;
+    vertical-align: top; /* 세로 정렬 */
+  }
+  
+  .qnaTable th {
+    background-color: #E2ECFF; 
+    text-align: left;
+    font-weight: bold;
+    color: #495057;
+  }
+  
+  .qnaTable td {
+    color: #212529; /* 텍스트 색상 변경 */
+  }
+  
+  .commentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    
+  }
+  
+  .commentsTable th,
+  .commentsTable td {
+    padding: 10px;
+  }
+  
+  .commentsTable th {
+    background-color: #E2ECFF; 
+    text-align: left;
+    font-weight: bold;
+    color: #495057;
+  }
+
+  .title {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: #004F99;
+  }
+  
+  .noComments {
+    text-align: center;
+    color: #666666;
+    font-style: italic;
+    margin-top: 20px;
+  }
+  
+  .attachmentSection {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .attachmentSection img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+  
+  .attachmentSection a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #007bff;
+    text-decoration: none;
+  }
+  
+  .attachmentSection a:hover {
+    text-decoration: underline;
+  }
+  
+  .bottomLeftLink {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    font-size: 14px;
+    color: #007bff;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+  
+  .bottomLeftLink:hover {
+    text-decoration: none;
+  }
+  
+  .img {
+    max-width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+}
+
+
+.replyForm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px; /* 요소 간 간격 */
+  padding: 20px;
+  margin-top: 20px;
+  background-color: #E2ECFF; 
+  border: 1px solid #ddd; /* 테두리 */
+  border-radius: 8px; /* 둥근 모서리 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+}
+
+.replyForm textarea {
+  width: 96%;
+  min-height: 100px; /* 최소 높이 설정 */
+  resize: horizontal; /* 가로 크기만 조절 가능 */
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc; /* 입력 필드 테두리 */
+  border-radius: 4px; /* 둥근 모서리 */
+  background-color: #fff;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 안쪽 그림자 */
+  transition: border-color 0.3s, box-shadow 0.3s; /* 전환 효과 */
+}
+
+.replyForm textarea:focus {
+  border-color: #007bff; /* 포커스 시 테두리 색 */
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25); /* 포커스 효과 */
+  outline: none; /* 기본 outline 제거 */
+}
+
+.replyForm button {
+  align-self: flex-end; /* 버튼을 오른쪽에 정렬 */
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff; /* 버튼 배경색 */
+  border: none;
+  border-radius: 4px; /* 둥근 모서리 */
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s; /* 전환 효과 */
+}
+
+.replyForm button:hover {
+  background-color: #0056b3; /* 호버 시 배경색 */
+  transform: translateY(-2px); /* 약간 위로 올라가는 효과 */
+}
+
+.replyForm button:active {
+  background-color: #004085; /* 클릭 시 배경색 */
+  transform: translateY(0); /* 클릭 시 원래 위치 */
+}
+
+.buttonGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.divider {
+  width: 100%;
+  height: 2px;
+  background-color: #ddd; /* 연한 회색 */
+  margin-top: 10px;
+}
+
+.qnaTable th,
+.qnaTable td {
+  text-align: left;    /* 텍스트 왼쪽 정렬 */
+  padding: 10px;       /* 여백 추가 */
+}

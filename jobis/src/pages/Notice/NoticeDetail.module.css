@@ -1,0 +1,239 @@
+.noticecontainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff; /* 배경 흰색 */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-family: Arial, sans-serif;
+    margin-top: 50px;
+    margin-bottom: 100px;
+}
+
+.noticetitle {
+    font-size: 30px;
+    font-weight: bold;
+    color: #333333;
+    text-align: left;
+    margin-bottom: 30px;
+    border-bottom: 2px solid #ddd; /* 아래 선 추가 */
+    padding-bottom: 10px;
+}
+
+.buttonContainer {
+    display: flex; /* 플렉스 박스를 사용해 버튼을 한 줄에 정렬 */
+    gap: 10px; /* 버튼 사이의 간격 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    align-items: center; /* 수직 정렬 */
+    margin-top: 10px; /* 위쪽 여백 */
+    justify-content: flex-end;
+}
+
+.updateButton {
+        background-color: #28a745;
+        color: black;
+        padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
+        border: none;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+        cursor: pointer;
+        margin-bottom: 10px;
+        font-family: Arial, sans-serif;
+        color: #ffffff;
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    color: black;
+    padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+    cursor: pointer;
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+
+}
+
+.updateButton:hover {
+    background-color: #138a2e; /* 호버 시 어두운 파란색 */      
+}
+
+.deleteButton:hover {
+        background-color: #c02131; /* 호버 시 어두운 파란색 */      
+}
+
+.noticecontent {
+    font-size: 17px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    line-height: 1.8;
+  }
+
+.noticeinfo {
+    font-size: 15px;
+    text-align: right;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 10px;    
+    color: #666666;
+    border-bottom: 1px solid #ddd; /* 회색 선 */
+    padding-bottom: 10px;
+}
+
+.noticetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.noticetable th,
+.noticetable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* 행 사이 회색 선 */
+    vertical-align: middle;
+}
+
+.noticetable th {
+    background-color: rgba(109, 160, 255, 0.2);
+    font-weight: bold;
+    color: #333333;
+    text-align: center;
+}
+
+.noticetable td {
+    color: #212529;
+}
+
+.noticeImageContainer {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.noticeImage {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 3px;
+}
+
+.unsupportedMessage {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    color: red;
+    font-weight: bold;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.list {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 80px;
+    font-size: 16px;
+}
+
+.downloadButton {
+    background: none;
+    color: black;
+    border: none;
+    cursor: pointer;
+    margin-top: 2px;
+    margin-bottom: 35px;
+    font-size: 14px;
+    display: flex;
+    align-items: center; /* 이미지와 텍스트 수직 정렬 */
+    gap: 7px; /* 이미지와 텍스트 간 간격 */
+}
+
+.downloadButton:hover {
+    color: #007bff;
+    text-decoration: underline;
+}
+
+.downloadIcon {
+    width: 19px;
+    height: 19px;
+    display: inline-block;
+}
+
+.preview {
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+    margin-top: 3px;
+    font-size: 16px;
+}
+
+.backButton {
+    position: relative;
+    margin-top: 50px;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    font-size: 15px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.backButton::before {
+    content: "←";
+    margin-right: 8px;
+    font-size: 15px;
+}
+
+.backButton:hover {
+    text-decoration: underline;
+    color: gray;
+}
+
+.commentsTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.commentsTable th,
+.commentsTable td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd; /* 댓글 테이블 회색 선 */
+}
+
+.commentsTable th {
+    background-color: rgba(109, 160, 255, 0.2);
+    font-weight: bold;
+    color: #333333;
+}
+
+.commentsTable td {
+    color: #212529;
+}
+
+.noComments {
+    text-align: center;
+    color: #666666;
+    font-style: italic;
+    margin-top: 20px;
+}
+
+.noFile {
+    text-align: left;
+    color: rgb(151, 151, 151);
+    margin-top: 2px;
+    font-size: 14px;
+}

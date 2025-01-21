@@ -1,0 +1,151 @@
+.reviewDetailContainer {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  color: #333333;
+  margin-top: 50px;
+  margin-bottom: 100px;
+}
+
+.reviewTitle {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: left;
+  color: #004F99;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+}
+
+.reviewInfo {
+  font-size: 14px;
+  text-align: right;
+  color: #666666;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+}
+
+.reviewContent {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+  color: #212529;
+}
+
+.attachmentSection {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.attachmentSection a {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px; /* 아이콘과 텍스트 간 간격 */
+  font-size: 14px;
+  color: #007bff;
+  text-decoration: none;
+}
+
+.attachmentSection a:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+.attachmentSection img {
+  width: 16px; /* 아이콘 크기 */
+  height: 16px;
+}
+
+
+.backButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  color: #000;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  margin-top: 20px;
+}
+
+.backButton::before {
+  content: "←";
+  margin-right: 8px;
+  font-size: 16px;
+}
+
+.backButton:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+.downloadButton {
+  background: none;
+    color: #007bff;
+    text-decoration: underline;
+    border: none;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 14px;
+    display: flex;
+    align-items: center; /* 이미지와 텍스트 수직 정렬 */
+    gap: 5px; /* 이미지와 텍스트 간 간격 */
+}
+
+.downloadButton:hover {
+  color: #0056b3;
+}
+
+.downloadIcon {
+  width: 16px; /* 아이콘 너비 */
+  height: 16px; /* 아이콘 높이 */
+  display: inline-block;
+}
+
+.reviewImageContainer {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.reviewImage {
+  max-width: 100%;
+  height: auto;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.editButton,
+.deleteButton {
+    padding: 10px 25px; /* 동일한 여백 설정 */
+    font-size: 16px; /* 글자 크기 */
+    color: white; /* 텍스트 색상 */
+    border: none; /* 테두리 제거 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    cursor: pointer; /* 포인터 커서 */
+    transition: all 0.3s ease; /* 부드러운 전환 효과 */
+}
+
+.editButton {
+    background-color: #28a745; /* 수정 버튼 기본 배경색 */
+}
+
+.editButton:hover {
+    background-color: #218838; /* 수정 버튼 호버 시 배경색 */
+}
+
+.deleteButton {
+    background-color: #dc3545; /* 삭제 버튼 기본 배경색 */
+}
+
+.deleteButton:hover {
+    background-color: #c82333; /* 삭제 버튼 호버 시 배경색 */
+}

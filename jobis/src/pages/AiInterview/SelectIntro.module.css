@@ -1,0 +1,265 @@
+
+.container {
+    width: 50%;
+    margin: 0 auto;
+    margin-bottom: 7%;
+    min-height: 400px;
+    font-family: Arial, sans-serif;
+    color: #333;
+    text-align: center; /* 추가: 버튼 가운데 정렬 */
+  }
+  .title {
+    font-size: 30px;
+    font-weight: 900;
+    margin-bottom: 10px;
+    text-align: left;
+    color: #004F99;
+  }
+  
+  .subTitle {
+    font-size: 21px;
+    font-weight: 800;
+    margin-bottom: 0px;
+    text-align: left;
+    color: #006DD2;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  
+  .table th,
+  .table td {
+    border: 1px solid #dadada;
+    padding: 8px;
+    text-align: center;
+    font-size: 15px;
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
+  }
+  .table th:nth-child(2) {
+    border-left: 1px solid #dadada !important;
+    border-right: 1px solid #dadada !important;
+  }
+  .table th:nth-child(3) {
+    border-right: 1px solid #dadada !important;
+  }
+  .table td:nth-child(2) {
+    border-left: 1px solid #dadada !important;
+    border-right: 1px solid #dadada !important;
+  }
+  .table td:nth-child(3) {
+    border-right: 1px solid #dadada !important;
+  }
+  
+  .table th {
+    background-color: rgba(109, 160, 255, 0.21);
+    font-weight: bold;
+    border-top: 2px solid rgba(90, 132, 211, 0.8);
+    border-bottom: 2px solid rgba(90, 132, 211, 0.8);
+  }
+  
+  .table tr:nth-child(even) {
+    background-color: rgba(109, 160, 255, 0.09);
+  }
+  
+  .nullMessage {
+    text-align: center;
+    color: #888;
+    margin-top: 5px;
+    font-size: 30px;
+    font-weight: bold;
+  }
+  .nullMessageContainer {
+    display: flex; /* 플렉스 컨테이너로 설정 */
+    justify-content: center; /* 가로 중앙 정렬 */
+    align-items: center; /* 세로 중앙 정렬 */
+    height: 300px;
+  }
+  
+  .startButton {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #004f99;
+    color: white;
+    border: none;
+    padding: 1em 2em;
+    font-size: 1.125em;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  .startButton:hover {
+    background-color: #003F7A;
+  }
+  
+  .startButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+
+  .statusSubMessage {
+    font-size: 12px;
+    color: white;
+    margin-top: 5px;
+  }
+  .startButtonContainer {
+    display: flex; /* 플렉스 컨테이너로 설정 */
+    justify-content: center; /* 가로 중앙 정렬 */
+  }
+
+  .headerRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .guideLink {
+    font-size: 14px;
+    font-family: "Arial Black", sans-serif; /* Arial Black으로 굵게 설정 */
+    font-weight: 900;
+    color: #9b9b9b;
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  
+  .guideLink:hover {
+    font-size: 15px;
+    color: rgb(0, 0, 0); /* hover 시 색상 변경 */
+  }
+
+  .authorityGuide{
+    font-size: 14px;
+    font-family: "Arial Black", sans-serif; /* Arial Black으로 굵게 설정 */
+    font-weight: 900;
+    color: rgba(255, 0, 0, 0.5);
+    text-decoration: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  .authorityGuide:hover {
+    font-size: 15px;
+    color: rgb(255, 0, 0); /* hover 시 색상 변경 */
+  }
+  
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modalContent {
+    position: relative;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%; /* 이미지 크기를 고려해 더 넓게 설정 */
+    max-width: 800px; /* 최대 크기를 제한 */
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    overflow: hidden; /* 이미지가 모달 밖으로 나가지 않도록 설정 */
+  }
+  .modalContent img {
+    max-width: 100%; /* 모달 크기에 맞춰 이미지 크기를 제한 */
+    height: auto; /* 가로/세로 비율 유지 */
+  }
+
+  
+  .modalCloseButton {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #6d6d6d;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  
+  .modalCloseButton:hover {
+    color: #000;
+  }
+
+  .interviewguide {
+    position: relative;
+    width: 800px;
+    height: 369px;
+    border: 1px solid rgba(109, 160, 255, 0.5);
+    border-radius: 10px;
+    margin-top: 20px;
+  }
+
+  .modalContent ul {
+    list-style: none; /* li 태그의 기본 스타일 제거 */
+    padding: 0; /* 리스트 왼쪽 여백 제거 */
+    margin: 0; /* 리스트 위아래 여백 제거 */
+  }
+  
+  .modalContent li {
+    margin-bottom: 10px; /* 각 항목 간 간격 추가 */
+    font-size: 16px; /* 리스트 항목 글씨 크기 설정 */
+    color: #333; /* 텍스트 색상 설정 */
+  }
+
+  .modalContent h2 {
+    margin-bottom: 10px; /* 각 항목 간 간격 추가 */
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .warning {
+    color: red !important; /* 덮어쓰기를 방지하기 위해 !important 사용 */
+    font-weight: bold; /* 추가 스타일 */
+  }
+  
+  .referenceText {
+    font-size: 12px !important; /* 텍스트 크기 작게 */
+    color: #666 !important; /* 텍스트 색상 회색 */
+    font-weight: bold;
+    position: absolute; /* 절대 위치로 설정 */
+    top: 10px; /* 이미지 기준 위로 위치 조정 */
+    left: 0; /* 이미지 기준 왼쪽으로 위치 조정 */
+    transform: translateY(-100%); /* 텍스트를 이미지 위로 이동 */
+    margin: 0; /* 여백 제거 */
+  }
+  .modalContent {
+    position: relative; /* 내부 절대 위치 요소를 기준으로 설정 */
+    display: flex;
+    flex-direction: column; /* 수직 방향 정렬 */
+    align-items: center; /* 중앙 정렬 */
+    text-align: center;
+    padding: 20px;
+  }
+  
+  
+  .permissionGuide {
+    text-align: left; /* 텍스트 좌측 정렬 */
+    max-width: 600px; /* 적절한 최대 너비 설정 */
+  }
+
+  .buttons{
+    margin-top: 20px;
+  }
+  

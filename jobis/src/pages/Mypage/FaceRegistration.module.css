@@ -1,0 +1,25 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 70vh; /* 화면 전체 높이 */
+    width: 100%; /* 화면 전체 너비 */
+    margin: 0; /* 기본 여백 제거 */
+  }
+
+  .reBtn{
+    margin-top: 2%;
+    width: 10%;
+    height: 5%;
+    border: none;
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: bold;
+    background-color: rgba(109, 160, 255, 0.5);
+  }
+
+  .successMessage{
+    font-weight: bold;
+    font-size: 30px;
+  }

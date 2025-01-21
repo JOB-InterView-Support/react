@@ -1,0 +1,236 @@
+.container {
+    width: 50%; /* 전체 폭을 조정 */
+    margin: 0 auto;
+    margin-bottom: 5%;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.title {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left; /* 왼쪽 정렬 */
+    color: #004F99;
+}
+
+.subtitle {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left; /* 왼쪽 정렬 */
+    color: #006DD2;
+}
+
+.listcontainer {
+    border: 2px solid #A1C9FF; /* 연한 파란색 테두리 */
+    background-color: #F5F9FF; /* 연한 파란색 배경 */
+    border-radius: 15px; /* 둥근 테두리 */
+    padding: 20px;
+    height: 400px; /* 고정된 높이 */
+    overflow-y: auto; /* 스크롤 생성 (수직 스크롤) */
+    overflow-x: hidden; /* 수평 스크롤 제거 */
+}
+
+.introductionGrid {
+    display: grid; /* CSS Grid 사용 */
+    grid-template-columns: repeat(2, 45%); /* 각 열의 크기를 40%로 설정, 2열 배치 */
+    gap: 20px; /* 아이템 간격 */
+    justify-content: center; /* 중앙 정렬 */
+}
+
+.introductionCard, .introductionCardNew {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #FFFFFF; /* 흰색 배경 */
+    border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
+    height: 100px;
+    border-radius: 10px;
+    padding: 15px;
+    gap: 15px; /* 내부 아이템 간격 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 박스 그림자 */
+    transition: transform 0.2s ease-in-out;
+}
+
+.introductionCardNew {
+    background-color: rgba(109, 160, 255, 0.74) !important;
+    color: #fff !important;
+}
+
+.introductionCard:hover, .introductionCardNew:hover { /* 흰색 배경 */
+    color: white;
+    border: 1px solid #A1C9FF; /* 연한 파란색 테두리 */
+    cursor: pointer;
+}
+.introductionCard:hover {
+    background-color: rgba(109, 160, 255, 0.74);
+}
+.introductionCardNew:hover {
+    background-color: rgba(56, 126, 255, 0.74) !important;
+}
+
+.circleicon {
+    width: 60px; /* 아이콘 크기 */
+    min-width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #fff;
+    border: 1px solid rgba(109, 160, 255, 0.74);
+    display: flex; /* 내부 요소를 정렬하기 위해 flex 사용 */
+    justify-content: center; /* 가로 정렬 */
+    align-items: center; /* 세로 정렬 */
+    
+}
+
+.circleicon img {
+    width: 80%; /* 아이콘 크기 조정 */
+    height: 80%;
+    object-fit: contain; /* 이미지 비율 유지 및 자르기 방지 */
+}
+
+.introductionCard h3, .introductionCardNew span {
+    font-size: 18px;
+    font-weight: bold;
+    color: #004F99; /* 텍스트 색상 */
+    margin: 0;
+}
+.introductionCardNew span {
+    color: #fff;
+}
+
+.introductionCard p {
+    font-size: 14px;
+    color: #666; /* 보조 텍스트 색상 */
+    margin: 5px 0 0;
+}
+
+.introductionCardNew button {
+    background-color: transparent;
+    border: none;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+}
+
+.minicontents {
+    margin-left: auto; /* 우측 고정 */
+    text-align: right; /* 내용 오른쪽 정렬 */
+    display: flex; /* Flexbox로 세부 정렬 */
+    flex-direction: column; /* 세로 정렬 */
+    gap: 10px; /* p 태그 간의 간격 */
+}
+.listcontainer::-webkit-scrollbar {
+    width: 6px; /* 스크롤바 너비 */
+    background-color: transparent; /* 배경 투명 */
+}
+
+/* 스크롤바 막대 설정 */
+.listcontainer::-webkit-scrollbar-thumb {
+    background-color: #85affd; /* 기본 색상 */
+    border-radius: 16px; /* 둥근 모양 */
+}
+
+.listcontainer::-webkit-scrollbar-thumb:hover {
+    background-color: #5c95fe; /* 호버 시 색상 */
+}
+
+/* 스크롤바 트랙 설정 (세로 길이 줄이기) */
+.listcontainer::-webkit-scrollbar-track {
+    border-radius: 10px; /* 트랙 둥근 모양 */
+    background-color: transparent; /* 배경 투명 */
+    margin: 5px 0; /* 트랙 위아래 여백 추가 */
+}
+
+.listcontainer::-webkit-scrollbar-track:hover {
+    background-color: transparent; /* 호버 시 배경 투명 */
+}
+
+.listcontainer::-webkit-scrollbar-button {
+    display: none; /* 버튼 제거 */
+}
+
+.buttonGroup {
+    display: flex;
+    gap: 0; /* 버튼 사이의 간격을 제거 */
+    margin-left: auto; /* subtitle 우측에 배치 */
+    border: 1px solid #5c95fe; /* 전체 버튼 그룹 테두리 */
+    border-radius: 5px; /* 둥근 테두리 */
+    overflow: hidden; /* 버튼들이 붙도록 처리 */
+}
+
+.filterButton {
+    padding: 10px 20px;
+    background-color: #f9f9f9;
+    color: #004F99;
+    cursor: pointer;
+    border: none; /* 개별 버튼의 테두리 제거 */
+    font-size: 16px; /* 버튼 텍스트 크기 */
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+}
+
+.filterButton:not(.active):hover {
+    background-color: #e6e6e6; /* 비활성화 버튼 호버 효과 */
+}
+
+.filterButton.active {
+    background-color: #5c95fe;
+    color: white;
+}
+.nullmessage{
+    color: #004F99;;
+    font-weight: 900;
+    font-size: 20px;
+    text-align: center;
+} 
+.filterButton:first-child {
+    border-right: 1px solid #ccc; /* 첫 번째 버튼 오른쪽 테두리 */
+}
+
+.filterButton:last-child {
+    border-left: none; /* 마지막 버튼 테두리 제거 */
+}
+
+.introContents {
+    white-space: nowrap; /* 텍스트를 한 줄로 유지 */
+    overflow: hidden; /* 넘치는 텍스트를 숨김 */
+    text-overflow: ellipsis; /* 말줄임표(...)를 추가 */
+    max-width: 100%; /* 부모 요소의 최대 너비를 따름 */
+  }
+
+  .subtitleContainer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    }
+    
+    @media (min-width: 769px) and (max-width: 1260px) {
+        .introductionGrid {
+            grid-template-columns: 1fr; /* 한 열에 하나씩 배치 */
+            gap: 20px; /* 간격 유지 */
+        }
+
+        .introductionCard h3, .introductionCardNew span {
+            font-size: 18px !important;
+        }
+
+    }
+
+    @media (max-width: 768px) {
+        .introductionGrid {
+            grid-template-columns: 1fr; /* 한 열에 하나씩 배치 */
+            gap: 20px; /* 간격 유지 */
+        }
+
+        .introductionCard h3, .introductionCardNew span {
+            font-size: 15px !important;
+        }
+
+    }
+   

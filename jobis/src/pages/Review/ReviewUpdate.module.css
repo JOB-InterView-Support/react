@@ -1,0 +1,135 @@
+.img {
+  display: block;
+  max-width: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.reviewupdate {
+  font-size: 28px; /* 제목 글자 크기 */
+  font-weight: bold;
+  color: #333333;
+  text-align: left;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #ddd; /* 아래 선 추가 */
+  padding-bottom: 10px;
+}
+
+.container {
+  max-width: 800px; /* 고정된 너비 */
+    margin: 0 auto; /* 중앙 정렬 */
+    padding: 20px; /* 내부 여백 */
+    background-color: #ffffff; /* 배경 흰색 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 */
+    font-family: Arial, sans-serif; /* 폰트 */
+}
+
+.previewImage {
+  max-width: 100%; /* 이미지 최대 너비 */
+  max-height: 200px; /* 이미지 최대 높이 */
+  margin-top: 10px; /* 위쪽 여백 */
+  border: 1px solid #ddd; /* 테두리 */
+  border-radius: 5px; /* 모서리 둥글게 */
+  padding: 5px; /* 내부 여백 */
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.formGroup {
+  margin-bottom: 15px;
+}
+
+.titleInput,
+.textarea {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+.titleInput {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.textarea {
+  height: 150px;
+  resize: none;
+}
+
+.fileInput {
+  display: block;
+}
+
+.fileName {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #666;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.backButton,
+.submitButton,
+.deleteButton {
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.backButton {
+  background-color: #ddd;
+  color: #333;
+}
+
+.backButton:hover {
+  background-color: #bbb;
+}
+
+.submitButton {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.submitButton:hover {
+  background-color: #0056b3;
+}
+
+.deleteButton {
+  background-color: #dc3545;
+  color: white;
+}
+
+.deleteButton:hover {
+  background-color: #c82333;
+}
+
+.reviewtitle,
+.textarea {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd; /* 테두리 회색 */
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.reviewtitle {
+    font-size: 18px;
+    font-weight: bold;
+}

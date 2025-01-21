@@ -1,0 +1,94 @@
+/* 전체 페이지 컨테이너 */
+.pageContainer {
+    width: 70%; /* 전체 너비를 70%로 설정 (좌우 15% 여백) */
+    margin: 0 auto; /* 중앙 정렬 */
+    font-family: Arial, sans-serif;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    height: auto; /* 동적 높이로 설정 */
+    box-sizing: border-box;
+    padding: 20px;
+}
+
+/* 제목 섹션 */
+.header {
+    font-size: 30px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-align: left;
+    color: #004F99;
+}
+
+/* 그리드 섹션 */
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 한 줄에 3개의 카드 */
+    gap: 22px; /* 카드 간 간격 (20px에서 22px로 증가) */
+    width: 100%; /* 그리드가 컨테이너 너비를 채우도록 설정 */
+    margin: 0 auto;
+    padding: 0; /* 불필요한 패딩 제거 */
+    background-color: transparent; /* 배경색 제거 */
+}
+
+/* 카드 스타일 */
+.card {
+    display: flex;
+    flex-direction: column; /* 세로 정렬 */
+    align-items: center;
+    justify-content: center;
+    background-color: #FFFFFF;
+    border: 1px solid #A1C9FF;
+    height: 150px; /* 카드 높이 */
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+    cursor: pointer;
+}
+
+.card.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.card:hover {
+    background-color: rgba(109, 160, 255, 0.74);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* 카드 내용 */
+.card h3 {
+    font-size: 20px !important; /* 글씨 크기 */
+    font-weight: bold;
+    color: #004F99;
+    margin: 0;
+}
+
+.card p {
+    font-size: 14px;
+    color: #666;
+    margin: 5px 0 0;
+}
+
+/* 상태 메시지 */
+.status {
+    font-size: 14px;
+    color: red !important;
+    margin-top: 10px;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 768px) {
+    .gridContainer {
+        grid-template-columns: 1fr; /* 작은 화면에서 한 줄에 1개 */
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .gridContainer {
+        grid-template-columns: repeat(2, 1fr); /* 중간 화면에서 한 줄에 2개 */
+    }
+}

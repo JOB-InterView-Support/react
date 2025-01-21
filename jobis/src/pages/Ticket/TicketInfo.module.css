@@ -1,0 +1,205 @@
+.noticecontainer {
+    width: 50%;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+.noticetitle {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: left;
+    color: #004F99;
+    margin-bottom: 20px;
+}
+
+.noticetable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+.noticetable th,
+.noticetable td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    height: 19px;
+    border-right: none; /* 기존 border-right 제거 */
+    border-left: none;
+}
+
+.noticetable td {
+    cursor: pointer;    
+}
+
+.noticetable th {
+    background-color: rgba(109, 160, 255, 0.2);
+    font-weight: bold;
+    color: #333;
+}
+
+.noticetable tbody tr:nth-child(even) {
+    background-color: rgba(109, 160, 255, 0.06);
+}
+
+.noticetable tbody tr:hover {
+    background-color: rgba(109, 160, 255, 0.3);
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.pagination button {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    background-color: #fff;
+    color: #333;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.pagination button.active {
+    background-color: #007bff;
+    color: #fff;
+    border-color: #007bff;
+}
+
+.pagination button:hover {
+    background-color: #f2f2f2;
+}
+
+.insertButton {
+    background-color: rgb(109,160,255);
+    color: black;
+    padding: 10px 20px; /* 좌우 여백(40px)을 늘림 */
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 900; /* 글씨를 가장 두껍게 설정 */
+    cursor: pointer;
+    margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
+    display: block; 
+    margin-bottom: 10px;
+    font-family: Arial, sans-serif;
+    color: #ffffff;
+  }
+  
+  .insertButton:hover {
+    background-color: rgb(75, 137, 253); /* 호버 시 어두운 파란색 */
+  }
+  
+
+.modal {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background-color: rgba(0, 0, 0, 0.5) !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    z-index: 9999 !important;
+    overflow: hidden !important;
+  }
+
+  .modalContent {
+    width: 90%;
+    max-width: 600px;
+    min-width: 300px; /* 최소 너비 설정 */
+    background-color: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto; /* 콘텐츠가 넘칠 경우 스크롤 가능 */
+  }
+
+@media (max-width: 768px) {
+.modalContent {
+    width: 95%; /* 모바일 화면에서 더 넓게 표시 */
+    padding: 10px; /* 패딩 감소 */
+}
+}
+
+.modalHeader {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2f4f9e;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.modalBody {
+    padding: 10px;
+}
+
+.modalBody label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-size: 16px;
+    color: #555;
+}
+
+.modalBody input,
+.modalBody textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.modalFooter {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.saveButton,
+.deleteButton,
+.cancelButton {
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.saveButton {
+    background-color: #2f4f9e;
+    color: #fff;
+    margin-right: 10px;
+}
+
+.saveButton:hover {
+    background-color: #1d3c77;
+}
+
+.deleteButton {
+    background-color: #dc3545;
+    color: #ffffff;
+    margin-right: 10px;
+}
+
+.deleteButton:hover {
+    background-color: #c82333; /* 호버 시 색상 */
+}
+
+.cancelButton {
+    background-color: #ccc;
+    color: #333;
+}
+
+.cancelButton:hover {
+    background-color: #bbb;
+}
